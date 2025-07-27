@@ -460,10 +460,10 @@ UserInputService.InputChanged:Connect(function(input)
 		end
 	end
 end)
--- Speed Hack Box (стиль як кнопка AIM)
+-- Створення Speed Hack Box
 local speedHackBox = Instance.new("Frame", frame)
-speedHackBox.Size = UDim2.new(0.9, 0, 0, 60) -- як кнопка, тільки вище
-speedHackBox.Position = UDim2.new(0.05, 0, 0, 200) -- підкоригуй позицію під своє меню
+speedHackBox.Size = UDim2.new(0.9, 0, 0, 60)
+speedHackBox.Position = UDim2.new(0.05, 0, 0, 200)
 speedHackBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 speedHackBox.BorderSizePixel = 0
 
@@ -504,14 +504,53 @@ local maxSpeed = 200
 local currentSpeed = minSpeed
 
 local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
+local LocalPlayer = game:GetService("Players").LocalPlayer
 local dragging = false
 
-local fun
+local function updateSliderButtonPosition(percentage)
+    local sliderSize = speedSlider.AbsoluteSize.X
+    local buttonSize = sliderButton.AbsoluteSize.X
+    local xPos = math.clamp(percentage * (sliderSize - buttonSize), 0, sliderSize - buttonSize)
+    sliderButton.Position = UDim2.new(0, xPos, 0.5, -buttonSize / 2)
+end
 
+sliderButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+    end
+end)
 
+sliderButton.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local sliderSize = speedSlider.AbsoluteSize.X
+        local buttonSize = sliderButton.AbsoluteSize.X
+        local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize - buttonSize)
+        local percentage = relativeX / (sliderSize - buttonSize)
+
+        updateSliderButtonPosition(percentage)
+
+        currentSpeed = math.floor(minSpeed + (maxSpeed - minSpeed) * percentage)
+        speedLabel.Text = "Speed: " .. currentSpeed
+
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
+        end
+    end
+end)
+
+-- Ініціалізація позиції кнопки при завантаженні UI
+speedSlider:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+    updateSliderButtonPosition((currentSpeed - minSpeed) / (maxSpeed - minSpeed))
+end)
+
+-- Встановити початкову швидкість
+speedLabel.Text = "Speed: " .. currentSpeed
 
 
 
