@@ -425,7 +425,7 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Блок Скорости без слайдера, з обводкою
+-- Блок швидкості
 UI.speedFrame = createUI("Frame", {
 	Name = "SpeedFrame",
 	Size = UDim2.new(1, 0, 0, 40),
@@ -436,10 +436,10 @@ UI.speedFrame = createUI("Frame", {
 UI.speedFrame.LayoutOrder = 7
 UI.speedFrame.Parent = UI.contentFrame
 
--- Кнопка з фоном (як інші)
-UI.speedButton = createUI("TextBox", {
-	Size = UDim2.new(0.9, 0, 0, 40),
-	Position = UDim2.new(0.05, 0, 0, 0),
+-- Кнопка Speed (вигляд як aimButton)
+UI.speedButton = createUI("TextButton", {
+	Size = UDim2.new(0.9, 0, 0, 30),
+	Position = UDim2.new(0.05, 0, 0, 5),
 	BackgroundColor3 = Color3.fromRGB(40, 40, 40),
 	BorderSizePixel = 1,
 	BorderColor3 = Color3.fromRGB(70, 70, 70),
@@ -447,39 +447,32 @@ UI.speedButton = createUI("TextBox", {
 	TextSize = 16,
 	Font = Enum.Font.SourceSansBold,
 	Text = "Speed: " .. tostring(state.currentSpeed),
-	ClearTextOnFocus = true,
-	TextXAlignment = Enum.TextXAlignment.Center,
-	Active = true,
-	Selectable = true,
 })
 UI.speedButton.Parent = UI.speedFrame
 
--- Обмеження по швидкості
+-- Текстове поле для вводу
+UI.speedInput = createUI("TextBox", {
+	Size = UI.speedButton.Size,
+	Position = UI.speedButton.Position,
+	BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+	BorderSizePixel = 1,
+	BorderColor3 = Color3.fromRGB(70, 70, 70),
+	TextColor3 = Color3.fromRGB(255, 255, 255),
+	TextSize = 16,
+	Font = Enum.Font.SourceSansBold,
+	Text = tostring(state.currentSpeed),
+	Visible = false,
+})
+UI.speedInput.Parent = UI.speedFrame
+
+-- Параметри швидкості
 state.minSpeed = 16
 state.maxSpeed = 500
 
--- Тільки цифри
-UI.speedButton:GetPropertyChangedSignal("Text"):Connect(function()
-	UI.speedButton.Text = UI.speedButton.Text:gsub("%D", "")
-end)
-
--- Встановлення швидкості
-UI.speedButton.FocusLost:Connect(function(enterPressed)
-	if enterPressed then
-		local value = tonumber(UI.speedButton.Text)
-		if value then
-			value = math.clamp(value, state.minSpeed, state.maxSpeed)
-			state.currentSpeed = value
-			UI.speedButton.Text = "Speed: " .. tostring(value)
-			local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
-			if humanoid then
-				humanoid.WalkSpeed = value
-			end
-		else
-			UI.speedButton.Text = "Speed: " .. tostring(state.currentSpeed)
-		end
-	end
-end)
+-- Перемикач між кнопкою і текстом
+UI.speedButton.MouseButton1Click:Connect(function()
+	UI.speedButton.Visible = false
+	UI.spe
 
 -- Логіка drag слайдера
 local dragging = false
