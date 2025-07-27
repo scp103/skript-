@@ -425,6 +425,40 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
+
+-- Логіка drag слайдера
+local dragging = false
+
+sliderButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+	end
+end)
+
+sliderButton.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = false
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		local sliderSize = speedSlider.AbsoluteSize.X
+		local buttonSize = sliderButton.AbsoluteSize.X
+		local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize - buttonSize)
+		local percentage = relativeX / (sliderSize - buttonSize)
+
+		updateSliderButtonPosition(percentage)
+
+		currentSpeed = minSpeed + (maxSpeed - minSpeed) * percentage
+
+		updateSpeedText(currentSpeed)
+
+		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
+		end
+	end
+end)
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
@@ -473,40 +507,6 @@ game:GetService("RunService").Heartbeat:Connect(function()
             humanoid.WalkSpeed = currentSpeed
         end
     end
-end)
-
--- Логіка drag слайдера
-local dragging = false
-
-sliderButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-	end
-end)
-
-sliderButton.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = false
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-		local sliderSize = speedSlider.AbsoluteSize.X
-		local buttonSize = sliderButton.AbsoluteSize.X
-		local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize - buttonSize)
-		local percentage = relativeX / (sliderSize - buttonSize)
-
-		updateSliderButtonPosition(percentage)
-
-		currentSpeed = minSpeed + (maxSpeed - minSpeed) * percentage
-
-		updateSpeedText(currentSpeed)
-
-		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
-		end
-	end
 end)
 
 
