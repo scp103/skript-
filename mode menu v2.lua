@@ -425,11 +425,11 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Speed Hack Box
+-- Speed Hack Box (під твій frame)
 local speedHackBox = Instance.new("Frame")
-speedHackBox.Size = UDim2.new(0, 180, 0, 60)
-speedHackBox.Position = UDim2.new(0.05, 0, 0, 200) -- Коригуй відповідно до меню
-speedHackBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+speedHackBox.Size = UDim2.new(0, 170, 0, 60) -- трохи компактніше, як кнопки
+speedHackBox.Position = UDim2.new(0.05, 0, 0, 200) -- підкоригуй під своє меню
+speedHackBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- як кнопки в твоєму меню
 speedHackBox.BorderSizePixel = 0
 speedHackBox.Parent = frame
 
@@ -437,7 +437,7 @@ local speedHackBoxCorner = Instance.new("UICorner")
 speedHackBoxCorner.CornerRadius = UDim.new(0, 6)
 speedHackBoxCorner.Parent = speedHackBox
 
--- Заголовок
+-- Текст швидкості
 local speedLabel = Instance.new("TextLabel")
 speedLabel.Size = UDim2.new(1, -20, 0, 24)
 speedLabel.Position = UDim2.new(0, 10, 0, 5)
@@ -449,11 +449,11 @@ speedLabel.Text = "Speed: 16"
 speedLabel.TextXAlignment = Enum.TextXAlignment.Left
 speedLabel.Parent = speedHackBox
 
--- Слайдер фон
+-- Фон слайдера
 local speedSlider = Instance.new("Frame")
 speedSlider.Size = UDim2.new(1, -20, 0, 10)
 speedSlider.Position = UDim2.new(0, 10, 0, 35)
-speedSlider.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedSlider.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- трохи темніший фон, як в основному меню
 speedSlider.BorderSizePixel = 0
 speedSlider.Parent = speedHackBox
 
@@ -465,7 +465,7 @@ speedSliderCorner.Parent = speedSlider
 local sliderButton = Instance.new("TextButton")
 sliderButton.Size = UDim2.new(0, 20, 0, 20)
 sliderButton.Position = UDim2.new(0, 0, 0.5, -10)
-sliderButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+sliderButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70) -- сіріша за фон
 sliderButton.BorderSizePixel = 0
 sliderButton.Text = ""
 sliderButton.Active = true
@@ -476,7 +476,7 @@ local sliderButtonCorner = Instance.new("UICorner")
 sliderButtonCorner.CornerRadius = UDim.new(1, 0)
 sliderButtonCorner.Parent = sliderButton
 
--- Логіка переміщення слайдера
+-- Логіка слайдера
 local minSpeed = 16
 local maxSpeed = 100
 local currentSpeed = minSpeed
@@ -488,9 +488,9 @@ local function updateSliderButtonPosition(percentage)
 	sliderButton.Position = UDim2.new(0, xPos, 0.5, -buttonSize / 2)
 end
 
-local dragging = false
 local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = game:GetService("Players").LocalPlayer
+local dragging = false
 
 sliderButton.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -522,11 +522,12 @@ UserInputService.InputChanged:Connect(function(input)
 	end
 end)
 
--- Ініціалізація позиції слайдера і тексту
+-- Ініціалізація позиції кнопки і тексту
 speedLabel.Text = "Speed: " .. currentSpeed
 speedSlider:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
 	updateSliderButtonPosition((currentSpeed - minSpeed) / (maxSpeed - minSpeed))
 end)
+
 
 -- Логіка drag слайдера
 local dragging = false
