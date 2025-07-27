@@ -425,14 +425,14 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Приклад config для speed hack
+-- Speed Hack state
 local state = {
-	minSpeed = 16,      -- мінімальна швидкість (звичайна)
-	maxSpeed = 200,     -- максимальна швидкість
-	currentSpeed = 16,  -- поточна швидкість
+	minSpeed = 16,
+	maxSpeed = 100,
+	currentSpeed = 16,
 }
 
--- Функція створення UI (приклад)
+-- Функція створення UI-елементів (використовуємо твою)
 local function createUI(className, properties)
 	local obj = Instance.new(className)
 	for prop, val in pairs(properties) do
@@ -441,16 +441,15 @@ local function createUI(className, properties)
 	return obj
 end
 
--- Створюємо слайдер (frame) і кнопку слайдера (sliderButton)
+-- Створення слайдера швидкості
 UI.speedSlider = createUI("Frame", {
 	Size = UDim2.new(0, 140, 0, 20),
-	Position = UDim2.new(0.05, 0, 0, 200),  -- підлаштуй позицію під своє меню
+	Position = UDim2.new(0.05, 0, 0, 200), -- підлаштуй під своє меню
 	BackgroundColor3 = Color3.fromRGB(50, 50, 50),
 	BorderSizePixel = 0,
 	Parent = frame,
 })
 
--- Фоновий повзунок
 UI.speedSliderBackground = createUI("Frame", {
 	Size = UDim2.new(1, -20, 0, 6),
 	Position = UDim2.new(0, 10, 0.5, -3),
@@ -459,7 +458,6 @@ UI.speedSliderBackground = createUI("Frame", {
 	Parent = UI.speedSlider,
 })
 
--- Кнопка слайдера
 UI.sliderButton = createUI("TextButton", {
 	Size = UDim2.new(0, 16, 0, 16),
 	Position = UDim2.new(0, 0, 0.5, -8),
@@ -474,7 +472,7 @@ UI.sliderButton = createUI("TextButton", {
 local corner = Instance.new("UICorner", UI.sliderButton)
 corner.CornerRadius = UDim.new(1, 0)
 
--- Функція оновлення позиції кнопки слайдера за відсотком (0..1)
+-- Оновлення позиції кнопки слайдера за відсотком
 local function updateSliderButtonPosition(slider, sliderButton, percentage)
 	local sliderSize = slider.AbsoluteSize
 	local buttonSize = sliderButton.AbsoluteSize
@@ -482,11 +480,10 @@ local function updateSliderButtonPosition(slider, sliderButton, percentage)
 	sliderButton.Position = UDim2.new(0, effectiveX - buttonSize.X/2, 0.5, -buttonSize.Y/2)
 end
 
--- Ініціалізуємо положення кнопки за початковою швидкістю
 local initSpeedPerc = (state.currentSpeed - state.minSpeed) / (state.maxSpeed - state.minSpeed)
 updateSliderButtonPosition(UI.speedSlider, UI.sliderButton, initSpeedPerc)
 
--- Drag логіка для слайдера
+-- Drag логіка
 local UserInputService = game:GetService("UserInputService")
 local dragging = false
 
@@ -503,24 +500,17 @@ UI.sliderButton.InputEnded:Connect(function(input)
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
 		local slider = UI.speedSlider
 		local sliderButton = UI.sliderButton
 		local sliderSize = slider.AbsoluteSize.X
 		local buttonSize = sliderButton.AbsoluteSize.X
-
-		-- Отримуємо курсор відносно слайдера
 		local relativeX = math.clamp(input.Position.X - slider.AbsolutePosition.X, 0, sliderSize)
-		-- Обчислюємо відсоток (0..1)
 		local percentage = relativeX / sliderSize
-
-		-- Оновлюємо положення кнопки слайдера
 		updateSliderButtonPosition(slider, sliderButton, percentage)
 
-		-- Оновлюємо швидкість в state
 		state.currentSpeed = state.minSpeed + (state.maxSpeed - state.minSpeed) * percentage
 
-		-- Твоє оновлення швидкості (приклад):
 		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
 			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = state.currentSpeed
 		end
