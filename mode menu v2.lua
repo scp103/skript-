@@ -425,49 +425,55 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Блок Скорости (Speed Hack)
-UI.speedFrame = createUI("Frame", {
-	Name = "SpeedFrame",
-	Size = UDim2.new(1, 0, 0, 50),
-	BackgroundTransparency = 1,
-	LayoutOrder = 7,
-})
-UI.speedFrame.Parent = UI.contentFrame
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
--- Кнопка з полем вводу
-UI.speedInput = createUI("TextBox", {
-	Size = UDim2.new(0.9, 0, 0, 30),
-	Position = UDim2.new(0.05, 0, 0, 10),
-	BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-	BorderColor3 = Color3.fromRGB(255, 255, 255),
-	BorderSizePixel = 1,
-	TextColor3 = Color3.fromRGB(255, 255, 255),
-	TextSize = 16,
-	Font = Enum.Font.SourceSansBold,
-	Text = tostring(state.currentSpeed or 16),
-	ClearTextOnFocus = true,
-	PlaceholderText = "Enter Speed (max 500)",
-})
-UI.speedInput.Parent = UI.speedFrame
+-- Початкова швидкість
+local currentSpeed = 16
+local minSpeed = 16
+local maxSpeed = 500
 
--- Перевірка на валідність і застосування швидкості
-UI.speedInput.FocusLost:Connect(function(enterPressed)
-	if enterPressed then
-		local input = tonumber(UI.speedInput.Text)
-		if input and input >= 0 and input <= 500 then
-			state.currentSpeed = input
-			-- Тут можна додати логіку зміни WalkSpeed
-			local char = game.Players.LocalPlayer.Character
-			if char and char:FindFirstChildOfClass("Humanoid") then
-				char:FindFirstChildOfClass("Humanoid").WalkSpeed = state.currentSpeed
-			end
-			UI.speedInput.Text = tostring(state.currentSpeed)
-		else
-			UI.speedInput.Text = tostring(state.currentSpeed)
-		end
-	end
+-- Створюємо TextBox у твоєму меню (frame)
+local speedInput = Instance.new("TextBox")
+speedInput.Size = UDim2.new(0.9, 0, 0, 30)
+speedInput.Position = UDim2.new(0.05, 0, 0, 200)  -- змінюй позицію під себе
+speedInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedInput.BorderSizePixel = 1
+speedInput.BorderColor3 = Color3.fromRGB(100, 100, 100)
+speedInput.TextColor3 = Color3.new(1, 1, 1)
+speedInput.Font = Enum.Font.SourceSansBold
+speedInput.TextSize = 16
+speedInput.ClearTextOnFocus = true
+speedInput.Text = "Speed: ".. tostring(currentSpeed)
+speedInput.Parent = frame  -- твій головний фрейм меню
+
+-- Функція для оновлення тексту
+local function updateSpeedText()
+    speedInput.Text = "Speed: ".. tostring(currentSpeed)
+end
+
+-- Обробник вводу
+speedInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local input = speedInput.Text:match("%d+")
+        input = tonumber(input)
+        if input and input >= minSpeed and input <= maxSpeed then
+            currentSpeed = input
+        end
+        updateSpeedText()
+    end
 end)
 
+-- Постійно оновлюємо WalkSpeed
+game:GetService("RunService").Heartbeat:Connect(function()
+    local character = LocalPlayer.Character
+    if character then
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = currentSpeed
+        end
+    end
+end)
 
 -- Логіка drag слайдера
 local dragging = false
