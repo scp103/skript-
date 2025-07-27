@@ -440,25 +440,6 @@ sliderButton.InputEnded:Connect(function(input)
 		dragging = false
 	end
 end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-		local sliderSize = speedSlider.AbsoluteSize.X
-		local buttonSize = sliderButton.AbsoluteSize.X
-		local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize - buttonSize)
-		local percentage = relativeX / (sliderSize - buttonSize)
-
-		updateSliderButtonPosition(percentage)
-
-		currentSpeed = minSpeed + (maxSpeed - minSpeed) * percentage
-
-		updateSpeedText(currentSpeed)
-
-		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
-		end
-	end
-end)
 -- ==============================
 -- Speed Hack UI Block (для Smile Mod Menu)
 -- ==============================
@@ -467,7 +448,7 @@ end)
 local state = {
     currentSpeed = 16,
     minSpeed = 16,
-    maxSpeed = 200,
+    maxSpeed = 500,
 }
 
 -- Фільтр для текстового вводу — лише цифри
@@ -572,6 +553,79 @@ sliderButton.InputEnded:Connect(function(input)
         dragging = false
     end
 end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local relativeX = input.Position.X - speedSlider.AbsolutePosition.X
+        local sliderWidth = speedSlider.AbsoluteSize.X
+        local buttonWidth = sliderButton.AbsoluteSize.X
+
+        local clampedX = math.clamp(relativeX, 0, sliderWidth - buttonWidth)
+        local percentage = clampedX / (sliderWidth - buttonWidth)
+
+        updateSliderPosition(percentage)
+
+        state.currentSpeed = math.floor(state.minSpeed + (state.maxSpeed - state.minSpeed) * percentage)
+        speedButton.Text = "Speed: " .. state.currentSpeed
+        speedInput.Text = tostring(state.currentSpeed)
+
+        -- Застосовуємо швидкість гравця
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = state.currentSpeed
+        end
+    end
+end)
+
+-- Клік по кнопці - показати текстове поле для вводу
+speedButton.MouseButton1Click:Connect(function()
+    speedButton.Visible = false
+    speedInput.Visible = true
+    speedInput:CaptureFocus()
+end)
+
+-- Вийшли з текстового поля
+speedInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local num = tonumber(speedInput.Text)
+        if num then
+            if num < state.minSpeed then num = state.minSpeed end
+            if num > state.maxSpeed then num = state.maxSpeed end
+            state.currentSpeed = num
+            speedButton.Text = "Speed: " .. state.currentSpeed
+
+            -- Оновити слайдер
+            local perc = (state.currentSpeed - state.minSpeed) / (state.maxSpeed - state.minSpeed)
+            updateSliderPosition(perc)
+
+            -- Застосувати швидкість
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+                LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = state.currentSpeed
+            end
+        end
+    end
+    speedInput.Visible = false
+    speedButton.Visible = true
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		local sliderSize = speedSlider.AbsoluteSize.X
+		local buttonSize = sliderButton.AbsoluteSize.X
+		local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize - buttonSize)
+		local percentage = relativeX / (sliderSize - buttonSize)
+
+		updateSliderButtonPosition(percentage)
+
+		currentSpeed = minSpeed + (maxSpeed - minSpeed) * percentage
+
+		updateSpeedText(currentSpeed)
+
+		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
+		end
+	end
+end)
+
 
 UserInputService.InputChanged:Connect(function(input)
     if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
