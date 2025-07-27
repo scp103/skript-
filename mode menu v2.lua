@@ -425,44 +425,7 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
-local speedHackBox = Instance.new("Frame", frame)
-speedHackBox.Size = UDim2.new(0.9, 0, 0, 60)  -- як у кнопок ширина, висота трохи більша
-speedHackBox.Position = UDim2.new(0.05, 0, 0, 200)  -- відступ по вертикалі підкоригуй під себе
-speedHackBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)  -- як у кнопок фон
-speedHackBox.BorderSizePixel = 0
 
-local speedLabel = Instance.new("TextLabel", speedHackBox)
-speedLabel.Size = UDim2.new(1, 0, 0, 30)
-speedLabel.Position = UDim2.new(0, 10, 0, 0)
-speedLabel.BackgroundTransparency = 1
-speedLabel.TextColor3 = Color3.new(1,1,1)
-speedLabel.Font = Enum.Font.SourceSansBold
-speedLabel.TextSize = 16
-speedLabel.Text = "Speed: 16"
-speedLabel.TextXAlignment = Enum.TextXAlignment.Left
-
--- Слайдер фон
-local speedSlider = Instance.new("Frame", speedHackBox)
-speedSlider.Size = UDim2.new(1, -20, 0, 10)
-speedSlider.Position = UDim2.new(0, 10, 0, 40)
-speedSlider.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- трошки темніший за фон кнопок
-speedSlider.BorderSizePixel = 0
-
-local speedSliderCorner = Instance.new("UICorner", speedSlider)
-speedSliderCorner.CornerRadius = UDim.new(1, 0)
-
--- Кнопка слайдера
-local sliderButton = Instance.new("TextButton", speedSlider)
-sliderButton.Size = UDim2.new(0, 20, 0, 20)
-sliderButton.Position = UDim2.new(0, 0, 0.5, -10)
-sliderButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70) -- сірий колір
-sliderButton.BorderSizePixel = 0
-sliderButton.Text = ""
-sliderButton.Active = true
-sliderButton.Selectable = true
-
-local sliderButtonCorner = Instance.new("UICorner", sliderButton)
-sliderButtonCorner.CornerRadius = UDim.new(1, 0)
 
 -- Логіка drag слайдера
 local dragging = false
