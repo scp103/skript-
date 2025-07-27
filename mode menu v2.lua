@@ -284,12 +284,7 @@ noclipButton.MouseButton1Click:Connect(function()
 		end
 	end
 end)
-
-Instance.new("UICorner", sliderButton).CornerRadius = UDim.new(1, 0)
-
--- Логіка швидкості
-local dragging = false
-local minSpeed, maxSpeed = 16, 100
+6, 100
 
 local function updateSlider(inputX)
 	local sliderPos = speedSlider.AbsolutePosition.X
