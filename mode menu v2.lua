@@ -425,91 +425,90 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Параметри Speed Hack для прикладу
+-- ==============================
+-- Speed Hack UI Block (для Smile Mod Menu)
+-- ==============================
+
+-- Параметри швидкості
 local state = {
     currentSpeed = 16,
     minSpeed = 16,
     maxSpeed = 200,
 }
 
+-- Фільтр для текстового вводу — лише цифри
 local function filterNumericInput(text)
-    -- Видаляємо все, крім цифр
     local filtered = text:gsub("%D", "")
     return filtered
 end
 
--- Починаємо додавати Speed Hack UI під noclipButton (на 200 px вниз)
-local speedFrame = createUI("Frame", {
-    Name = "SpeedFrame",
-    Size = UDim2.new(1, 0, 0, 60),
-    BackgroundTransparency = 1,
-    Active = true,
-    Selectable = true,
-})
-speedFrame.LayoutOrder = 7
-speedFrame.Parent = frame -- додаємо в головний frame твого меню
+-- Створення Speed Frame
+local speedFrame = Instance.new("Frame", frame)
+speedFrame.Name = "SpeedFrame"
+speedFrame.Size = UDim2.new(0.9, 0, 0, 60)
+speedFrame.Position = UDim2.new(0.05, 0, 0, 200)  -- Під noclipButton (160+30+10)
+speedFrame.BackgroundTransparency = 1
+speedFrame.Active = true
+speedFrame.Selectable = true
 
-speedFrame.Position = UDim2.new(0.05, 0, 0, 200) -- Позиція під noclipButton
+-- Кнопка показу швидкості
+local speedButton = Instance.new("TextButton", speedFrame)
+speedButton.Size = UDim2.new(1, 0, 0, 40)
+speedButton.Position = UDim2.new(0, 0, 0, 0)
+speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedButton.BorderSizePixel = 0
+speedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedButton.TextSize = 16
+speedButton.Font = Enum.Font.SourceSansBold
+speedButton.Text = "Speed: " .. state.currentSpeed
+speedButton.Active = true
+speedButton.Selectable = true
 
-local speedButton = createUI("TextButton", {
-    Size = UDim2.new(0.9, 0, 0, 40),
-    Position = UDim2.new(0.05, 0, 0, 0),
-    BackgroundColor3 = Color3.fromRGB(40, 40, 40), -- під стиль кнопок меню
-    BorderSizePixel = 0,
-    TextColor3 = Color3.fromRGB(255, 255, 255),
-    TextSize = 16,
-    Font = Enum.Font.SourceSansBold,
-    Text = "Speed: " .. state.currentSpeed,
-    Active = true,
-    Selectable = true,
-})
-speedButton.Parent = speedFrame
+-- Текстове поле вводу швидкості (спочатку приховане)
+local speedInput = Instance.new("TextBox", speedFrame)
+speedInput.Size = speedButton.Size
+speedInput.Position = speedButton.Position
+speedInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedInput.BorderSizePixel = 0
+speedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedInput.TextSize = 16
+speedInput.Font = Enum.Font.SourceSansBold
+speedInput.Text = tostring(state.currentSpeed)
+speedInput.ClearTextOnFocus = true
+speedInput.Visible = false
+speedInput.Active = true
+speedInput.Selectable = true
 
-local speedInput = createUI("TextBox", {
-    Size = speedButton.Size,
-    Position = speedButton.Position,
-    BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-    BorderSizePixel = 0,
-    TextColor3 = Color3.fromRGB(255, 255, 255),
-    TextSize = 16,
-    Font = Enum.Font.SourceSansBold,
-    Text = tostring(state.currentSpeed),
-    ClearTextOnFocus = true,
-    Visible = false,
-    Active = true,
-    Selectable = true,
-})
-speedInput.Parent = speedFrame
 speedInput:GetPropertyChangedSignal("Text"):Connect(function()
     speedInput.Text = filterNumericInput(speedInput.Text)
 end)
 
-local speedSlider = createUI("Frame", {
-    Size = UDim2.new(0.9, 0, 0, 4),
-    Position = UDim2.new(0.05, 0, 0, 50),
-    BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-    BorderSizePixel = 0,
-    Active = true,
-    Selectable = true,
-})
-speedSlider.Parent = speedFrame
-createUI("UICorner", { CornerRadius = UDim.new(1, 0), Parent = speedSlider })
+-- Слайдер (рейка)
+local speedSlider = Instance.new("Frame", speedFrame)
+speedSlider.Size = UDim2.new(1, 0, 0, 4)
+speedSlider.Position = UDim2.new(0, 0, 0, 50)
+speedSlider.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedSlider.BorderSizePixel = 0
+speedSlider.Active = true
+speedSlider.Selectable = true
 
--- Кнопка-слайдер для швидкості
-local initSpeedPerc = (state.currentSpeed - state.minSpeed) / (state.maxSpeed - state.minSpeed)
-local sliderButton = createUI("TextButton", {
-    Size = UDim2.new(0, 16, 0, 16),
-    Position = UDim2.new(0, 0, 0.5, -8),
-    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-    BorderSizePixel = 0,
-    Text = "",
-    Active = true,
-    Selectable = true,
-})
-sliderButton.Parent = speedSlider
-createUI("UICorner", { CornerRadius = UDim.new(1, 0), Parent = sliderButton })
+local speedSliderCorner = Instance.new("UICorner", speedSlider)
+speedSliderCorner.CornerRadius = UDim.new(1, 0)
 
--- Функція оновлення позиції слайдера за відсотком
+-- Кнопка-слайдер (рухома)
+local sliderButton = Instance.new("TextButton", speedSlider)
+sliderButton.Size = UDim2.new(0, 16, 0, 16)
+sliderButton.Position = UDim2.new(0, 0, 0.5, -8) -- по центру рейки
+sliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+sliderButton.BorderSizePixel = 0
+sliderButton.Text = ""
+sliderButton.Active = true
+sliderButton.Selectable = true
+
+local sliderButtonCorner = Instance.new("UICorner", sliderButton)
+sliderButtonCorner.CornerRadius = UDim.new(1, 0)
+
+-- Функція оновлення позиції слайдера по відсотку (0-1)
 local function updateSliderPosition(percentage)
     local sliderWidth = speedSlider.AbsoluteSize.X
     local buttonWidth = sliderButton.AbsoluteSize.X
@@ -517,10 +516,14 @@ local function updateSliderPosition(percentage)
     sliderButton.Position = UDim2.new(0, clampedX, 0.5, -buttonWidth / 2)
 end
 
--- Початкова позиція
+-- Початкова позиція слайдера
+local initSpeedPerc = (state.currentSpeed - state.minSpeed) / (state.maxSpeed - state.minSpeed)
+speedSlider:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+    updateSliderPosition(initSpeedPerc)
+end)
 updateSliderPosition(initSpeedPerc)
 
--- Обробка перетягування слайдера
+-- Логіка перетягування слайдера
 local dragging = false
 local UserInputService = game:GetService("UserInputService")
 
@@ -551,30 +554,44 @@ UserInputService.InputChanged:Connect(function(input)
         speedButton.Text = "Speed: " .. state.currentSpeed
         speedInput.Text = tostring(state.currentSpeed)
 
-        -- Застосувати швидкість персонажу
+        -- Застосовуємо швидкість гравця
         if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
             LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = state.currentSpeed
         end
     end
 end)
 
-speedSlider:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-    local percentage = (state.currentSpeed - state.minSpeed) / (state.maxSpeed - state.minSpeed)
-    updateSliderPosition(percentage)
-end)
-
--- Кнопка для вводу вручну (переключення між TextBox і кнопкою)
+-- Клік по кнопці - показати текстове поле для вводу
 speedButton.MouseButton1Click:Connect(function()
     speedButton.Visible = false
     speedInput.Visible = true
     speedInput:CaptureFocus()
 end)
 
+-- Вийшли з текстового поля
 speedInput.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local num = tonumber(speedInput.Text)
         if num then
-            if num < state.minS
+            if num < state.minSpeed then num = state.minSpeed end
+            if num > state.maxSpeed then num = state.maxSpeed end
+            state.currentSpeed = num
+            speedButton.Text = "Speed: " .. state.currentSpeed
+
+            -- Оновити слайдер
+            local perc = (state.currentSpeed - state.minSpeed) / (state.maxSpeed - state.minSpeed)
+            updateSliderPosition(perc)
+
+            -- Застосувати швидкість
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+                LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = state.currentSpeed
+            end
+        end
+    end
+    speedInput.Visible = false
+    speedButton.Visible = true
+end)
+
 
 -- Логіка drag слайдера
 local dragging = false
