@@ -425,39 +425,46 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Блок швидкості
+-- Потрібні сервіси
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Початкові параметри
+state.currentSpeed = 16
+state.minSpeed = 16
+state.maxSpeed = 500
+
+-- Створення SpeedFrame
 UI.speedFrame = createUI("Frame", {
 	Name = "SpeedFrame",
 	Size = UDim2.new(1, 0, 0, 40),
 	BackgroundTransparency = 1,
-	Active = true,
-	Selectable = true,
+	LayoutOrder = 7,
 })
-UI.speedFrame.LayoutOrder = 7
 UI.speedFrame.Parent = UI.contentFrame
 
--- Кнопка Speed (вигляд як aimButton)
+-- Кнопка Speed
 UI.speedButton = createUI("TextButton", {
 	Size = UDim2.new(0.9, 0, 0, 30),
 	Position = UDim2.new(0.05, 0, 0, 5),
 	BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-	BorderSizePixel = 1,
 	BorderColor3 = Color3.fromRGB(70, 70, 70),
+	BorderSizePixel = 1,
+	Text = "Speed: " .. tostring(state.currentSpeed),
 	TextColor3 = Color3.fromRGB(255, 255, 255),
 	TextSize = 16,
 	Font = Enum.Font.SourceSansBold,
-	Text = "Speed: " .. tostring(state.currentSpeed),
 })
 UI.speedButton.Parent = UI.speedFrame
 
--- Текстове поле для вводу
+-- Поле вводу (приховане)
 UI.speedInput = createUI("TextBox", {
 	Size = UI.speedButton.Size,
 	Position = UI.speedButton.Position,
-	BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+	BackgroundColor3 = UI.speedButton.BackgroundColor3,
+	BorderColor3 = UI.speedButton.BorderColor3,
 	BorderSizePixel = 1,
-	BorderColor3 = Color3.fromRGB(70, 70, 70),
-	TextColor3 = Color3.fromRGB(255, 255, 255),
+	TextColor3 = UI.speedButton.TextColor3,
 	TextSize = 16,
 	Font = Enum.Font.SourceSansBold,
 	Text = tostring(state.currentSpeed),
@@ -465,14 +472,15 @@ UI.speedInput = createUI("TextBox", {
 })
 UI.speedInput.Parent = UI.speedFrame
 
--- Параметри швидкості
-state.minSpeed = 16
-state.maxSpeed = 500
+-- Фільтрація нечислового вводу
+UI.speedInput:GetPropertyChangedSignal("Text"):Connect(function()
+	UI.speedInput.Text = UI.speedInput.Text:gsub("%D", "")
+end)
 
--- Перемикач між кнопкою і текстом
+-- Натискаєш на кнопку – зʼявляється поле
 UI.speedButton.MouseButton1Click:Connect(function()
 	UI.speedButton.Visible = false
-	UI.spe
+	UI.speedInp
 
 -- Логіка drag слайдера
 local dragging = false
