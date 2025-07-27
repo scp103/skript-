@@ -425,57 +425,60 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- ==============================
--- Speed Hack UI (без слайдера, з обводкою)
--- ==============================
+-- Блок Скорости без слайдера, з обводкою
+UI.speedFrame = createUI("Frame", {
+	Name = "SpeedFrame",
+	Size = UDim2.new(1, 0, 0, 40),
+	BackgroundTransparency = 1,
+	Active = true,
+	Selectable = true,
+})
+UI.speedFrame.LayoutOrder = 7
+UI.speedFrame.Parent = UI.contentFrame
 
-local speedFrame = Instance.new("Frame", frame)
-speedFrame.Name = "SpeedHack"
-speedFrame.Size = UDim2.new(0.9, 0, 0, 40)
-speedFrame.Position = UDim2.new(0.05, 0, 0, 200) -- Нижче попередніх
-speedFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-speedFrame.BorderSizePixel = 1
-speedFrame.BorderColor3 = Color3.fromRGB(70, 70, 70)
-speedFrame.Active = true
-speedFrame.Selectable = true
+-- Кнопка з фоном (як інші)
+UI.speedButton = createUI("TextBox", {
+	Size = UDim2.new(0.9, 0, 0, 40),
+	Position = UDim2.new(0.05, 0, 0, 0),
+	BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+	BorderSizePixel = 1,
+	BorderColor3 = Color3.fromRGB(70, 70, 70),
+	TextColor3 = Color3.fromRGB(255, 255, 255),
+	TextSize = 16,
+	Font = Enum.Font.SourceSansBold,
+	Text = "Speed: " .. tostring(state.currentSpeed),
+	ClearTextOnFocus = true,
+	TextXAlignment = Enum.TextXAlignment.Center,
+	Active = true,
+	Selectable = true,
+})
+UI.speedButton.Parent = UI.speedFrame
 
--- Поле для вводу швидкості
-local speedInput = Instance.new("TextBox", speedFrame)
-speedInput.Size = UDim2.new(1, 0, 1, 0)
-speedInput.Position = UDim2.new(0, 0, 0, 0)
-speedInput.BackgroundTransparency = 1
-speedInput.Text = "Speed: 16"
-speedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-speedInput.TextSize = 16
-speedInput.Font = Enum.Font.SourceSansBold
-speedInput.ClearTextOnFocus = true
-speedInput.TextXAlignment = Enum.TextXAlignment.Center
-speedInput.Active = true
-speedInput.Selectable = true
+-- Обмеження по швидкості
+state.minSpeed = 16
+state.maxSpeed = 500
 
--- Параметри
-local minSpeed = 16
-local maxSpeed = 500
-
--- Фільтр — тільки цифри
-speedInput:GetPropertyChangedSignal("Text"):Connect(function()
-    speedInput.Text = speedInput.Text:gsub("%D", "")
+-- Тільки цифри
+UI.speedButton:GetPropertyChangedSignal("Text"):Connect(function()
+	UI.speedButton.Text = UI.speedButton.Text:gsub("%D", "")
 end)
 
--- Коли фокус втрачено
-speedInput.FocusLost:Connect(function(enterPressed)
-    if enterPressed then
-        local speed = tonumber(speedInput.Text)
-        if speed then
-            speed = math.clamp(speed, minSpeed, maxSpeed)
-            speedInput.Text = "Speed: " .. speed
-            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-                LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = speed
-            end
-        else
-            speedInput.Text = "Speed: 16"
-        end
-    end
+-- Встановлення швидкості
+UI.speedButton.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		local value = tonumber(UI.speedButton.Text)
+		if value then
+			value = math.clamp(value, state.minSpeed, state.maxSpeed)
+			state.currentSpeed = value
+			UI.speedButton.Text = "Speed: " .. tostring(value)
+			local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+			if humanoid then
+				humanoid.WalkSpeed = value
+			end
+		else
+			UI.speedButton.Text = "Speed: " .. tostring(state.currentSpeed)
+		end
+	end
 end)
 
 -- Логіка drag слайдера
