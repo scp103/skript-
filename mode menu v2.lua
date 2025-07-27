@@ -284,34 +284,6 @@ noclipButton.MouseButton1Click:Connect(function()
 		end
 	end
 end)
--- SpeedHack Label
-local speedSliderLabel = Instance.new("TextLabel", frame)
-speedSliderLabel.Size = UDim2.new(0.9, 0, 0, 20)
-speedSliderLabel.Position = UDim2.new(0.05, 0, 0, 200)
-speedSliderLabel.BackgroundTransparency = 1
-speedSliderLabel.Text = "SpeedHack"
-speedSliderLabel.Font = Enum.Font.SourceSansBold
-speedSliderLabel.TextSize = 14
-speedSliderLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-
--- Слайдер фон
-local speedSlider = Instance.new("Frame", frame)
-speedSlider.Size = UDim2.new(0.9, 0, 0, 6)
-speedSlider.Position = UDim2.new(0.05, 0, 0, 225)
-speedSlider.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-speedSlider.Name = "speedSlider"
-
-local sliderBGCorner = Instance.new("UICorner", speedSlider)
-sliderBGCorner.CornerRadius = UDim.new(1, 0)
-
--- Повзунок
-local sliderButton = Instance.new("TextButton", speedSlider)
-sliderButton.Size = UDim2.new(0, 16, 0, 16)
-sliderButton.Position = UDim2.new(0, 0, 0.5, -8)
-sliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-sliderButton.BorderSizePixel = 0
-sliderButton.Text = ""
-sliderButton.AutoButtonColor = false
 
 Instance.new("UICorner", sliderButton).CornerRadius = UDim.new(1, 0)
 
