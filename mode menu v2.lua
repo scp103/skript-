@@ -459,46 +459,170 @@ UserInputService.InputChanged:Connect(function(input)
 		end
 	end
 end)
--- Параметри
-local currentSpeed = 16
-local minSpeed = 16
-local maxSpeed = 500
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local RunService = game:GetService("RunService")
+-- ==============================
+-- Speed Hack UI Block (для Smile Mod Menu)
+-- ==============================
 
--- GUI: Створюємо Speed Input в твоєму меню
-local speedInput = Instance.new("TextBox", frame)
-speedInput.Size = UDim2.new(0.9, 0, 0, 30)
-speedInput.Position = UDim2.new(0.05, 0, 0, 200)  -- змінюй Y Offset під тебе
+-- Параметри швидкості
+local state = {
+    currentSpeed = 16,
+    minSpeed = 16,
+    maxSpeed = 200,
+}
+
+-- Фільтр для текстового вводу — лише цифри
+local function filterNumericInput(text)
+    local filtered = text:gsub("%D", "")
+    return filtered
+end
+
+-- Створення Speed Frame
+local speedFrame = Instance.new("Frame", frame)
+speedFrame.Name = "SpeedFrame"
+speedFrame.Size = UDim2.new(0.9, 0, 0, 60)
+speedFrame.Position = UDim2.new(0.05, 0, 0, 200)  -- Під noclipButton (160+30+10)
+speedFrame.BackgroundTransparency = 1
+speedFrame.Active = true
+speedFrame.Selectable = true
+
+-- Кнопка показу швидкості
+local speedButton = Instance.new("TextButton", speedFrame)
+speedButton.Size = UDim2.new(1, 0, 0, 40)
+speedButton.Position = UDim2.new(0, 0, 0, 0)
+speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedButton.BorderSizePixel = 0
+speedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedButton.TextSize = 16
+speedButton.Font = Enum.Font.SourceSansBold
+speedButton.Text = "Speed: " .. state.currentSpeed
+speedButton.Active = true
+speedButton.Selectable = true
+
+-- Текстове поле вводу швидкості (спочатку приховане)
+local speedInput = Instance.new("TextBox", speedFrame)
+speedInput.Size = speedButton.Size
+speedInput.Position = speedButton.Position
 speedInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-speedInput.BorderSizePixel = 1
-speedInput.BorderColor3 = Color3.fromRGB(70, 70, 70)
+speedInput.BorderSizePixel = 0
 speedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-speedInput.Font = Enum.Font.SourceSansBold
 speedInput.TextSize = 16
+speedInput.Font = Enum.Font.SourceSansBold
+speedInput.Text = tostring(state.currentSpeed)
 speedInput.ClearTextOnFocus = true
-speedInput.Text = "Speed: " .. currentSpeed
-speedInput.TextXAlignment = Enum.TextXAlignment.Center
+speedInput.Visible = false
+speedInput.Active = true
+speedInput.Selectable = true
 
--- Коли користувач натискає Enter після вводу
+speedInput:GetPropertyChangedSignal("Text"):Connect(function()
+    speedInput.Text = filterNumericInput(speedInput.Text)
+end)
+
+-- Слайдер (рейка)
+local speedSlider = Instance.new("Frame", speedFrame)
+speedSlider.Size = UDim2.new(1, 0, 0, 4)
+speedSlider.Position = UDim2.new(0, 0, 0, 50)
+speedSlider.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedSlider.BorderSizePixel = 0
+speedSlider.Active = true
+speedSlider.Selectable = true
+
+local speedSliderCorner = Instance.new("UICorner", speedSlider)
+speedSliderCorner.CornerRadius = UDim.new(1, 0)
+
+-- Кнопка-слайдер (рухома)
+local sliderButton = Instance.new("TextButton", speedSlider)
+sliderButton.Size = UDim2.new(0, 16, 0, 16)
+sliderButton.Position = UDim2.new(0, 0, 0.5, -8) -- по центру рейки
+sliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+sliderButton.BorderSizePixel = 0
+sliderButton.Text = ""
+sliderButton.Active = true
+sliderButton.Selectable = true
+
+local sliderButtonCorner = Instance.new("UICorner", sliderButton)
+sliderButtonCorner.CornerRadius = UDim.new(1, 0)
+
+-- Функція оновлення позиції слайдера по відсотку (0-1)
+local function updateSliderPosition(percentage)
+    local sliderWidth = speedSlider.AbsoluteSize.X
+    local buttonWidth = sliderButton.AbsoluteSize.X
+    local clampedX = math.clamp(percentage * (sliderWidth - buttonWidth), 0, sliderWidth - buttonWidth)
+    sliderButton.Position = UDim2.new(0, clampedX, 0.5, -buttonWidth / 2)
+end
+
+-- Початкова позиція слайдера
+local initSpeedPerc = (state.currentSpeed - state.minSpeed) / (state.maxSpeed - state.minSpeed)
+speedSlider:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+    updateSliderPosition(initSpeedPerc)
+end)
+updateSliderPosition(initSpeedPerc)
+
+-- Логіка перетягування слайдера
+local dragging = false
+local UserInputService = game:GetService("UserInputService")
+
+sliderButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+    end
+end)
+
+sliderButton.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local relativeX = input.Position.X - speedSlider.AbsolutePosition.X
+        local sliderWidth = speedSlider.AbsoluteSize.X
+        local buttonWidth = sliderButton.AbsoluteSize.X
+
+        local clampedX = math.clamp(relativeX, 0, sliderWidth - buttonWidth)
+        local percentage = clampedX / (sliderWidth - buttonWidth)
+
+        updateSliderPosition(percentage)
+
+        state.currentSpeed = math.floor(state.minSpeed + (state.maxSpeed - state.minSpeed) * percentage)
+        speedButton.Text = "Speed: " .. state.currentSpeed
+        speedInput.Text = tostring(state.currentSpeed)
+
+        -- Застосовуємо швидкість гравця
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = state.currentSpeed
+        end
+    end
+end)
+
+-- Клік по кнопці - показати текстове поле для вводу
+speedButton.MouseButton1Click:Connect(function()
+    speedButton.Visible = false
+    speedInput.Visible = true
+    speedInput:CaptureFocus()
+end)
+
+-- Вийшли з текстового поля
 speedInput.FocusLost:Connect(function(enterPressed)
     if enterPressed then
-        local s = tonumber(speedInput.Text:match("%d+"))
-        if s and s >= minSpeed and s <= maxSpeed then
-            currentSpeed = s
+        local num = tonumber(speedInput.Text)
+        if num then
+            if num < state.minSpeed then num = state.minSpeed end
+            if num > state.maxSpeed then num = state.maxSpeed end
+            state.currentSpeed = num
+            speedButton.Text = "Speed: " .. state.currentSpeed
+
+            -- Оновити слайдер
+            local perc = (state.currentSpeed - state.minSpeed) / (state.maxSpeed - state.minSpeed)
+            updateSliderPosition(perc)
+
+            -- Застосувати швидкість
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+                LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = state.currentSpeed
+            end
         end
-        speedInput.Text = "Speed: " .. currentSpeed
     end
+    speedInput.Visible = false
+    speedButton.Visible = true
 end)
 
--- Постійне оновлення WalkSpeed
-RunService.Heartbeat:Connect(function()
-    local char = LocalPlayer.Character
-    if char then
-        local humanoid = char:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            humanoid.WalkSpeed = currentSpeed
-        end
-    end
-end)
