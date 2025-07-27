@@ -425,128 +425,6 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
-
-
--- Логіка drag слайдера
-local dragging = false
-
-sliderButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-	end
-end)
-
-sliderButton.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = false
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-		local sliderSize = speedSlider.AbsoluteSize.X
-		local buttonSize = sliderButton.AbsoluteSize.X
-		local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize - buttonSize)
-		local percentage = relativeX / (sliderSize - buttonSize)
-
-		updateSliderButtonPosition(percentage)
-
-		currentSpeed = minSpeed + (maxSpeed - minSpeed) * percentage
-
-		updateSpeedText(currentSpeed)
-
-		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
-		end
-	end
-end)
--- Speed Hack Box (стиль як кнопка AIM)
-local speedHackBox = Instance.new("Frame", frame)
-speedHackBox.Size = UDim2.new(0.9, 0, 0, 60)
-speedHackBox.Position = UDim2.new(0.05, 0, 0, 200) -- відрегулюй, щоб не накладалось
-speedHackBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-speedHackBox.BorderSizePixel = 0
-speedHackBox.Active = true
-speedHackBox.Draggable = false
-
-local speedLabel = Instance.new("TextLabel", speedHackBox)
-speedLabel.Size = UDim2.new(1, 0, 0, 30)
-speedLabel.Position = UDim2.new(0, 10, 0, 0)
-speedLabel.BackgroundTransparency = 1
-speedLabel.TextColor3 = Color3.new(1, 1, 1)
-speedLabel.Font = Enum.Font.SourceSansBold
-speedLabel.TextSize = 16
-speedLabel.Text = "Speed: 16"
-speedLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-local speedSlider = Instance.new("Frame", speedHackBox)
-speedSlider.Size = UDim2.new(1, -20, 0, 10)
-speedSlider.Position = UDim2.new(0, 10, 0, 35)
-speedSlider.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-speedSlider.BorderSizePixel = 0
-
-local speedSliderCorner = Instance.new("UICorner", speedSlider)
-speedSliderCorner.CornerRadius = UDim.new(1, 0)
-
-local sliderButton = Instance.new("TextButton", speedSlider)
-sliderButton.Size = UDim2.new(0, 20, 0, 20)
-sliderButton.Position = UDim2.new(0, 0, 0.5, -10)
-sliderButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-sliderButton.BorderSizePixel = 0
-sliderButton.Text = ""
-sliderButton.Active = true
-sliderButton.Selectable = true
-
-local sliderButtonCorner = Instance.new("UICorner", sliderButton)
-sliderButtonCorner.CornerRadius = UDim.new(1, 0)
-
--- Логіка слайдера
-local minSpeed = 16
-local maxSpeed = 200
-local currentSpeed = minSpeed
-
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-local dragging = false
-
-local function updateSliderButtonPosition(percentage)
-	local sliderSize = speedSlider.AbsoluteSize.X
-	local buttonSize = sliderButton.AbsoluteSize.X
-	local xPos = math.clamp(percentage * (sliderSize - buttonSize), 0, sliderSize - buttonSize)
-	sliderButton.Position = UDim2.new(0, xPos, 0.5, -buttonSize / 2)
-end
-
-sliderButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-	end
-end)
-
-sliderButton.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = false
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-		local sliderSize = speedSlider.AbsoluteSize.X
-		local buttonSize = sliderButton.AbsoluteSize.X
-		local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize - buttonSize)
-		local percentage = relativeX / (sliderSize - buttonSize)
-
-		updateSliderButtonPosition(percentage)
-
-		currentSpeed = math.floor(minSpeed + (maxSpeed - minSpeed) * percentage)
-		speedLabel.Text = "Speed: " .. currentSpeed
-
-		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
-		end
-	end
-end)
 -- Speed Hack Box (під noclipButton)
 local speedHackBox = Instance.new("Frame", frame)
 speedHackBox.Size = UDim2.new(0.9, 0, 0, 60)
@@ -641,6 +519,42 @@ end)
 -- Ініціалізуємо стартову позицію кнопки і швидкість
 updateSliderButtonPosition(0)
 speedLabel.Text = "Speed: " .. currentSpeed
+
+
+-- Логіка drag слайдера
+local dragging = false
+
+sliderButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+	end
+end)
+
+sliderButton.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = false
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		local sliderSize = speedSlider.AbsoluteSize.X
+		local buttonSize = sliderButton.AbsoluteSize.X
+		local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize - buttonSize)
+		local percentage = relativeX / (sliderSize - buttonSize)
+
+		updateSliderButtonPosition(percentage)
+
+		currentSpeed = minSpeed + (maxSpeed - minSpeed) * percentage
+
+		updateSpeedText(currentSpeed)
+
+		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
+		end
+	end
+end)
+
 
 
 
