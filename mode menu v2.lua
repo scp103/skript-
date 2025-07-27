@@ -425,8 +425,6 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Припускаємо, що у тебе є frame — основне меню, додаємо слайдер Speed Hack туди
-
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
@@ -436,26 +434,36 @@ local minSpeed = 16
 local maxSpeed = 100
 local currentSpeed = minSpeed
 
--- Створюємо UI слайдер (frame)
-local speedSlider = Instance.new("Frame")
-speedSlider.Size = UDim2.new(0, 140, 0, 20)
-speedSlider.Position = UDim2.new(0.05, 0, 0, 200) -- Підлаштуй позицію під своє меню
-speedSlider.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-speedSlider.BorderSizePixel = 0
-speedSlider.Parent = frame
+-- Контейнер для Speed Hack (окремий бокс)
+local speedHackBox = Instance.new("Frame")
+speedHackBox.Size = UDim2.new(0, 200, 0, 50)
+speedHackBox.Position = UDim2.new(0.05, 0, 0, 200) -- Підлаштуй під своє меню
+speedHackBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedHackBox.BorderSizePixel = 0
+speedHackBox.Parent = frame
 
--- Фон слайдера
-local sliderBackground = Instance.new("Frame")
-sliderBackground.Size = UDim2.new(1, -20, 0, 6)
-sliderBackground.Position = UDim2.new(0, 10, 0.5, -3)
-sliderBackground.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-sliderBackground.BorderSizePixel = 0
-sliderBackground.Parent = speedSlider
+local speedLabel = Instance.new("TextLabel")
+speedLabel.Size = UDim2.new(0, 100, 0, 20)
+speedLabel.Position = UDim2.new(0, 10, 0, 5)
+speedLabel.BackgroundTransparency = 1
+speedLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+speedLabel.Font = Enum.Font.SourceSansBold
+speedLabel.TextSize = 18
+speedLabel.Text = "Speed: " .. currentSpeed
+speedLabel.Parent = speedHackBox
+
+-- Слайдер (фон)
+local speedSlider = Instance.new("Frame")
+speedSlider.Size = UDim2.new(0, 160, 0, 12)
+speedSlider.Position = UDim2.new(0, 10, 0, 30)
+speedSlider.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+speedSlider.BorderSizePixel = 0
+speedSlider.Parent = speedHackBox
 
 -- Кнопка слайдера
 local sliderButton = Instance.new("TextButton")
-sliderButton.Size = UDim2.new(0, 16, 0, 16)
-sliderButton.Position = UDim2.new(0, 0, 0.5, -8)
+sliderButton.Size = UDim2.new(0, 24, 0, 24)
+sliderButton.Position = UDim2.new(0, 0, 0.5, -12)
 sliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 sliderButton.BorderSizePixel = 0
 sliderButton.Text = ""
@@ -466,16 +474,22 @@ sliderButton.Parent = speedSlider
 local corner = Instance.new("UICorner", sliderButton)
 corner.CornerRadius = UDim.new(1, 0)
 
--- Функція оновлення позиції кнопки слайдера
+-- Функція оновлення позиції кнопки слайдера (percentage від 0 до 1)
 local function updateSliderButtonPosition(percentage)
 	local sliderSize = speedSlider.AbsoluteSize.X
 	local buttonSize = sliderButton.AbsoluteSize.X
-	local effectiveX = buttonSize / 2 + (sliderSize - buttonSize) * percentage
-	sliderButton.Position = UDim2.new(0, effectiveX - buttonSize / 2, 0.5, -sliderButton.AbsoluteSize.Y / 2)
+	-- Кнопка рухається від 0 до максимальної ширини слайдера мінус ширина кнопки
+	local xPos = math.clamp(percentage * (sliderSize - buttonSize), 0, sliderSize - buttonSize)
+	sliderButton.Position = UDim2.new(0, xPos, 0.5, -buttonSize / 2)
 end
 
 -- Початкове положення кнопки
 updateSliderButtonPosition(0)
+
+-- Оновлення тексту швидкості
+local function updateSpeedText(speed)
+	speedLabel.Text = string.format("Speed: %.1f", speed)
+end
 
 -- Логіка drag слайдера
 local dragging = false
@@ -496,19 +510,120 @@ UserInputService.InputChanged:Connect(function(input)
 	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
 		local sliderSize = speedSlider.AbsoluteSize.X
 		local buttonSize = sliderButton.AbsoluteSize.X
-		local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize)
-		local percentage = relativeX / sliderSize
+		local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize - buttonSize)
+		local percentage = relativeX / (sliderSize - buttonSize)
 
 		updateSliderButtonPosition(percentage)
 
 		currentSpeed = minSpeed + (maxSpeed - minSpeed) * percentage
 
-		-- Застосовуємо швидкість
+		updateSpeedText(currentSpeed)
+
 		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
 			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
 		end
 	end
 end)
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+
+-- Параметри швидкості
+local minSpeed = 16
+local maxSpeed = 100
+local currentSpeed = minSpeed
+
+-- Контейнер для Speed Hack (окремий бокс)
+local speedHackBox = Instance.new("Frame")
+speedHackBox.Size = UDim2.new(0, 200, 0, 50)
+speedHackBox.Position = UDim2.new(0.05, 0, 0, 200) -- Підлаштуй під своє меню
+speedHackBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedHackBox.BorderSizePixel = 0
+speedHackBox.Parent = frame
+
+local speedLabel = Instance.new("TextLabel")
+speedLabel.Size = UDim2.new(0, 100, 0, 20)
+speedLabel.Position = UDim2.new(0, 10, 0, 5)
+speedLabel.BackgroundTransparency = 1
+speedLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+speedLabel.Font = Enum.Font.SourceSansBold
+speedLabel.TextSize = 18
+speedLabel.Text = "Speed: " .. currentSpeed
+speedLabel.Parent = speedHackBox
+
+-- Слайдер (фон)
+local speedSlider = Instance.new("Frame")
+speedSlider.Size = UDim2.new(0, 160, 0, 12)
+speedSlider.Position = UDim2.new(0, 10, 0, 30)
+speedSlider.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+speedSlider.BorderSizePixel = 0
+speedSlider.Parent = speedHackBox
+
+-- Кнопка слайдера
+local sliderButton = Instance.new("TextButton")
+sliderButton.Size = UDim2.new(0, 24, 0, 24)
+sliderButton.Position = UDim2.new(0, 0, 0.5, -12)
+sliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+sliderButton.BorderSizePixel = 0
+sliderButton.Text = ""
+sliderButton.Active = true
+sliderButton.Selectable = true
+sliderButton.Parent = speedSlider
+
+local corner = Instance.new("UICorner", sliderButton)
+corner.CornerRadius = UDim.new(1, 0)
+
+-- Функція оновлення позиції кнопки слайдера (percentage від 0 до 1)
+local function updateSliderButtonPosition(percentage)
+	local sliderSize = speedSlider.AbsoluteSize.X
+	local buttonSize = sliderButton.AbsoluteSize.X
+	-- Кнопка рухається від 0 до максимальної ширини слайдера мінус ширина кнопки
+	local xPos = math.clamp(percentage * (sliderSize - buttonSize), 0, sliderSize - buttonSize)
+	sliderButton.Position = UDim2.new(0, xPos, 0.5, -buttonSize / 2)
+end
+
+-- Початкове положення кнопки
+updateSliderButtonPosition(0)
+
+-- Оновлення тексту швидкості
+local function updateSpeedText(speed)
+	speedLabel.Text = string.format("Speed: %.1f", speed)
+end
+
+-- Логіка drag слайдера
+local dragging = false
+
+sliderButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+	end
+end)
+
+sliderButton.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = false
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		local sliderSize = speedSlider.AbsoluteSize.X
+		local buttonSize = sliderButton.AbsoluteSize.X
+		local relativeX = math.clamp(input.Position.X - speedSlider.AbsolutePosition.X, 0, sliderSize - buttonSize)
+		local percentage = relativeX / (sliderSize - buttonSize)
+
+		updateSliderButtonPosition(percentage)
+
+		currentSpeed = minSpeed + (maxSpeed - minSpeed) * percentage
+
+		updateSpeedText(currentSpeed)
+
+		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
+		end
+	end
+end)
+
 
 
 
