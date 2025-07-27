@@ -426,6 +426,7 @@ makeDraggable(frame)
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
 -- Мінімальний Speed Hack блок
+-- Мінімальний Speed Hack блок
 UI.speedButton = createUI("TextBox", {
 	Name = "SpeedButton",
 	Size = UDim2.new(0.9, 0, 0, 30),
