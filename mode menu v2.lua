@@ -425,44 +425,49 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Мінімальний Speed Hack блок
--- Мінімальний Speed Hack блок
-UI.speedButton = createUI("TextBox", {
-	Name = "SpeedButton",
-	Size = UDim2.new(0.9, 0, 0, 30),
-	Position = UDim2.new(0.05, 0, 0, 0),
-	BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-	TextColor3 = Color3.new(1, 1, 1),
-	Font = Enum.Font.SourceSansBold,
-	TextSize = 16,
-	Text = "Speed: 16",
-	ClearTextOnFocus = true,
-	BorderSizePixel = 1,
-	BorderColor3 = Color3.fromRGB(100, 100, 100),
-	Parent = UI.contentFrame
+-- Блок Скорости (Speed Hack)
+UI.speedFrame = createUI("Frame", {
+	Name = "SpeedFrame",
+	Size = UDim2.new(1, 0, 0, 50),
+	BackgroundTransparency = 1,
+	LayoutOrder = 7,
 })
+UI.speedFrame.Parent = UI.contentFrame
 
--- Стартова швидкість
-local currentSpeed = 16
+-- Кнопка з полем вводу
+UI.speedInput = createUI("TextBox", {
+	Size = UDim2.new(0.9, 0, 0, 30),
+	Position = UDim2.new(0.05, 0, 0, 10),
+	BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+	BorderColor3 = Color3.fromRGB(255, 255, 255),
+	BorderSizePixel = 1,
+	TextColor3 = Color3.fromRGB(255, 255, 255),
+	TextSize = 16,
+	Font = Enum.Font.SourceSansBold,
+	Text = tostring(state.currentSpeed or 16),
+	ClearTextOnFocus = true,
+	PlaceholderText = "Enter Speed (max 500)",
+})
+UI.speedInput.Parent = UI.speedFrame
 
--- Встановлення швидкості після вводу
-UI.speedButton.FocusLost:Connect(function()
-	local input = tonumber(UI.speedButton.Text)
-	if input and input >= 0 and input <= 500 then
-		currentSpeed = input
-		UI.speedButton.Text = "Speed: " .. tostring(currentSpeed)
-	else
-		UI.speedButton.Text = "Speed: " .. tostring(currentSpeed)
+-- Перевірка на валідність і застосування швидкості
+UI.speedInput.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		local input = tonumber(UI.speedInput.Text)
+		if input and input >= 0 and input <= 500 then
+			state.currentSpeed = input
+			-- Тут можна додати логіку зміни WalkSpeed
+			local char = game.Players.LocalPlayer.Character
+			if char and char:FindFirstChildOfClass("Humanoid") then
+				char:FindFirstChildOfClass("Humanoid").WalkSpeed = state.currentSpeed
+			end
+			UI.speedInput.Text = tostring(state.currentSpeed)
+		else
+			UI.speedInput.Text = tostring(state.currentSpeed)
+		end
 	end
 end)
 
--- Постійне оновлення WalkSpeed
-game:GetService("RunService").Heartbeat:Connect(function()
-	local char = game.Players.LocalPlayer.Character
-	if char and char:FindFirstChild("Humanoid") then
-		char.Humanoid.WalkSpeed = currentSpeed
-	end
-end)
 
 -- Логіка drag слайдера
 local dragging = false
