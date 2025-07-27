@@ -284,46 +284,56 @@ noclipButton.MouseButton1Click:Connect(function()
 		end
 	end
 end)
-6, 100
+-- Кнопка "хрестик" згортання (над мод меню)
+local minimizeButton = Instance.new("TextButton", frame)
+minimizeButton.Size = UDim2.new(0, 20, 0, 20)
+minimizeButton.Position = UDim2.new(1, -22, 0, -22) -- трохи зверху справа
+minimizeButton.Text = "✕"
+minimizeButton.TextColor3 = Color3.new(1, 1, 1)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+minimizeButton.BorderSizePixel = 0
+minimizeButton.ZIndex = 10
 
-local function updateSlider(inputX)
-	local sliderPos = speedSlider.AbsolutePosition.X
-	local sliderSize = speedSlider.AbsoluteSize.X
-	local rel = math.clamp(inputX - sliderPos, 0, sliderSize)
+-- Кнопка кружок для розгортання (зовні меню)
+local minimizedCircle = Instance.new("TextButton", screenGui)
+minimizedCircle.Size = UDim2.new(0, 30, 0, 30)
+minimizedCircle.Position = UDim2.new(0, 300, 0, 200) -- змінюй на потрібне
+minimizedCircle.Text = ""
+minimizedCircle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+minimizedCircle.BorderSizePixel = 0
+minimizedCircle.Visible = false
+minimizedCircle.AutoButtonColor = false
+minimizedCircle.ZIndex = 10
+minimizedCircle.AnchorPoint = Vector2.new(0.5, 0.5)
 
-	sliderButton.Position = UDim2.new(0, rel - sliderButton.AbsoluteSize.X / 2, 0.5, -8)
+local corner = Instance.new("UICorner", minimizedCircle)
+corner.CornerRadius = UDim.new(1, 0) -- круг
 
-	local perc = rel / sliderSize
-	local hum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
-	if hum then
-		hum.WalkSpeed = minSpeed + (maxSpeed - minSpeed) * perc
-	end
-end
-
--- Події слайдера
-sliderButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
+-- Анімація переливу кольору кружка
+task.spawn(function()
+	while true do
+		if minimizedCircle.Visible then
+			local t = tick()
+			local r = 0.5 + 0.5 * math.sin(t)
+			local g = 0.5 + 0.5 * math.sin(t + 2)
+			local b = 0.5 + 0.5 * math.sin(t + 4)
+			minimizedCircle.BackgroundColor3 = Color3.new(r, g, b)
+		end
+		task.wait(0.05)
 	end
 end)
 
-UserInputService.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = false
-	end
+-- Обробник кліку на хрестик (згортання)
+minimizeButton.MouseButton1Click:Connect(function()
+	frame.Visible = false
+	minimizeButton.Visible = false
+	minimizedCircle.Visible = true
 end)
 
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		updateSlider(input.Position.X)
-	end
+-- Обробник кліку на кружок (розгортання)
+minimizedCircle.MouseButton1Click:Connect(function()
+	frame.Visible = true
+	minimizeButton.Visible = true
+	minimizedCircle.Visible = false
 end)
-
--- Задати початкову швидкість (50%)
-RunService.RenderStepped:Wait()
-updateSlider(speedSlider.AbsolutePosition.X + speedSlider.AbsoluteSize.X / 2)
-
--- Початкове значення швидкості (50%)
-RunService.RenderStepped:Wait() -- щоб елементи створились
-updateWalkSpeed(speedSlider.AbsolutePosition.X + speedSlider.AbsoluteSize.X / 2)
 
