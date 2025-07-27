@@ -284,3 +284,73 @@ noclipButton.MouseButton1Click:Connect(function()
 		end
 	end
 end)
+-- Кнопка SpeedHack (Slider)
+local speedSliderLabel = Instance.new("TextLabel", frame)
+speedSliderLabel.Size = UDim2.new(0.9, 0, 0, 20)
+speedSliderLabel.Position = UDim2.new(0.05, 0, 0, 200)
+speedSliderLabel.BackgroundTransparency = 1
+speedSliderLabel.Text = "SpeedHack"
+speedSliderLabel.Font = Enum.Font.SourceSansBold
+speedSliderLabel.TextSize = 14
+speedSliderLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local speedSlider = Instance.new("Frame", frame)
+speedSlider.Name = "speedSlider"
+speedSlider.Size = UDim2.new(0.9, 0, 0, 6)
+speedSlider.Position = UDim2.new(0.05, 0, 0, 225)
+speedSlider.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+
+local speedSliderCorner = Instance.new("UICorner", speedSlider)
+speedSliderCorner.CornerRadius = UDim.new(1, 0)
+
+local sliderButton = Instance.new("TextButton", speedSlider)
+sliderButton.Size = UDim2.new(0, 16, 0, 16)
+sliderButton.Position = UDim2.new(0, 0, 0.5, -8)
+sliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+sliderButton.BorderSizePixel = 0
+sliderButton.Text = ""
+sliderButton.Active = true
+sliderButton.Selectable = true
+
+local sliderButtonCorner = Instance.new("UICorner", sliderButton)
+sliderButtonCorner.CornerRadius = UDim.new(1, 0)
+
+-- Логіка зміни швидкості
+local dragging = false
+local minWalkSpeed = 16
+local maxWalkSpeed = 100
+
+local function updateWalkSpeed(x)
+	local sliderWidth = speedSlider.AbsoluteSize.X
+	local relX = math.clamp(x - speedSlider.AbsolutePosition.X, 0, sliderWidth)
+	local perc = relX / sliderWidth
+	sliderButton.Position = UDim2.new(0, relX - sliderButton.AbsoluteSize.X / 2, 0.5, -8)
+
+	local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.WalkSpeed = minWalkSpeed + (maxWalkSpeed - minWalkSpeed) * perc
+	end
+end
+
+sliderButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = false
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+		updateWalkSpeed(input.Position.X)
+	end
+end)
+
+-- Початкове значення швидкості (50%)
+RunService.RenderStepped:Wait() -- щоб елементи створились
+updateWalkSpeed(speedSlider.AbsolutePosition.X + speedSlider.AbsoluteSize.X / 2)
+
