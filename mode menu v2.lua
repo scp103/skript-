@@ -425,63 +425,42 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Блок Speed Hack (ручне введення швидкості)
-UI.speedFrame = createUI("Frame", {
-	Name = "SpeedFrame",
-	Size = UDim2.new(1, 0, 0, 70),
-	BackgroundTransparency = 1,
-	Active = true,
-	Selectable = true,
-})
-UI.speedFrame.LayoutOrder = 7
-UI.speedFrame.Parent = UI.contentFrame
-
--- Кнопка (вигляд як в aimButton)
-UI.speedButton = createUI("TextButton", {
+-- Мінімальний Speed Hack блок
+UI.speedButton = createUI("TextBox", {
+	Name = "SpeedButton",
 	Size = UDim2.new(0.9, 0, 0, 30),
-	Position = UDim2.new(0.05, 0, 0, 5),
+	Position = UDim2.new(0.05, 0, 0, 0),
 	BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-	TextColor3 = Color3.fromRGB(255, 255, 255),
-	TextSize = 16,
+	TextColor3 = Color3.new(1, 1, 1),
 	Font = Enum.Font.SourceSansBold,
-	Text = "Speed: " .. tostring(state.currentSpeed),
-	BorderSizePixel = 1,
-	BorderColor3 = Color3.fromRGB(100, 100, 100),
-})
-UI.speedButton.Parent = UI.speedFrame
-
--- Ввід значення
-UI.speedInput = createUI("TextBox", {
-	Size = UI.speedButton.Size,
-	Position = UI.speedButton.Position,
-	BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-	TextColor3 = Color3.fromRGB(255, 255, 255),
 	TextSize = 16,
-	Font = Enum.Font.SourceSansBold,
-	Text = tostring(state.currentSpeed),
-	Visible = false,
+	Text = "Speed: 16",
 	ClearTextOnFocus = true,
 	BorderSizePixel = 1,
 	BorderColor3 = Color3.fromRGB(100, 100, 100),
+	Parent = UI.contentFrame
 })
-UI.speedInput.Parent = UI.speedFrame
 
--- Перемикання між кнопкою і полем вводу
-UI.speedButton.MouseButton1Click:Connect(function()
-	UI.speedButton.Visible = false
-	UI.speedInput.Visible = true
-	UI.speedInput:CaptureFocus()
+-- Стартова швидкість
+local currentSpeed = 16
+
+-- Встановлення швидкості після вводу
+UI.speedButton.FocusLost:Connect(function()
+	local input = tonumber(UI.speedButton.Text)
+	if input and input >= 0 and input <= 500 then
+		currentSpeed = input
+		UI.speedButton.Text = "Speed: " .. tostring(currentSpeed)
+	else
+		UI.speedButton.Text = "Speed: " .. tostring(currentSpeed)
+	end
 end)
 
--- Застосування нової швидкості
-UI.speedInput.FocusLost:Connect(function()
-	local input = tonumber(UI.speedInput.Text)
-	if input and input >= 0 and input <= 500 then
-		state.currentSpeed = input
+-- Постійне оновлення WalkSpeed
+game:GetService("RunService").Heartbeat:Connect(function()
+	local char = game.Players.LocalPlayer.Character
+	if char and char:FindFirstChild("Humanoid") then
+		char.Humanoid.WalkSpeed = currentSpeed
 	end
-	UI.speedButton.Text = "Speed: " .. tostring(state.currentSpeed)
-	UI.speedInput.Visible = false
-	UI.speedButton.Visible = true
 end)
 
 -- Логіка drag слайдера
