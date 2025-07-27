@@ -459,45 +459,46 @@ UserInputService.InputChanged:Connect(function(input)
 		end
 	end
 end)
+-- Параметри
+local currentSpeed = 16
+local minSpeed = 16
+local maxSpeed = 500
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local state = {}
-state.currentSpeed = 16
-state.minSpeed = 16
-state.maxSpeed = 500
+local RunService = game:GetService("RunService")
 
--- Створення GUI із TextBox
-local screenGui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
-local textBox = Instance.new("TextBox", screenGui)
-textBox.Size = UDim2.new(0, 200, 0, 30)
-textBox.Position = UDim2.new(0.5, -100, 0.5, -15)
-textBox.PlaceholderText = "Type speed (16‑500)"
-textBox.ClearTextOnFocus = true
-textBox.Text = tostring(state.currentSpeed)
-textBox.TextSize = 18
-textBox.Font = Enum.Font.SourceSansBold
-textBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+-- GUI: Створюємо Speed Input в твоєму меню
+local speedInput = Instance.new("TextBox", frame)
+speedInput.Size = UDim2.new(0.9, 0, 0, 30)
+speedInput.Position = UDim2.new(0.05, 0, 0, 200)  -- змінюй Y Offset під тебе
+speedInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedInput.BorderSizePixel = 1
+speedInput.BorderColor3 = Color3.fromRGB(70, 70, 70)
+speedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedInput.Font = Enum.Font.SourceSansBold
+speedInput.TextSize = 16
+speedInput.ClearTextOnFocus = true
+speedInput.Text = "Speed: " .. currentSpeed
+speedInput.TextXAlignment = Enum.TextXAlignment.Center
 
--- Коли користувач вводить і натискає Enter
-textBox.FocusLost:Connect(function(enterPressed)
+-- Коли користувач натискає Enter після вводу
+speedInput.FocusLost:Connect(function(enterPressed)
     if enterPressed then
-        local val = tonumber(textBox.Text)
-        if val and val >= state.minSpeed and val <= state.maxSpeed then
-            state.currentSpeed = val
+        local s = tonumber(speedInput.Text:match("%d+"))
+        if s and s >= minSpeed and s <= maxSpeed then
+            currentSpeed = s
         end
-        textBox.Text = tostring(state.currentSpeed)
+        speedInput.Text = "Speed: " .. currentSpeed
     end
 end)
 
--- Пістійне оновлення WalkSpeed для персонажа
-game:GetService("RunService").Heartbeat:Connect(function()
+-- Постійне оновлення WalkSpeed
+RunService.Heartbeat:Connect(function()
     local char = LocalPlayer.Character
-    if char and char:FindFirstChildOfClass("Humanoid") then
-        char:FindFirstChildOfClass("Humanoid").WalkSpeed = state.currentSpeed
+    if char then
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = currentSpeed
+        end
     end
 end)
-
-
-
-
