@@ -284,7 +284,7 @@ noclipButton.MouseButton1Click:Connect(function()
 		end
 	end
 end)
--- Кнопка SpeedHack (Slider)
+-- SpeedHack Label
 local speedSliderLabel = Instance.new("TextLabel", frame)
 speedSliderLabel.Size = UDim2.new(0.9, 0, 0, 20)
 speedSliderLabel.Position = UDim2.new(0.05, 0, 0, 200)
@@ -294,44 +294,46 @@ speedSliderLabel.Font = Enum.Font.SourceSansBold
 speedSliderLabel.TextSize = 14
 speedSliderLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
+-- Слайдер фон
 local speedSlider = Instance.new("Frame", frame)
-speedSlider.Name = "speedSlider"
 speedSlider.Size = UDim2.new(0.9, 0, 0, 6)
 speedSlider.Position = UDim2.new(0.05, 0, 0, 225)
-speedSlider.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+speedSlider.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
+speedSlider.Name = "speedSlider"
 
-local speedSliderCorner = Instance.new("UICorner", speedSlider)
-speedSliderCorner.CornerRadius = UDim.new(1, 0)
+local sliderBGCorner = Instance.new("UICorner", speedSlider)
+sliderBGCorner.CornerRadius = UDim.new(1, 0)
 
+-- Повзунок
 local sliderButton = Instance.new("TextButton", speedSlider)
 sliderButton.Size = UDim2.new(0, 16, 0, 16)
 sliderButton.Position = UDim2.new(0, 0, 0.5, -8)
 sliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 sliderButton.BorderSizePixel = 0
 sliderButton.Text = ""
-sliderButton.Active = true
-sliderButton.Selectable = true
+sliderButton.AutoButtonColor = false
 
-local sliderButtonCorner = Instance.new("UICorner", sliderButton)
-sliderButtonCorner.CornerRadius = UDim.new(1, 0)
+Instance.new("UICorner", sliderButton).CornerRadius = UDim.new(1, 0)
 
--- Логіка зміни швидкості
+-- Логіка швидкості
 local dragging = false
-local minWalkSpeed = 16
-local maxWalkSpeed = 100
+local minSpeed, maxSpeed = 16, 100
 
-local function updateWalkSpeed(x)
-	local sliderWidth = speedSlider.AbsoluteSize.X
-	local relX = math.clamp(x - speedSlider.AbsolutePosition.X, 0, sliderWidth)
-	local perc = relX / sliderWidth
-	sliderButton.Position = UDim2.new(0, relX - sliderButton.AbsoluteSize.X / 2, 0.5, -8)
+local function updateSlider(inputX)
+	local sliderPos = speedSlider.AbsolutePosition.X
+	local sliderSize = speedSlider.AbsoluteSize.X
+	local rel = math.clamp(inputX - sliderPos, 0, sliderSize)
 
-	local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-	if humanoid then
-		humanoid.WalkSpeed = minWalkSpeed + (maxWalkSpeed - minWalkSpeed) * perc
+	sliderButton.Position = UDim2.new(0, rel - sliderButton.AbsoluteSize.X / 2, 0.5, -8)
+
+	local perc = rel / sliderSize
+	local hum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+	if hum then
+		hum.WalkSpeed = minSpeed + (maxSpeed - minSpeed) * perc
 	end
 end
 
+-- Події слайдера
 sliderButton.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = true
@@ -346,9 +348,13 @@ end)
 
 UserInputService.InputChanged:Connect(function(input)
 	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		updateWalkSpeed(input.Position.X)
+		updateSlider(input.Position.X)
 	end
 end)
+
+-- Задати початкову швидкість (50%)
+RunService.RenderStepped:Wait()
+updateSlider(speedSlider.AbsolutePosition.X + speedSlider.AbsoluteSize.X / 2)
 
 -- Початкове значення швидкості (50%)
 RunService.RenderStepped:Wait() -- щоб елементи створились
