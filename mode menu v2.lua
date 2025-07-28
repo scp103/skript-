@@ -440,58 +440,113 @@ sliderButton.InputEnded:Connect(function(input)
 		dragging = false
 	end
 end)
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
+-- Speed Hack Module for LogdrinosMenu (add at the end of your script)
+do
+    -- Add to content frame
+    UI.speedHackFrame = createUI("Frame", {
+        Name = "SpeedHackFrame",
+        Size = UDim2.new(1, 0, 0, 60),
+        BackgroundTransparency = 1,
+        Active = true,
+        Selectable = true,
+    })
+    UI.speedHackFrame.LayoutOrder = 9  -- Position after jump controls
+    UI.speedHackFrame.Parent = UI.contentFrame
 
--- Створюємо головне меню
-local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-screenGui.Name = "SpeedHackUI"
-screenGui.ResetOnSpawn = false
+    -- Speed Hack Button
+    UI.speedHackButton = createUI("TextButton", {
+        Size = UDim2.new(0.9, 0, 0, 40),
+        Position = UDim2.new(0.05, 0, 0, 0),
+        BackgroundColor3 = Color3.fromRGB(65,65,65),
+        TextColor3 = Color3.fromRGB(255,255,255),
+        TextSize = 14,
+        Font = Enum.Font.Gotham,
+        Text = "Speed Hack: OFF",
+    })
+    UI.speedHackButton.Parent = UI.speedHackFrame
 
--- Основна панель (можеш вставити в createUI, якщо в тебе є)
-local speedFrame = Instance.new("Frame")
-speedFrame.Size = UDim2.new(0, 200, 0, 100)
-speedFrame.Position = UDim2.new(0, 20, 0, 250)
-speedFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-speedFrame.BorderSizePixel = 2
-speedFrame.BorderColor3 = Color3.fromRGB(0, 255, 0)
-speedFrame.Parent = screenGui
+    -- Speed Slider
+    UI.speedHackSlider = createUI("Frame", {
+        Size = UDim2.new(0.9, 0, 0, 4),
+        Position = UDim2.new(0.05, 0, 0, 50),
+        BackgroundColor3 = Color3.fromRGB(65,65,65),
+        BorderSizePixel = 0,
+    })
+    UI.speedHackSlider.Parent = UI.speedHackFrame
+    createUI("UICorner", {CornerRadius = UDim.new(1, 0), Parent = UI.speedHackSlider})
 
--- Поле для введення швидкості
-local speedBox = Instance.new("TextBox")
-speedBox.Size = UDim2.new(0, 180, 0, 30)
-speedBox.Position = UDim2.new(0, 10, 0, 10)
-speedBox.PlaceholderText = "Speed (макс 500)"
-speedBox.Text = ""
-speedBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-speedBox.BorderColor3 = Color3.fromRGB(0, 255, 0)
-speedBox.TextColor3 = Color3.new(1, 1, 1)
-speedBox.ClearTextOnFocus = false
-speedBox.Parent = speedFrame
+    -- Slider Button
+    UI.speedHackSliderButton = createUI("TextButton", {
+        Size = UDim2.new(0, 16, 0, 16),
+        Position = UDim2.new(0, 0, 0.5, 0),
+        BackgroundColor3 = Color3.fromRGB(255,255,255),
+        BorderSizePixel = 0,
+        Text = "",
+    })
+    UI.speedHackSliderButton.Parent = UI.speedHackSlider
+    createUI("UICorner", {CornerRadius = UDim.new(1, 0), Parent = UI.speedHackSliderButton})
 
--- Кнопка Apply (в стилі aimButton)
-local applyButton = Instance.new("TextButton")
-applyButton.Size = UDim2.new(0, 180, 0, 30)
-applyButton.Position = UDim2.new(0, 10, 0, 50)
-applyButton.Text = "Застосувати швидкість"
-applyButton.BackgroundColor3 = Color3.fromRGB(0, 180, 0)
-applyButton.TextColor3 = Color3.new(1, 1, 1)
-applyButton.Font = Enum.Font.SourceSansBold
-applyButton.TextSize = 18
-applyButton.BorderSizePixel = 2
-applyButton.BorderColor3 = Color3.fromRGB(255, 255, 255)
-applyButton.Parent = speedFrame
+    -- Speed variables
+    local speedHackEnabled = false
+    local currentSpeed = 16
+    local minSpeed = 16
+    local maxSpeed = 500
+    local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
 
--- Зміна швидкості
-applyButton.MouseButton1Click:Connect(function()
-	local speed = tonumber(speedBox.Text)
-	if speed and speed >= 0 and speed <= 500 then
-		humanoid.WalkSpeed = speed
-	else
-		speedBox.Text = "Невірне значення"
-	end
-end)
+    -- Update speed display
+    local function updateSpeedDisplay()
+        UI.speedHackButton.Text = speedHackEnabled and "Speed: "..currentSpeed or "Speed Hack: OFF"
+        UI.speedHackButton.BackgroundColor3 = speedHackEnabled and Color3.fromRGB(0, 80, 0) or Color3.fromRGB(65,65,65)
+        
+        -- Update slider position
+        local percentage = (currentSpeed - minSpeed) / (maxSpeed - minSpeed)
+        UI.speedHackSliderButton.Position = UDim2.new(percentage, -8, 0.5, -8)
+    end
 
+    -- Apply speed to character
+    local function applySpeed()
+        if humanoid then
+            humanoid.WalkSpeed = speedHackEnabled and currentSpeed or 16
+        end
+    end
 
+    -- Toggle speed hack
+    UI.speedHackButton.MouseButton1Click:Connect(function()
+        speedHackEnabled = not speedHackEnabled
+        updateSpeedDisplay()
+        applySpeed()
+    end)
+
+    -- Slider functionality
+    UI.speedHackSliderButton.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local connection
+            connection = input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    connection:Disconnect()
+                else
+                    local sliderSize = UI.speedHackSlider.AbsoluteSize.X
+                    local mouseX = input.Position.X - UI.speedHackSlider.AbsolutePosition.X
+                    local percentage = math.clamp(mouseX/sliderSize, 0, 1)
+                    currentSpeed = math.floor(minSpeed + (maxSpeed - minSpeed) * percentage)
+                    speedHackEnabled = true
+                    updateSpeedDisplay()
+                    applySpeed()
+                end
+            end)
+        end
+    end)
+
+    -- Character handling
+    player.CharacterAdded:Connect(function(character)
+        humanoid = character:WaitForChild("Humanoid")
+        applySpeed()
+    end)
+
+    -- Initial setup
+    updateSpeedDisplay()
+    applySpeed()
+    
+    -- Adjust main frame size
+    frame.Size = UDim2.new(0, config.menuWidth, 0, config.menuHeight + 60)
+end
