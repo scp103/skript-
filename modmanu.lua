@@ -231,6 +231,44 @@ RunService.RenderStepped:Connect(function()
 		end
 	end
 end)
+-- Speed Hack
+local speedToggle = false
+local currentSpeed = 50
+
+local speedButton
+speedButton = createUI("SPEED: "..currentSpeed.." (OFF)", function()
+	speedToggle = not speedToggle
+	local char = Players.LocalPlayer.Character
+	if char and char:FindFirstChild("Humanoid") then
+		char.Humanoid.WalkSpeed = speedToggle and currentSpeed or 16
+	end
+	speedButton.Text = "SPEED: "..currentSpeed.." ("..(speedToggle and "ON" or "OFF")..")"
+end)
+
+speedButton.MouseButton2Click:Connect(function()
+	local inputBox = Instance.new("TextBox")
+	inputBox.Size = UDim2.new(0, 120, 0, 25)
+	inputBox.Position = UDim2.new(0, 0, 0, speedButton.Position.Y.Offset + speedButton.Size.Y.Offset + 5)
+	inputBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	inputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+	inputBox.Text = tostring(currentSpeed)
+	inputBox.ClearTextOnFocus = false
+	inputBox.Parent = frame
+
+	inputBox.FocusLost:Connect(function(enterPressed)
+		if enterPressed then
+			local value = tonumber(inputBox.Text)
+			if value and value >= 16 and value <= 500 then
+				currentSpeed = math.floor(value)
+				if speedToggle and Players.LocalPlayer.Character and Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+					Players.LocalPlayer.Character.Humanoid.WalkSpeed = currentSpeed
+				end
+				speedButton.Text = "SPEED: "..currentSpeed.." ("..(speedToggle and "ON" or "OFF")..")"
+			end
+		end
+		inputBox:Destroy()
+	end)
+end)
 
 -- AIM кнопка
 aimButton.MouseButton1Click:Connect(function()
@@ -425,91 +463,6 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Smile Mod Menu (оригінальний з ESP, AIM, Noclip)
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local LocalPlayer = Players.LocalPlayer
-
-local function createUI(name, parent)
-    local button = Instance.new("TextButton")
-    button.Name = name
-    button.Size = UDim2.new(0, 200, 0, 30)
-    button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    button.TextColor3 = Color3.new(1, 1, 1)
-    button.TextSize = 14
-    button.BorderSizePixel = 0
-    button.Text = name .. ": OFF"
-    button.Parent = parent
-    return button
-end
-
-local screenGui = Instance.new("ScreenGui", game.CoreGui)
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 220, 0, 200)
-frame.Position = UDim2.new(0, 10, 0, 100)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-frame.Parent = screenGui
-
-local aimOn, espOn, noclipOn, speedOn = false, false, false, false
-local currentSpeed = 50
-
-local aimButton = createUI("AIM", frame)
-aimButton.Position = UDim2.new(0, 10, 0, 10)
-
-local espButton = createUI("ESP", frame)
-espButton.Position = UDim2.new(0, 10, 0, 50)
-
-local noclipButton = createUI("Noclip", frame)
-noclipButton.Position = UDim2.new(0, 10, 0, 90)
-
-local speedButton = createUI("SPEED", frame)
-speedButton.Position = UDim2.new(0, 10, 0, 130)
-speedButton.Text = "SPEED: " .. tostring(currentSpeed) .. " (OFF)"
-
-local speedInput = Instance.new("TextBox")
-speedInput.Size = UDim2.new(0, 200, 0, 30)
-speedInput.Position = UDim2.new(0, 10, 0, 170)
-speedInput.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-speedInput.TextColor3 = Color3.new(1, 1, 1)
-speedInput.Text = tostring(currentSpeed)
-speedInput.Visible = false
-speedInput.ClearTextOnFocus = false
-speedInput.Parent = frame
-
-speedInput.FocusLost:Connect(function()
-    local val = tonumber(speedInput.Text)
-    if val and val >= 16 and val <= 500 then
-        currentSpeed = val
-        if speedOn then
-            LocalPlayer.Character.Humanoid.WalkSpeed = currentSpeed
-        end
-        speedButton.Text = "SPEED: " .. tostring(currentSpeed) .. (speedOn and " (ON)" or " (OFF)")
-    end
-    speedInput.Visible = false
-end)
-
-speedButton.MouseButton1Click:Connect(function()
-    speedOn = not speedOn
-    if speedOn then
-        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
-            LocalPlayer.Character.Humanoid.WalkSpeed = currentSpeed
-        end
-    else
-        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
-            LocalPlayer.Character.Humanoid.WalkSpeed = 16
-        end
-    end
-    speedButton.Text = "SPEED: " .. tostring(currentSpeed) .. (speedOn and " (ON)" or " (OFF)")
-end)
-
-speedButton.MouseButton2Click:Connect(function()
-    speedInput.Text = tostring(currentSpeed)
-    speedInput.Visible = true
-    speedInput:CaptureFocus()
-end)
-
--- Далі залиш свій ESP, AIM, Noclip код без змін
 
 -- Логіка drag слайдера
 local dragging = false
