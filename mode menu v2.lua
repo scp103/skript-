@@ -427,17 +427,6 @@ makeDraggable(frame)
 makeDraggable(minimizedCircle)
 -- Speed Hack Module for LogdrinosMenu (add at the end of your script)
 do
-    -- Debug function for troubleshooting
-    local function debugMessage(msg)
-        print("[SpeedHack] " .. msg)
-        -- Uncomment for in-game notifications:
-        -- game:GetService("StarterGui"):SetCore("SendNotification", {
-        --     Title = "SpeedHack Debug",
-        --     Text = msg,
-        --     Duration = 2
-        -- })
-    end
-
     -- Add to content frame
     UI.speedHackFrame = createUI("Frame", {
         Name = "SpeedHackFrame",
@@ -448,7 +437,6 @@ do
     })
     UI.speedHackFrame.LayoutOrder = 9  -- Position after jump controls
     UI.speedHackFrame.Parent = UI.contentFrame
-    debugMessage("Speed frame created")
 
     -- Speed Hack Button
     UI.speedHackButton = createUI("TextButton", {
@@ -458,82 +446,52 @@ do
         TextColor3 = Color3.fromRGB(255,255,255),
         TextSize = 14,
         Font = Enum.Font.Gotham,
-        Text = "SPEED: OFF",
-        AutoButtonColor = false,
-        Name = "SpeedHackButton"
+        Text = "Speed Hack: OFF",
     })
     UI.speedHackButton.Parent = UI.speedHackFrame
-    debugMessage("Speed button created")
 
     -- Speed Slider
     UI.speedHackSlider = createUI("Frame", {
         Size = UDim2.new(0.9, 0, 0, 4),
         Position = UDim2.new(0.05, 0, 0, 50),
-        BackgroundColor3 = Color3.fromRGB(80,80,80),
+        BackgroundColor3 = Color3.fromRGB(65,65,65),
         BorderSizePixel = 0,
-        Name = "SpeedSliderTrack"
     })
     UI.speedHackSlider.Parent = UI.speedHackFrame
     createUI("UICorner", {CornerRadius = UDim.new(1, 0), Parent = UI.speedHackSlider})
-    debugMessage("Slider track created")
 
     -- Slider Button
     UI.speedHackSliderButton = createUI("TextButton", {
         Size = UDim2.new(0, 16, 0, 16),
-        Position = UDim2.new(0, 0, 0.5, -8),
-        BackgroundColor3 = Color3.fromRGB(200,200,200),
+        Position = UDim2.new(0, 0, 0.5, 0),
+        BackgroundColor3 = Color3.fromRGB(255,255,255),
         BorderSizePixel = 0,
         Text = "",
-        ZIndex = 2,
-        Name = "SpeedSliderButton"
     })
     UI.speedHackSliderButton.Parent = UI.speedHackSlider
     createUI("UICorner", {CornerRadius = UDim.new(1, 0), Parent = UI.speedHackSliderButton})
-    debugMessage("Slider button created")
 
     -- Speed variables
     local speedHackEnabled = false
     local currentSpeed = 16
     local minSpeed = 16
     local maxSpeed = 500
-    local humanoid = nil
-    local sliderDragging = false
-    local sliderInput = nil
+    local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
 
-    -- Get humanoid safely
-    local function getHumanoid()
-        if player.Character then
-            local hum = player.Character:FindFirstChildOfClass("Humanoid")
-            if hum then return hum end
-        end
-        return nil
-    end
-
-    -- Update speed display and slider
+    -- Update speed display
     local function updateSpeedDisplay()
-        if speedHackEnabled then
-            UI.speedHackButton.Text = "SPEED: "..currentSpeed
-            UI.speedHackButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
-        else
-            UI.speedHackButton.Text = "SPEED: OFF"
-            UI.speedHackButton.BackgroundColor3 = Color3.fromRGB(65,65,65)
-        end
+        UI.speedHackButton.Text = speedHackEnabled and "Speed: "..currentSpeed or "Speed Hack: OFF"
+        UI.speedHackButton.BackgroundColor3 = speedHackEnabled and Color3.fromRGB(0, 80, 0) or Color3.fromRGB(65,65,65)
         
         -- Update slider position
-        local percentage = math.clamp((currentSpeed - minSpeed) / (maxSpeed - minSpeed), 0, 1)
+        local percentage = (currentSpeed - minSpeed) / (maxSpeed - minSpeed)
         UI.speedHackSliderButton.Position = UDim2.new(percentage, -8, 0.5, -8)
-        debugMessage("Display updated: "..UI.speedHackButton.Text)
     end
 
     -- Apply speed to character
     local function applySpeed()
-        humanoid = getHumanoid()
         if humanoid then
-            local targetSpeed = speedHackEnabled and currentSpeed or 16
-            humanoid.WalkSpeed = targetSpeed
-            debugMessage("Speed applied: "..targetSpeed)
-        else
-            debugMessage("Humanoid not found!")
+            humanoid.WalkSpeed = speedHackEnabled and currentSpeed or 16
         end
     end
 
@@ -542,89 +500,37 @@ do
         speedHackEnabled = not speedHackEnabled
         updateSpeedDisplay()
         applySpeed()
-        debugMessage("Toggle: "..tostring(speedHackEnabled))
     end)
 
     -- Slider functionality
-    local function handleSliderInput(input)
-        if not UI.speedHackSlider or not UI.speedHackSliderButton then 
-            debugMessage("Slider elements missing!")
-            return 
-        end
-        
-        local sliderPos = UI.speedHackSlider.AbsolutePosition
-        local sliderSize = UI.speedHackSlider.AbsoluteSize.X
-        local buttonSize = UI.speedHackSliderButton.AbsoluteSize.X
-        
-        if sliderSize <= 0 then 
-            debugMessage("Invalid slider size: "..sliderSize)
-            return 
-        end
-        
-        local mouseX = math.clamp(input.Position.X - sliderPos.X, 0, sliderSize)
-        local percentage = mouseX / sliderSize
-        currentSpeed = math.floor(minSpeed + (maxSpeed - minSpeed) * percentage)
-        speedHackEnabled = true
-        
-        updateSpeedDisplay()
-        applySpeed()
-        debugMessage("Slider: "..currentSpeed)
-    end
-
     UI.speedHackSliderButton.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            sliderDragging = true
-            sliderInput = input
-            handleSliderInput(input)
-        end
-    end)
-    
-    UI.speedHackSlider.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            sliderDragging = true
-            sliderInput = input
-            handleSliderInput(input)
-        end
-    end)
-    
-    UserInputService.InputChanged:Connect(function(input)
-        if sliderDragging and input == sliderInput then
-            handleSliderInput(input)
-        end
-    end)
-    
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 and input == sliderInput then
-            sliderDragging = false
-            sliderInput = nil
+            local connection
+            connection = input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    connection:Disconnect()
+                else
+                    local sliderSize = UI.speedHackSlider.AbsoluteSize.X
+                    local mouseX = input.Position.X - UI.speedHackSlider.AbsolutePosition.X
+                    local percentage = math.clamp(mouseX/sliderSize, 0, 1)
+                    currentSpeed = math.floor(minSpeed + (maxSpeed - minSpeed) * percentage)
+                    speedHackEnabled = true
+                    updateSpeedDisplay()
+                    applySpeed()
+                end
+            end)
         end
     end)
 
     -- Character handling
     player.CharacterAdded:Connect(function(character)
-        debugMessage("New character detected")
-        humanoid = character:WaitForChild("Humanoid", 2) or getHumanoid()
-        if not humanoid then
-            debugMessage("Humanoid not found in new character!")
-        end
+        humanoid = character:WaitForChild("Humanoid")
         applySpeed()
-    end)
-
-    -- Initial humanoid detection
-    task.spawn(function()
-        wait(1)  -- Wait for character to load
-        humanoid = getHumanoid()
-        if humanoid then
-            debugMessage("Initial humanoid found")
-            applySpeed()
-        else
-            debugMessage("No initial humanoid found")
-        end
     end)
 
     -- Initial setup
     updateSpeedDisplay()
-    debugMessage("Module initialized")
+    applySpeed()
     
     -- Adjust main frame size
     frame.Size = UDim2.new(0, config.menuWidth, 0, config.menuHeight + 60)
