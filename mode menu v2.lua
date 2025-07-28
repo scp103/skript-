@@ -425,116 +425,7 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Speed Hack Module for LogdrinosMenu (add at the end of your script)
-do
-    -- Add to content frame
-    UI.speedHackFrame = createUI("Frame", {
-        Name = "SpeedHackFrame",
-        Size = UDim2.new(1, 0, 0, 60),
-        BackgroundTransparency = 1,
-        Active = true,
-        Selectable = true,
-    })
-    UI.speedHackFrame.LayoutOrder = 9  -- Position after jump controls
-    UI.speedHackFrame.Parent = UI.contentFrame
 
-    -- Speed Hack Button
-    UI.speedHackButton = createUI("TextButton", {
-        Size = UDim2.new(0.9, 0, 0, 40),
-        Position = UDim2.new(0.05, 0, 0, 0),
-        BackgroundColor3 = Color3.fromRGB(65,65,65),
-        TextColor3 = Color3.fromRGB(255,255,255),
-        TextSize = 14,
-        Font = Enum.Font.Gotham,
-        Text = "Speed Hack: OFF",
-    })
-    UI.speedHackButton.Parent = UI.speedHackFrame
-
-    -- Speed Slider
-    UI.speedHackSlider = createUI("Frame", {
-        Size = UDim2.new(0.9, 0, 0, 4),
-        Position = UDim2.new(0.05, 0, 0, 50),
-        BackgroundColor3 = Color3.fromRGB(65,65,65),
-        BorderSizePixel = 0,
-    })
-    UI.speedHackSlider.Parent = UI.speedHackFrame
-    createUI("UICorner", {CornerRadius = UDim.new(1, 0), Parent = UI.speedHackSlider})
-
-    -- Slider Button
-    UI.speedHackSliderButton = createUI("TextButton", {
-        Size = UDim2.new(0, 16, 0, 16),
-        Position = UDim2.new(0, 0, 0.5, 0),
-        BackgroundColor3 = Color3.fromRGB(255,255,255),
-        BorderSizePixel = 0,
-        Text = "",
-    })
-    UI.speedHackSliderButton.Parent = UI.speedHackSlider
-    createUI("UICorner", {CornerRadius = UDim.new(1, 0), Parent = UI.speedHackSliderButton})
-
-    -- Speed variables
-    local speedHackEnabled = false
-    local currentSpeed = 16
-    local minSpeed = 16
-    local maxSpeed = 500
-    local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-
-    -- Update speed display
-    local function updateSpeedDisplay()
-        UI.speedHackButton.Text = speedHackEnabled and "Speed: "..currentSpeed or "Speed Hack: OFF"
-        UI.speedHackButton.BackgroundColor3 = speedHackEnabled and Color3.fromRGB(0, 80, 0) or Color3.fromRGB(65,65,65)
-        
-        -- Update slider position
-        local percentage = (currentSpeed - minSpeed) / (maxSpeed - minSpeed)
-        UI.speedHackSliderButton.Position = UDim2.new(percentage, -8, 0.5, -8)
-    end
-
-    -- Apply speed to character
-    local function applySpeed()
-        if humanoid then
-            humanoid.WalkSpeed = speedHackEnabled and currentSpeed or 16
-        end
-    end
-
-    -- Toggle speed hack
-    UI.speedHackButton.MouseButton1Click:Connect(function()
-        speedHackEnabled = not speedHackEnabled
-        updateSpeedDisplay()
-        applySpeed()
-    end)
-
-    -- Slider functionality
-    UI.speedHackSliderButton.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local connection
-            connection = input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    connection:Disconnect()
-                else
-                    local sliderSize = UI.speedHackSlider.AbsoluteSize.X
-                    local mouseX = input.Position.X - UI.speedHackSlider.AbsolutePosition.X
-                    local percentage = math.clamp(mouseX/sliderSize, 0, 1)
-                    currentSpeed = math.floor(minSpeed + (maxSpeed - minSpeed) * percentage)
-                    speedHackEnabled = true
-                    updateSpeedDisplay()
-                    applySpeed()
-                end
-            end)
-        end
-    end)
-
-    -- Character handling
-    player.CharacterAdded:Connect(function(character)
-        humanoid = character:WaitForChild("Humanoid")
-        applySpeed()
-    end)
-
-    -- Initial setup
-    updateSpeedDisplay()
-    applySpeed()
-    
-    -- Adjust main frame size
-    frame.Size = UDim2.new(0, config.menuWidth, 0, config.menuHeight + 60)
-end
 -- Логіка drag слайдера
 local dragging = false
 
@@ -549,4 +440,316 @@ sliderButton.InputEnded:Connect(function(input)
 		dragging = false
 	end
 end)
+-- Roblox Speed Hack GUI
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+
+local Player = Players.LocalPlayer
+local Mouse = Player:GetMouse()
+local CoreGui = game:GetService("CoreGui")
+
+-- Remove previous GUI if exists
+if CoreGui:FindFirstChild("SpeedHackGUI") then
+    CoreGui:FindFirstChild("SpeedHackGUI"):Destroy()
+end
+
+-- Create main GUI
+local SpeedHackGUI = Instance.new("ScreenGui")
+SpeedHackGUI.Name = "SpeedHackGUI"
+SpeedHackGUI.ResetOnSpawn = false
+SpeedHackGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+SpeedHackGUI.Parent = CoreGui
+
+-- Main frame
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 300, 0, 180)
+MainFrame.Position = UDim2.new(0.5, -150, 0.7, -90)
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Selectable = true
+MainFrame.Parent = SpeedHackGUI
+
+-- Corner rounding
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 8)
+UICorner.Parent = MainFrame
+
+-- Title bar
+local TitleBar = Instance.new("Frame")
+TitleBar.Name = "TitleBar"
+TitleBar.Size = UDim2.new(1, 0, 0, 30)
+TitleBar.Position = UDim2.new(0, 0, 0, 0)
+TitleBar.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+TitleBar.BorderSizePixel = 0
+TitleBar.Parent = MainFrame
+
+local TitleCorner = Instance.new("UICorner")
+TitleCorner.CornerRadius = UDim.new(0, 8)
+TitleCorner.Parent = TitleBar
+
+local TitleText = Instance.new("TextLabel")
+TitleText.Name = "TitleText"
+TitleText.Size = UDim2.new(0.7, 0, 1, 0)
+TitleText.Position = UDim2.new(0.15, 0, 0, 0)
+TitleText.BackgroundTransparency = 1
+TitleText.Text = "SPEED HACK CONTROL"
+TitleText.TextColor3 = Color3.fromRGB(220, 220, 220)
+TitleText.TextSize = 16
+TitleText.Font = Enum.Font.GothamBold
+TitleText.Parent = TitleBar
+
+local CloseButton = Instance.new("TextButton")
+CloseButton.Name = "CloseButton"
+CloseButton.Size = UDim2.new(0, 25, 0, 25)
+CloseButton.Position = UDim2.new(1, -30, 0.5, -12.5)
+CloseButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+CloseButton.Text = "X"
+CloseButton.TextColor3 = Color3.new(1, 1, 1)
+CloseButton.TextSize = 14
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.Parent = TitleBar
+
+local CloseCorner = Instance.new("UICorner")
+CloseCorner.CornerRadius = UDim.new(0, 6)
+CloseCorner.Parent = CloseButton
+
+-- Speed display
+local SpeedDisplay = Instance.new("TextLabel")
+SpeedDisplay.Name = "SpeedDisplay"
+SpeedDisplay.Size = UDim2.new(0.8, 0, 0, 40)
+SpeedDisplay.Position = UDim2.new(0.1, 0, 0.2, 0)
+SpeedDisplay.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+SpeedDisplay.TextColor3 = Color3.fromRGB(50, 200, 50)
+SpeedDisplay.Text = "CURRENT SPEED: 16"
+SpeedDisplay.TextSize = 18
+SpeedDisplay.Font = Enum.Font.GothamBold
+SpeedDisplay.Parent = MainFrame
+
+local DisplayCorner = Instance.new("UICorner")
+DisplayCorner.CornerRadius = UDim.new(0, 6)
+DisplayCorner.Parent = SpeedDisplay
+
+-- Slider track
+local SliderTrack = Instance.new("Frame")
+SliderTrack.Name = "SliderTrack"
+SliderTrack.Size = UDim2.new(0.8, 0, 0, 8)
+SliderTrack.Position = UDim2.new(0.1, 0, 0.5, 0)
+SliderTrack.BackgroundColor3 = Color3.fromRGB(60, 60, 65)
+SliderTrack.BorderSizePixel = 0
+SliderTrack.Parent = MainFrame
+
+local TrackCorner = Instance.new("UICorner")
+TrackCorner.CornerRadius = UDim.new(0, 4)
+TrackCorner.Parent = SliderTrack
+
+-- Slider button
+local SliderButton = Instance.new("TextButton")
+SliderButton.Name = "SliderButton"
+SliderButton.Size = UDim2.new(0, 24, 0, 24)
+SliderButton.BackgroundColor3 = Color3.fromRGB(50, 150, 255)
+SliderButton.Text = ""
+SliderButton.ZIndex = 2
+SliderButton.Parent = SliderTrack
+
+local ButtonCorner = Instance.new("UICorner")
+ButtonCorner.CornerRadius = UDim.new(1, 0)
+ButtonCorner.Parent = SliderButton
+
+-- Value display
+local ValueDisplay = Instance.new("TextLabel")
+ValueDisplay.Name = "ValueDisplay"
+ValueDisplay.Size = UDim2.new(0.8, 0, 0, 20)
+ValueDisplay.Position = UDim2.new(0.1, 0, 0.65, 0)
+ValueDisplay.BackgroundTransparency = 1
+ValueDisplay.Text = "Drag slider to adjust speed (16-500)"
+ValueDisplay.TextColor3 = Color3.fromRGB(180, 180, 180)
+ValueDisplay.TextSize = 12
+ValueDisplay.Font = Enum.Font.Gotham
+ValueDisplay.Parent = MainFrame
+
+-- Control buttons
+local ApplyButton = Instance.new("TextButton")
+ApplyButton.Name = "ApplyButton"
+ApplyButton.Size = UDim2.new(0.35, 0, 0, 30)
+ApplyButton.Position = UDim2.new(0.1, 0, 0.85, -30)
+ApplyButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+ApplyButton.TextColor3 = Color3.new(1, 1, 1)
+ApplyButton.Text = "APPLY"
+ApplyButton.TextSize = 14
+ApplyButton.Font = Enum.Font.GothamBold
+ApplyButton.Parent = MainFrame
+
+local ResetButton = Instance.new("TextButton")
+ResetButton.Name = "ResetButton"
+ResetButton.Size = UDim2.new(0.35, 0, 0, 30)
+ResetButton.Position = UDim2.new(0.55, 0, 0.85, -30)
+ResetButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+ResetButton.TextColor3 = Color3.new(1, 1, 1)
+ResetButton.Text = "RESET"
+ResetButton.TextSize = 14
+ResetButton.Font = Enum.Font.GothamBold
+ResetButton.Parent = MainFrame
+
+local ButtonCorner = Instance.new("UICorner")
+ButtonCorner.CornerRadius = UDim.new(0, 6)
+ButtonCorner.Parent = ApplyButton
+ButtonCorner:Clone().Parent = ResetButton
+
+-- Speed variables
+local speedHackEnabled = false
+local currentSpeed = 16
+local minSpeed = 16
+local maxSpeed = 500
+local humanoid = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
+
+-- Update speed display
+local function updateSpeedDisplay()
+    SpeedDisplay.Text = "CURRENT SPEED: " .. currentSpeed
+    ValueDisplay.Text = "Drag slider to adjust speed ("..minSpeed.."-"..maxSpeed..")"
+    
+    -- Update slider position
+    local percentage = (currentSpeed - minSpeed) / (maxSpeed - minSpeed)
+    SliderButton.Position = UDim2.new(percentage, -12, 0.5, -12)
+end
+
+-- Apply speed to character
+local function applySpeed()
+    if humanoid then
+        humanoid.WalkSpeed = currentSpeed
+    end
+end
+
+-- Reset to default
+local function resetSpeed()
+    currentSpeed = 16
+    updateSpeedDisplay()
+    applySpeed()
+end
+
+-- Toggle speed hack
+local function toggleSpeedHack()
+    speedHackEnabled = not speedHackEnabled
+    if speedHackEnabled then
+        ApplyButton.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+        ApplyButton.Text = "ACTIVE"
+    else
+        ApplyButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+        ApplyButton.Text = "APPLY"
+    end
+    applySpeed()
+end
+
+-- Dragging functionality
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+
+-- Make GUI draggable
+local function updateDrag(input)
+    if dragging then
+        local delta = input.Position - dragStart
+        MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, 
+                                     startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end
+
+TitleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+    end
+end)
+
+TitleBar.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+TitleBar.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        updateDrag(input)
+    end
+end)
+
+-- Slider functionality
+SliderButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = SliderButton.Position
+    end
+end)
+
+SliderButton.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+SliderButton.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local mouseX = Mouse.X - SliderTrack.AbsolutePosition.X
+        local percentage = math.clamp(mouseX / SliderTrack.AbsoluteSize.X, 0, 1)
+        currentSpeed = math.floor(minSpeed + (maxSpeed - minSpeed) * percentage)
+        
+        updateSpeedDisplay()
+        
+        -- Apply immediately if speed hack is active
+        if speedHackEnabled then
+            applySpeed()
+        end
+    end
+end)
+
+-- Button functionality
+ApplyButton.MouseButton1Click:Connect(toggleSpeedHack)
+ResetButton.MouseButton1Click:Connect(resetSpeed)
+CloseButton.MouseButton1Click:Connect(function()
+    SpeedHackGUI:Destroy()
+    resetSpeed()
+end)
+
+-- Handle character changes
+Player.CharacterAdded:Connect(function(character)
+    humanoid = character:WaitForChild("Humanoid")
+    applySpeed()
+end)
+
+-- Initial setup
+updateSpeedDisplay()
+
+-- Smooth opening animation
+MainFrame.Size = UDim2.new(0, 300, 0, 0)
+MainFrame.Visible = true
+
+local openTween = TweenService:Create(
+    MainFrame,
+    TweenInfo.new(0.4, Enum.EasingStyle.Quint),
+    {Size = UDim2.new(0, 300, 0, 180)}
+)
+openTween:Play()
+
+-- Initial humanoid check
+if humanoid then
+    applySpeed()
+end
 
