@@ -461,7 +461,8 @@ do
         TextColor3 = Color3.fromRGB(255,255,255),
         TextSize = 14,
         Font = Enum.Font.Gotham,
-        Text = "Speed Hack: OFF",
+        Text = "Speed: OFF",
+        AutoButtonColor = false,
     })
     UI.speedHackButton.Parent = UI.speedHackFrame
 
@@ -469,7 +470,7 @@ do
     UI.speedHackSlider = createUI("Frame", {
         Size = UDim2.new(0.9, 0, 0, 4),
         Position = UDim2.new(0.05, 0, 0, 50),
-        BackgroundColor3 = Color3.fromRGB(65,65,65),
+        BackgroundColor3 = Color3.fromRGB(80,80,80),
         BorderSizePixel = 0,
     })
     UI.speedHackSlider.Parent = UI.speedHackFrame
@@ -478,10 +479,11 @@ do
     -- Slider Button
     UI.speedHackSliderButton = createUI("TextButton", {
         Size = UDim2.new(0, 16, 0, 16),
-        Position = UDim2.new(0, 0, 0.5, 0),
-        BackgroundColor3 = Color3.fromRGB(255,255,255),
+        Position = UDim2.new(0, 0, 0.5, -8),
+        BackgroundColor3 = Color3.fromRGB(200,200,200),
         BorderSizePixel = 0,
         Text = "",
+        ZIndex = 2,
     })
     UI.speedHackSliderButton.Parent = UI.speedHackSlider
     createUI("UICorner", {CornerRadius = UDim.new(1, 0), Parent = UI.speedHackSliderButton})
@@ -493,13 +495,18 @@ do
     local maxSpeed = 500
     local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
 
-    -- Update speed display
+    -- Update speed display and slider
     local function updateSpeedDisplay()
-        UI.speedHackButton.Text = speedHackEnabled and "Speed: "..currentSpeed or "Speed Hack: OFF"
-        UI.speedHackButton.BackgroundColor3 = speedHackEnabled and Color3.fromRGB(0, 80, 0) or Color3.fromRGB(65,65,65)
+        if speedHackEnabled then
+            UI.speedHackButton.Text = "Speed: "..currentSpeed
+            UI.speedHackButton.BackgroundColor3 = Color3.fromRGB(0, 120, 0)
+        else
+            UI.speedHackButton.Text = "Speed: OFF"
+            UI.speedHackButton.BackgroundColor3 = Color3.fromRGB(65,65,65)
+        end
         
         -- Update slider position
-        local percentage = (currentSpeed - minSpeed) / (maxSpeed - minSpeed)
+        local percentage = math.clamp((currentSpeed - minSpeed) / (maxSpeed - minSpeed), 0, 1)
         UI.speedHackSliderButton.Position = UDim2.new(percentage, -8, 0.5, -8)
     end
 
@@ -517,23 +524,50 @@ do
         applySpeed()
     end)
 
-    -- Slider functionality
+    -- Slider drag functionality
+    local sliderDragging = false
+    local sliderInput
+    
     UI.speedHackSliderButton.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local connection
-            connection = input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    connection:Disconnect()
-                else
-                    local sliderSize = UI.speedHackSlider.AbsoluteSize.X
-                    local mouseX = input.Position.X - UI.speedHackSlider.AbsolutePosition.X
-                    local percentage = math.clamp(mouseX/sliderSize, 0, 1)
-                    currentSpeed = math.floor(minSpeed + (maxSpeed - minSpeed) * percentage)
-                    speedHackEnabled = true
-                    updateSpeedDisplay()
-                    applySpeed()
-                end
-            end)
+            sliderDragging = true
+            sliderInput = input
+        end
+    end)
+    
+    UI.speedHackSlider.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            sliderDragging = true
+            sliderInput = input
+            -- Update immediately when clicking on slider track
+            local sliderPos = UI.speedHackSlider.AbsolutePosition
+            local sliderSize = UI.speedHackSlider.AbsoluteSize.X
+            local mouseX = input.Position.X - sliderPos.X
+            local percentage = math.clamp(mouseX/sliderSize, 0, 1)
+            currentSpeed = math.floor(minSpeed + (maxSpeed - minSpeed) * percentage)
+            speedHackEnabled = true
+            updateSpeedDisplay()
+            applySpeed()
+        end
+    end)
+    
+    UserInputService.InputChanged:Connect(function(input)
+        if sliderDragging and input == sliderInput then
+            local sliderPos = UI.speedHackSlider.AbsolutePosition
+            local sliderSize = UI.speedHackSlider.AbsoluteSize.X
+            local mouseX = input.Position.X - sliderPos.X
+            local percentage = math.clamp(mouseX/sliderSize, 0, 1)
+            currentSpeed = math.floor(minSpeed + (maxSpeed - minSpeed) * percentage)
+            speedHackEnabled = true
+            updateSpeedDisplay()
+            applySpeed()
+        end
+    end)
+    
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 and input == sliderInput then
+            sliderDragging = false
+            sliderInput = nil
         end
     end)
 
@@ -547,6 +581,7 @@ do
     updateSpeedDisplay()
     applySpeed()
     
-    -- Adjust main frame size
-    frame.Size = UDim2.new(0, config.menuWidth, 0, config.menuHeight + 60)
+    -- Adjust main frame size if needed
+    local currentHeight = config.menuHeight
+    frame.Size = UDim2.new(0, config.menuWidth, 0, currentHeight + 60)
 end
