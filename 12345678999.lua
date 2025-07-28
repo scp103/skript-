@@ -425,78 +425,78 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
-do
-    -- Додаємо кнопку SPEED HACK
-    local speedFrame = createUI("Frame", {
-        Name = "SpeedHackFrame",
-        Size = UDim2.new(1, 0, 0, 84),
-        BackgroundTransparency = 1,
-        Active = true,
-        Selectable = true,
-        LayoutOrder = 999,
-    })
-    speedFrame.Parent = UI.contentFrame
+local speedEnabled = false
+local currentSpeed = 50
 
-    local speedButton = createUI("TextButton", {
-        Size = UDim2.new(0.9, 0, 0, 40),
-        Position = UDim2.new(0.05, 0, 0, 0),
-        BackgroundColor3 = Color3.fromRGB(65,65,65),
-        TextColor3 = Color3.fromRGB(255,255,255),
-        TextSize = 14,
-        Font = Enum.Font.Gotham,
-        Text = "SPEED: 50 (OFF)",
-    })
-    speedButton.Parent = speedFrame
+-- Кнопка Speed Hack
+local speedButton = Instance.new("TextButton")
+speedButton.Name = "speedButton"
+speedButton.Text = "SPEED: OFF"
+speedButton.Size = UDim2.new(0, 200, 0, 40)
+speedButton.Position = UDim2.new(0, 10, 0, 300)
+speedButton.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+speedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedButton.Font = Enum.Font.Gotham
+speedButton.TextSize = 14
+speedButton.Parent = ScreenGui
 
-    local speedInput = createUI("TextBox", {
-        Size = UDim2.new(0.9, 0, 0, 30),
-        Position = UDim2.new(0.05, 0, 0, 45),
-        BackgroundColor3 = Color3.fromRGB(50,50,50),
-        TextColor3 = Color3.fromRGB(255,255,255),
-        TextSize = 14,
-        Font = Enum.Font.Gotham,
-        PlaceholderText = "Enter speed (16-500)",
-        Text = "50",
-        Visible = false,
-    })
-    speedInput.Parent = speedFrame
+-- Поле для введення швидкості
+local speedInput = Instance.new("TextBox")
+speedInput.Name = "speedInput"
+speedInput.Text = tostring(currentSpeed)
+speedInput.PlaceholderText = "Enter speed (16–500)"
+speedInput.Size = UDim2.new(0, 200, 0, 35)
+speedInput.Position = UDim2.new(0, 10, 0, 350)
+speedInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedInput.Font = Enum.Font.Gotham
+speedInput.TextSize = 14
+speedInput.ClearTextOnFocus = false
+speedInput.Visible = false
+speedInput.Parent = ScreenGui
 
-    local speedEnabled = false
-    local currentSpeed = 50
-    local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+-- Логіка
+speedButton.MouseButton1Click:Connect(function()
+	speedEnabled = not speedEnabled
+	speedButton.Text = speedEnabled and ("SPEED: " .. currentSpeed) or "SPEED: OFF"
+	speedButton.BackgroundColor3 = speedEnabled and Color3.fromRGB(0, 120, 0) or Color3.fromRGB(65, 65, 65)
 
-    local function updateSpeed()
-        if humanoid then
-            humanoid.WalkSpeed = speedEnabled and currentSpeed or 16
-        end
-        speedButton.Text = "SPEED: " .. currentSpeed .. (speedEnabled and " (ON)" or " (OFF)")
-    end
+	local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+	local hum = char:FindFirstChildOfClass("Humanoid")
+	if hum then
+		hum.WalkSpeed = speedEnabled and currentSpeed or 16
+	end
+end)
 
-    speedButton.MouseButton1Click:Connect(function()
-        speedEnabled = not speedEnabled
-        speedButton.BackgroundColor3 = speedEnabled and Color3.fromRGB(0,120,0) or Color3.fromRGB(65,65,65)
-        updateSpeed()
-    end)
+speedButton.MouseButton2Click:Connect(function()
+	speedInput.Visible = not speedInput.Visible
+	if speedInput.Visible then speedInput:CaptureFocus() end
+end)
 
-    speedButton.MouseButton2Click:Connect(function()
-        speedInput.Visible = not speedInput.Visible
-        if speedInput.Visible then
-            speedInput:CaptureFocus()
-        end
-    end)
+speedInput.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		local newSpeed = tonumber(speedInput.Text)
+		if newSpeed and newSpeed >= 16 and newSpeed <= 500 then
+			currentSpeed = newSpeed
+			if speedEnabled then
+				local char = game.Players.LocalPlayer.Character
+				if char then
+					local hum = char:FindFirstChildOfClass("Humanoid")
+					if hum then
+						hum.WalkSpeed = currentSpeed
+					end
+				end
+			end
+			speedButton.Text = "SPEED: " .. currentSpeed
+		else
+			speedInput.Text = tostring(currentSpeed)
+		end
+	end
+end)
 
-    speedInput.FocusLost:Connect(function(enterPressed)
-        local newSpeed = tonumber(speedInput.Text)
-        if newSpeed and newSpeed >= 16 and newSpeed <= 500 then
-            currentSpeed = newSpeed
-        else
-            speedInput.Text = tostring(currentSpeed)
-        end
-        updateSpeed()
-    end)
-
-    player.CharacterAdded:Connect(function(char)
-        humanoid = char:WaitForChild("Humanoid")
-        updateSpeed()
-    end)
-end
+game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
+	local hum = char:WaitForChild("Humanoid")
+	if speedEnabled then
+		hum.WalkSpeed = currentSpeed
+	end
+end)
