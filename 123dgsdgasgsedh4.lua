@@ -425,17 +425,31 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Простий Speed Hack (додати в кінець скрипта)
+-- Speed Hack Module (додати в кінець скрипта)
 do
-    -- Додаємо кнопку (таку саму як інші)
+    -- Додаємо кнопку
     local speedButton = Instance.new("TextButton", frame)
     speedButton.Size = UDim2.new(0.9, 0, 0, 30)
     speedButton.Position = UDim2.new(0.05, 0, 0, 200) -- Після останньої кнопки
     speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    speedButton.BorderSizePixel = 2  -- Жирна обводка
+    speedButton.BorderColor3 = Color3.fromRGB(80, 80, 80)
     speedButton.TextColor3 = Color3.new(1,1,1)
     speedButton.Font = Enum.Font.SourceSansBold
     speedButton.TextSize = 16
     speedButton.Text = "SPEED: OFF"
+
+    -- Поле для введення швидкості
+    local speedInput = Instance.new("TextBox", frame)
+    speedInput.Size = UDim2.new(0.9, 0, 0, 30)
+    speedInput.Position = UDim2.new(0.05, 0, 0, 235)
+    speedInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    speedInput.TextColor3 = Color3.new(1,1,1)
+    speedInput.Font = Enum.Font.SourceSansBold
+    speedInput.TextSize = 16
+    speedInput.PlaceholderText = "Enter speed (16-500)"
+    speedInput.Text = "50"
+    speedInput.Visible = false
 
     -- Змінні
     local speedEnabled = false
@@ -447,13 +461,34 @@ do
         if humanoid then
             humanoid.WalkSpeed = speedEnabled and currentSpeed or 16
         end
+        speedButton.Text = speedEnabled and "SPEED: ON ("..currentSpeed..")" or "SPEED: OFF"
     end
 
     -- Обробник кнопки
     speedButton.MouseButton1Click:Connect(function()
         speedEnabled = not speedEnabled
-        speedButton.Text = speedEnabled and "SPEED: ON ("..currentSpeed..")" or "SPEED: OFF"
         updateSpeed()
+    end)
+
+    -- Показувати поле введення при натисканні правою кнопкою
+    speedButton.MouseButton2Click:Connect(function()
+        speedInput.Visible = not speedInput.Visible
+        if speedInput.Visible then
+            speedInput:CaptureFocus()
+        end
+    end)
+
+    -- Обробник введення тексту
+    speedInput.FocusLost:Connect(function()
+        local newSpeed = tonumber(speedInput.Text)
+        if newSpeed and newSpeed >= 16 and newSpeed <= 500 then
+            currentSpeed = newSpeed
+            if speedEnabled then
+                updateSpeed()
+            end
+        else
+            speedInput.Text = tostring(currentSpeed)
+        end
     end)
 
     -- Обробка зміни персонажа
@@ -463,5 +498,5 @@ do
     end)
 
     -- Збільшуємо розмір фрейму
-    frame.Size = UDim2.new(0, 180, 0, 240) -- +40 до висоти
+    frame.Size = UDim2.new(0, 180, 0, 270) -- +70 до висоти
 end
