@@ -440,4 +440,93 @@ sliderButton.InputEnded:Connect(function(input)
 		dragging = false
 	end
 end)
+-- Speed Hack Module (додати в кінець вашого скрипта)
+do
+    -- Створюємо фрейм для Speed Hack (такий самий як для AIM)
+    UI.speedHackFrame = createUI("Frame", {
+        Name = "SpeedHackFrame",
+        Size = UDim2.new(1, 0, 0, 84),
+        BackgroundTransparency = 1,
+        Active = true,
+        Selectable = true,
+    })
+    UI.speedHackFrame.LayoutOrder = 10  -- Після інших модулів
+    UI.speedHackFrame.Parent = UI.contentFrame
+
+    -- Кнопка активації (така сама як AIM)
+    UI.speedHackButton = createUI("TextButton", {
+        Size = UDim2.new(0.9, 0, 0, 40),
+        Position = UDim2.new(0.05, 0, 0, 0),
+        BackgroundColor3 = Color3.fromRGB(65,65,65),
+        TextColor3 = Color3.fromRGB(255,255,255),
+        TextSize = 14,
+        Font = Enum.Font.Gotham,
+        Text = "SPEED HACK: OFF",
+    })
+    UI.speedHackButton.Parent = UI.speedHackFrame
+
+    -- Поле для введення швидкості (як для AIM)
+    UI.speedInput = createUI("TextBox", {
+        Size = UDim2.new(0.9, 0, 0, 30),
+        Position = UDim2.new(0.05, 0, 0, 45),
+        BackgroundColor3 = Color3.fromRGB(50,50,50),
+        TextColor3 = Color3.fromRGB(255,255,255),
+        TextSize = 14,
+        Font = Enum.Font.Gotham,
+        PlaceholderText = "Enter speed (16-500)",
+        Text = "50",
+        Visible = false,
+    })
+    UI.speedInput.Parent = UI.speedHackFrame
+
+    -- Змінні
+    local speedEnabled = false
+    local currentSpeed = 50
+    local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+
+    -- Функція оновлення швидкості
+    local function updateSpeed()
+        if humanoid then
+            humanoid.WalkSpeed = speedEnabled and currentSpeed or 16
+        end
+    end
+
+    -- Обробник кнопки
+    UI.speedHackButton.MouseButton1Click:Connect(function()
+        speedEnabled = not speedEnabled
+        UI.speedHackButton.Text = speedEnabled and "SPEED HACK: ON" or "SPEED HACK: OFF"
+        UI.speedHackButton.BackgroundColor3 = speedEnabled and Color3.fromRGB(0,120,0) or Color3.fromRGB(65,65,65)
+        updateSpeed()
+    end)
+
+    -- Показувати поле введення при натисканні правою кнопкою
+    UI.speedHackButton.MouseButton2Click:Connect(function()
+        UI.speedInput.Visible = not UI.speedInput.Visible
+        if UI.speedInput.Visible then
+            UI.speedInput:CaptureFocus()
+        end
+    end)
+
+    -- Обробник введення тексту
+    UI.speedInput.FocusLost:Connect(function(enterPressed)
+        local newSpeed = tonumber(UI.speedInput.Text)
+        if newSpeed and newSpeed >= 16 and newSpeed <= 500 then
+            currentSpeed = newSpeed
+            if speedEnabled then
+                updateSpeed()
+            end
+        else
+            UI.speedInput.Text = tostring(currentSpeed)
+        end
+    end)
+
+    -- Обробка зміни персонажа
+    LocalPlayer.CharacterAdded:Connect(function(character)
+        humanoid = character:WaitForChild("Humanoid")
+        updateSpeed()
+    end)
+
+    -- Автоматично збільшити розмір фрейму
+    frame.Size = UDim2.new(0, config.menuWidth, 0, config.menuHeight + 84)
+end
 
