@@ -465,17 +465,4 @@ do
     -- Збільшуємо розмір фрейму
     frame.Size = UDim2.new(0, 180, 0, 240) -- +40 до висоти
 end
--- Логіка drag слайдера
-local dragging = false
 
-sliderButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-	end
-end)
-
-sliderButton.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = false
-	end
-end)
