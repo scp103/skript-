@@ -425,52 +425,59 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Speed Hack Module (додати в кінець скрипта)
 do
-    -- Додаємо кнопку
-    local speedButton = Instance.new("TextButton", frame)
-    speedButton.Size = UDim2.new(0.9, 0, 0, 30)
-    speedButton.Position = UDim2.new(0.05, 0, 0, 200) -- Після останньої кнопки
-    speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    speedButton.BorderSizePixel = 2  -- Жирна обводка
-    speedButton.BorderColor3 = Color3.fromRGB(80, 80, 80)
-    speedButton.TextColor3 = Color3.new(1,1,1)
-    speedButton.Font = Enum.Font.SourceSansBold
-    speedButton.TextSize = 16
-    speedButton.Text = "SPEED: OFF"
+    -- Додаємо кнопку SPEED HACK
+    local speedFrame = createUI("Frame", {
+        Name = "SpeedHackFrame",
+        Size = UDim2.new(1, 0, 0, 84),
+        BackgroundTransparency = 1,
+        Active = true,
+        Selectable = true,
+        LayoutOrder = 999,
+    })
+    speedFrame.Parent = UI.contentFrame
 
-    -- Поле для введення швидкості
-    local speedInput = Instance.new("TextBox", frame)
-    speedInput.Size = UDim2.new(0.9, 0, 0, 30)
-    speedInput.Position = UDim2.new(0.05, 0, 0, 235)
-    speedInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    speedInput.TextColor3 = Color3.new(1,1,1)
-    speedInput.Font = Enum.Font.SourceSansBold
-    speedInput.TextSize = 16
-    speedInput.PlaceholderText = "Enter speed (16-500)"
-    speedInput.Text = "50"
-    speedInput.Visible = false
+    local speedButton = createUI("TextButton", {
+        Size = UDim2.new(0.9, 0, 0, 40),
+        Position = UDim2.new(0.05, 0, 0, 0),
+        BackgroundColor3 = Color3.fromRGB(65,65,65),
+        TextColor3 = Color3.fromRGB(255,255,255),
+        TextSize = 14,
+        Font = Enum.Font.Gotham,
+        Text = "SPEED: 50 (OFF)",
+    })
+    speedButton.Parent = speedFrame
 
-    -- Змінні
+    local speedInput = createUI("TextBox", {
+        Size = UDim2.new(0.9, 0, 0, 30),
+        Position = UDim2.new(0.05, 0, 0, 45),
+        BackgroundColor3 = Color3.fromRGB(50,50,50),
+        TextColor3 = Color3.fromRGB(255,255,255),
+        TextSize = 14,
+        Font = Enum.Font.Gotham,
+        PlaceholderText = "Enter speed (16-500)",
+        Text = "50",
+        Visible = false,
+    })
+    speedInput.Parent = speedFrame
+
     local speedEnabled = false
     local currentSpeed = 50
     local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
 
-    -- Функція оновлення швидкості
     local function updateSpeed()
         if humanoid then
             humanoid.WalkSpeed = speedEnabled and currentSpeed or 16
         end
-        speedButton.Text = speedEnabled and "SPEED: ON ("..currentSpeed..")" or "SPEED: OFF"
+        speedButton.Text = "SPEED: " .. currentSpeed .. (speedEnabled and " (ON)" or " (OFF)")
     end
 
-    -- Обробник кнопки
     speedButton.MouseButton1Click:Connect(function()
         speedEnabled = not speedEnabled
+        speedButton.BackgroundColor3 = speedEnabled and Color3.fromRGB(0,120,0) or Color3.fromRGB(65,65,65)
         updateSpeed()
     end)
 
-    -- Показувати поле введення при натисканні правою кнопкою
     speedButton.MouseButton2Click:Connect(function()
         speedInput.Visible = not speedInput.Visible
         if speedInput.Visible then
@@ -478,25 +485,18 @@ do
         end
     end)
 
-    -- Обробник введення тексту
-    speedInput.FocusLost:Connect(function()
+    speedInput.FocusLost:Connect(function(enterPressed)
         local newSpeed = tonumber(speedInput.Text)
         if newSpeed and newSpeed >= 16 and newSpeed <= 500 then
             currentSpeed = newSpeed
-            if speedEnabled then
-                updateSpeed()
-            end
         else
             speedInput.Text = tostring(currentSpeed)
         end
-    end)
-
-    -- Обробка зміни персонажа
-    player.CharacterAdded:Connect(function(character)
-        humanoid = character:WaitForChild("Humanoid")
         updateSpeed()
     end)
 
-    -- Збільшуємо розмір фрейму
-    frame.Size = UDim2.new(0, 180, 0, 270) -- +70 до висоти
+    player.CharacterAdded:Connect(function(char)
+        humanoid = char:WaitForChild("Humanoid")
+        updateSpeed()
+    end)
 end
