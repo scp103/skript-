@@ -1,4 +1,4 @@
--- Об'єднане мод-меню (AIM + ESP + Noclip) | Для KRNL
+-- Об'єднане мод-меню (AIM + ESP + Noclip + BunnyHop) | Для KRNL
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -8,11 +8,12 @@ local Camera = workspace.CurrentCamera
 
 -- Налаштування
 local AimPart = "Head"
-local FieldOfView = 30
+local FieldOfView = 60
 local Holding = false
 local WallCheckEnabled = false
 local espEnabled = false
 local espObjects = {}
+local bunnyHopEnabled = false
 
 -- GUI
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -21,7 +22,7 @@ screenGui.Name = "SmileModMenu"
 screenGui.ResetOnSpawn = false
 
 local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 180, 0, 200)
+frame.Size = UDim2.new(0, 180, 0, 240) -- Збільшив висоту для нової кнопки
 frame.Position = UDim2.new(0.5, -90, 0.6, 0)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
@@ -67,7 +68,7 @@ espButton.Font = Enum.Font.SourceSansBold
 espButton.TextSize = 16
 espButton.Text = "ESP: OFF"
 
--- Кнопка Noclip (додана)
+-- Кнопка Noclip
 local noclipButton = Instance.new("TextButton", frame)
 noclipButton.Size = UDim2.new(0.9, 0, 0, 30)
 noclipButton.Position = UDim2.new(0.05, 0, 0, 160)
@@ -76,6 +77,16 @@ noclipButton.TextColor3 = Color3.new(1,1,1)
 noclipButton.Font = Enum.Font.SourceSansBold
 noclipButton.TextSize = 16
 noclipButton.Text = "Noclip: OFF"
+
+-- Кнопка BunnyHop (НОВА)
+local bunnyHopButton = Instance.new("TextButton", frame)
+bunnyHopButton.Size = UDim2.new(0.9, 0, 0, 30)
+bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 200)
+bunnyHopButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+bunnyHopButton.TextColor3 = Color3.new(1,1,1)
+bunnyHopButton.Font = Enum.Font.SourceSansBold
+bunnyHopButton.TextSize = 16
+bunnyHopButton.Text = "BunnyHop: OFF"
 
 -- Анімація кольору заголовка
 local hue = 0
@@ -159,6 +170,15 @@ local function clearESP()
 	espObjects = {}
 end
 
+local function removePlayerESP(player)
+	if espObjects[player] then
+		for _, obj in pairs(espObjects[player]) do
+			if obj and obj.Remove then obj:Remove() end
+		end
+		espObjects[player] = nil
+	end
+end
+
 local function createESP(p)
 	if p == LocalPlayer then return end
 	local box = Drawing.new("Square")
@@ -192,45 +212,89 @@ local function createESP(p)
 	espObjects[p] = {Box = box, Name = name, Health = health, Distance = distance}
 end
 
+-- Створюємо ESP для всіх гравців
 for _, p in pairs(game.Players:GetPlayers()) do createESP(p) end
+
+-- Додаємо ESP коли гравець заходить
 game.Players.PlayerAdded:Connect(createESP)
 
+-- Видаляємо ESP коли гравець виходить
+game.Players.PlayerRemoving:Connect(removePlayerESP)
+
 RunService.RenderStepped:Connect(function()
-	if not espEnabled then clearESP() return end
+	if not espEnabled then 
+		-- Ховаємо всі ESP але не видаляємо
+		for _, esp in pairs(espObjects) do
+			for _, obj in pairs(esp) do
+				if obj then obj.Visible = false end
+			end
+		end
+		return 
+	end
+	
+	-- Перевіряємо які гравці ще в грі і чистимо зайві ESP
+	for player, esp in pairs(espObjects) do
+		if not Players:FindFirstChild(player.Name) then
+			-- Гравець вийшов з гри, видаляємо його ESP
+			removePlayerESP(player)
+		end
+	end
+	
+	-- Оновлюємо ESP для активних гравців
 	for _, p in pairs(Players:GetPlayers()) do
-		if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-			local root = p.Character.HumanoidRootPart
-			local head = p.Character.Head
-			local hum = p.Character:FindFirstChildOfClass("Humanoid")
+		if p ~= LocalPlayer then
 			local esp = espObjects[p]
-			if not esp then createESP(p) esp = espObjects[p] end
-			local pos, visible = Camera:WorldToViewportPoint(root.Position)
-			if visible then
-				local dist = (LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude
-				local scale = math.clamp(3000 / dist, 100, 300)
-				local width, height = scale / 2, scale
+			if not esp then 
+				createESP(p) 
+				esp = espObjects[p] 
+			end
+			
+			-- Перевіряємо чи є характер і чи він живий
+			if p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChildOfClass("Humanoid") then
+				local root = p.Character.HumanoidRootPart
+				local hum = p.Character:FindFirstChildOfClass("Humanoid")
+				
+				-- Перевіряємо чи гравець живий
+				if hum.Health > 0 then
+					local pos, visible = Camera:WorldToViewportPoint(root.Position)
+					if visible and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+						local dist = (LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude
+						local scale = math.clamp(3000 / dist, 100, 300)
+						local width, height = scale / 2, scale
 
-				esp.Box.Size = Vector2.new(width, height)
-				esp.Box.Position = Vector2.new(pos.X - width / 2, pos.Y - height / 1.5)
-				esp.Box.Visible = true
+						esp.Box.Size = Vector2.new(width, height)
+						esp.Box.Position = Vector2.new(pos.X - width / 2, pos.Y - height / 1.5)
+						esp.Box.Visible = true
 
-				esp.Name.Position = Vector2.new(pos.X, pos.Y - height / 1.5 - 15)
-				esp.Name.Text = p.Name
-				esp.Name.Visible = true
+						esp.Name.Position = Vector2.new(pos.X, pos.Y - height / 1.5 - 15)
+						esp.Name.Text = p.Name
+						esp.Name.Visible = true
 
-				esp.Health.Position = Vector2.new(pos.X, pos.Y - height / 1.5)
-				esp.Health.Text = "HP: " .. math.floor(hum.Health)
-				esp.Health.Visible = true
+						esp.Health.Position = Vector2.new(pos.X, pos.Y - height / 1.5)
+						esp.Health.Text = "HP: " .. math.floor(hum.Health)
+						esp.Health.Visible = true
 
-				esp.Distance.Position = Vector2.new(pos.X, pos.Y + height / 2 + 5)
-				esp.Distance.Text = "Dist: " .. math.floor(dist)
-				esp.Distance.Visible = true
+						esp.Distance.Position = Vector2.new(pos.X, pos.Y + height / 2 + 5)
+						esp.Distance.Text = "Dist: " .. math.floor(dist)
+						esp.Distance.Visible = true
+					else
+						-- Гравець поза екраном - ховаємо ESP
+						for _, v in pairs(esp) do v.Visible = false end
+					end
+				else
+					-- Гравець мертвий - ховаємо ESP
+					for _, v in pairs(esp) do v.Visible = false end
+				end
 			else
+				-- Немає характера або він респавниться - ховаємо ESP
 				for _, v in pairs(esp) do v.Visible = false end
 			end
 		end
 	end
 end)
+
+-- BunnyHop логіка (НОВА)
+local bunnyHopConnection
 
 -- AIM кнопка
 aimButton.MouseButton1Click:Connect(function()
@@ -251,7 +315,7 @@ espButton.MouseButton1Click:Connect(function()
 	if not espEnabled then clearESP() end
 end)
 
--- Noclip логіка (оновлено)
+-- Noclip логіка
 local noclipEnabled = false
 local noclipConnection
 
@@ -284,6 +348,37 @@ noclipButton.MouseButton1Click:Connect(function()
 		end
 	end
 end)
+
+-- BunnyHop кнопка (НОВА)
+bunnyHopButton.MouseButton1Click:Connect(function()
+	bunnyHopEnabled = not bunnyHopEnabled
+	bunnyHopButton.Text = bunnyHopEnabled and "BunnyHop: ON" or "BunnyHop: OFF"
+
+	if bunnyHopEnabled then
+		bunnyHopConnection = RunService.RenderStepped:Connect(function()
+			local char = LocalPlayer.Character
+			if char and char:FindFirstChildOfClass("Humanoid") then
+				local hum = char:FindFirstChildOfClass("Humanoid")
+				hum.WalkSpeed = 100
+				hum.JumpPower = 35
+				if hum.FloorMaterial ~= Enum.Material.Air then
+					hum:ChangeState("Jumping")
+				end
+			end
+		end)
+	else
+		if bunnyHopConnection then
+			bunnyHopConnection:Disconnect()
+			bunnyHopConnection = nil
+		end
+		-- Повертаємо звичайну швидкість
+		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").JumpPower = 50
+		end
+	end
+end)
+
 -- Кнопка "хрестик" згортання (над мод меню)
 local minimizeButton = Instance.new("TextButton", frame)
 minimizeButton.Size = UDim2.new(0, 20, 0, 20)
@@ -336,47 +431,6 @@ minimizedCircle.MouseButton1Click:Connect(function()
 	minimizeButton.Visible = true
 	minimizedCircle.Visible = false
 end)
-local UserInputService = game:GetService("UserInputService")
-
-local dragging = false
-local dragInput = nil
-local dragStart = nil
-local startPos = nil
-
-frame.Active = true
-
-frame.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		dragStart = input.Position
-		startPos = frame.Position
-		
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
-end)
-
-frame.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-		dragInput = input
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if input == dragInput and dragging then
-		local delta = input.Position - dragStart
-		frame.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	end
-end)
-local UserInputService = game:GetService("UserInputService")
 
 -- Функція drag, яку можна викликати для будь-якого UI-елемента
 local function makeDraggable(frame)
@@ -425,78 +479,3 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
-local speedEnabled = false
-local currentSpeed = 50
-
--- Кнопка Speed Hack
-local speedButton = Instance.new("TextButton")
-speedButton.Name = "speedButton"
-speedButton.Text = "SPEED: OFF"
-speedButton.Size = UDim2.new(0, 200, 0, 40)
-speedButton.Position = UDim2.new(0, 10, 0, 300)
-speedButton.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
-speedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-speedButton.Font = Enum.Font.Gotham
-speedButton.TextSize = 14
-speedButton.Parent = ScreenGui
-
--- Поле для введення швидкості
-local speedInput = Instance.new("TextBox")
-speedInput.Name = "speedInput"
-speedInput.Text = tostring(currentSpeed)
-speedInput.PlaceholderText = "Enter speed (16–500)"
-speedInput.Size = UDim2.new(0, 200, 0, 35)
-speedInput.Position = UDim2.new(0, 10, 0, 350)
-speedInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-speedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-speedInput.Font = Enum.Font.Gotham
-speedInput.TextSize = 14
-speedInput.ClearTextOnFocus = false
-speedInput.Visible = false
-speedInput.Parent = ScreenGui
-
--- Логіка
-speedButton.MouseButton1Click:Connect(function()
-	speedEnabled = not speedEnabled
-	speedButton.Text = speedEnabled and ("SPEED: " .. currentSpeed) or "SPEED: OFF"
-	speedButton.BackgroundColor3 = speedEnabled and Color3.fromRGB(0, 120, 0) or Color3.fromRGB(65, 65, 65)
-
-	local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-	local hum = char:FindFirstChildOfClass("Humanoid")
-	if hum then
-		hum.WalkSpeed = speedEnabled and currentSpeed or 16
-	end
-end)
-
-speedButton.MouseButton2Click:Connect(function()
-	speedInput.Visible = not speedInput.Visible
-	if speedInput.Visible then speedInput:CaptureFocus() end
-end)
-
-speedInput.FocusLost:Connect(function(enterPressed)
-	if enterPressed then
-		local newSpeed = tonumber(speedInput.Text)
-		if newSpeed and newSpeed >= 16 and newSpeed <= 500 then
-			currentSpeed = newSpeed
-			if speedEnabled then
-				local char = game.Players.LocalPlayer.Character
-				if char then
-					local hum = char:FindFirstChildOfClass("Humanoid")
-					if hum then
-						hum.WalkSpeed = currentSpeed
-					end
-				end
-			end
-			speedButton.Text = "SPEED: " .. currentSpeed
-		else
-			speedInput.Text = tostring(currentSpeed)
-		end
-	end
-end)
-
-game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
-	local hum = char:WaitForChild("Humanoid")
-	if speedEnabled then
-		hum.WalkSpeed = currentSpeed
-	end
-end)
