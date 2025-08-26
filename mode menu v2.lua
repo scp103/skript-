@@ -8,7 +8,7 @@ local Camera = workspace.CurrentCamera
 
 -- Налаштування
 local AimPart = "Head"
-local FieldOfView = 30
+local FieldOfView = 60
 local Holding = false
 local WallCheckEnabled = false
 local espEnabled = false
