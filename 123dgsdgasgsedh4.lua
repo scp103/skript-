@@ -170,6 +170,15 @@ local function clearESP()
 	espObjects = {}
 end
 
+local function removePlayerESP(player)
+	if espObjects[player] then
+		for _, obj in pairs(espObjects[player]) do
+			if obj and obj.Remove then obj:Remove() end
+		end
+		espObjects[player] = nil
+	end
+end
+
 local function createESP(p)
 	if p == LocalPlayer then return end
 	local box = Drawing.new("Square")
@@ -203,40 +212,81 @@ local function createESP(p)
 	espObjects[p] = {Box = box, Name = name, Health = health, Distance = distance}
 end
 
+-- Створюємо ESP для всіх гравців
 for _, p in pairs(game.Players:GetPlayers()) do createESP(p) end
+
+-- Додаємо ESP коли гравець заходить
 game.Players.PlayerAdded:Connect(createESP)
 
+-- Видаляємо ESP коли гравець виходить
+game.Players.PlayerRemoving:Connect(removePlayerESP)
+
 RunService.RenderStepped:Connect(function()
-	if not espEnabled then clearESP() return end
+	if not espEnabled then 
+		-- Ховаємо всі ESP але не видаляємо
+		for _, esp in pairs(espObjects) do
+			for _, obj in pairs(esp) do
+				if obj then obj.Visible = false end
+			end
+		end
+		return 
+	end
+	
+	-- Перевіряємо які гравці ще в грі і чистимо зайві ESP
+	for player, esp in pairs(espObjects) do
+		if not Players:FindFirstChild(player.Name) then
+			-- Гравець вийшов з гри, видаляємо його ESP
+			removePlayerESP(player)
+		end
+	end
+	
+	-- Оновлюємо ESP для активних гравців
 	for _, p in pairs(Players:GetPlayers()) do
-		if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-			local root = p.Character.HumanoidRootPart
-			local head = p.Character.Head
-			local hum = p.Character:FindFirstChildOfClass("Humanoid")
+		if p ~= LocalPlayer then
 			local esp = espObjects[p]
-			if not esp then createESP(p) esp = espObjects[p] end
-			local pos, visible = Camera:WorldToViewportPoint(root.Position)
-			if visible then
-				local dist = (LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude
-				local scale = math.clamp(3000 / dist, 100, 300)
-				local width, height = scale / 2, scale
+			if not esp then 
+				createESP(p) 
+				esp = espObjects[p] 
+			end
+			
+			-- Перевіряємо чи є характер і чи він живий
+			if p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChildOfClass("Humanoid") then
+				local root = p.Character.HumanoidRootPart
+				local hum = p.Character:FindFirstChildOfClass("Humanoid")
+				
+				-- Перевіряємо чи гравець живий
+				if hum.Health > 0 then
+					local pos, visible = Camera:WorldToViewportPoint(root.Position)
+					if visible and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+						local dist = (LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude
+						local scale = math.clamp(3000 / dist, 100, 300)
+						local width, height = scale / 2, scale
 
-				esp.Box.Size = Vector2.new(width, height)
-				esp.Box.Position = Vector2.new(pos.X - width / 2, pos.Y - height / 1.5)
-				esp.Box.Visible = true
+						esp.Box.Size = Vector2.new(width, height)
+						esp.Box.Position = Vector2.new(pos.X - width / 2, pos.Y - height / 1.5)
+						esp.Box.Visible = true
 
-				esp.Name.Position = Vector2.new(pos.X, pos.Y - height / 1.5 - 15)
-				esp.Name.Text = p.Name
-				esp.Name.Visible = true
+						esp.Name.Position = Vector2.new(pos.X, pos.Y - height / 1.5 - 15)
+						esp.Name.Text = p.Name
+						esp.Name.Visible = true
 
-				esp.Health.Position = Vector2.new(pos.X, pos.Y - height / 1.5)
-				esp.Health.Text = "HP: " .. math.floor(hum.Health)
-				esp.Health.Visible = true
+						esp.Health.Position = Vector2.new(pos.X, pos.Y - height / 1.5)
+						esp.Health.Text = "HP: " .. math.floor(hum.Health)
+						esp.Health.Visible = true
 
-				esp.Distance.Position = Vector2.new(pos.X, pos.Y + height / 2 + 5)
-				esp.Distance.Text = "Dist: " .. math.floor(dist)
-				esp.Distance.Visible = true
+						esp.Distance.Position = Vector2.new(pos.X, pos.Y + height / 2 + 5)
+						esp.Distance.Text = "Dist: " .. math.floor(dist)
+						esp.Distance.Visible = true
+					else
+						-- Гравець поза екраном - ховаємо ESP
+						for _, v in pairs(esp) do v.Visible = false end
+					end
+				else
+					-- Гравець мертвий - ховаємо ESP
+					for _, v in pairs(esp) do v.Visible = false end
+				end
 			else
+				-- Немає характера або він респавниться - ховаємо ESP
 				for _, v in pairs(esp) do v.Visible = false end
 			end
 		end
