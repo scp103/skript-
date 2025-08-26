@@ -1,4 +1,4 @@
--- Об'єднане мод-меню (AIM + ESP + Noclip) | Для KRNL
+-- Об'єднане мод-меню (AIM + ESP + Noclip + BunnyHop) | Для KRNL
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -8,11 +8,12 @@ local Camera = workspace.CurrentCamera
 
 -- Налаштування
 local AimPart = "Head"
-local FieldOfView = 30
+local FieldOfView = 60
 local Holding = false
 local WallCheckEnabled = false
 local espEnabled = false
 local espObjects = {}
+local bunnyHopEnabled = false
 
 -- GUI
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -21,7 +22,7 @@ screenGui.Name = "SmileModMenu"
 screenGui.ResetOnSpawn = false
 
 local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 180, 0, 200)
+frame.Size = UDim2.new(0, 180, 0, 240) -- Збільшив висоту для нової кнопки
 frame.Position = UDim2.new(0.5, -90, 0.6, 0)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
@@ -67,7 +68,7 @@ espButton.Font = Enum.Font.SourceSansBold
 espButton.TextSize = 16
 espButton.Text = "ESP: OFF"
 
--- Кнопка Noclip (додана)
+-- Кнопка Noclip
 local noclipButton = Instance.new("TextButton", frame)
 noclipButton.Size = UDim2.new(0.9, 0, 0, 30)
 noclipButton.Position = UDim2.new(0.05, 0, 0, 160)
@@ -76,6 +77,16 @@ noclipButton.TextColor3 = Color3.new(1,1,1)
 noclipButton.Font = Enum.Font.SourceSansBold
 noclipButton.TextSize = 16
 noclipButton.Text = "Noclip: OFF"
+
+-- Кнопка BunnyHop (НОВА)
+local bunnyHopButton = Instance.new("TextButton", frame)
+bunnyHopButton.Size = UDim2.new(0.9, 0, 0, 30)
+bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 200)
+bunnyHopButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+bunnyHopButton.TextColor3 = Color3.new(1,1,1)
+bunnyHopButton.Font = Enum.Font.SourceSansBold
+bunnyHopButton.TextSize = 16
+bunnyHopButton.Text = "BunnyHop: OFF"
 
 -- Анімація кольору заголовка
 local hue = 0
@@ -232,6 +243,9 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
+-- BunnyHop логіка (НОВА)
+local bunnyHopConnection
+
 -- AIM кнопка
 aimButton.MouseButton1Click:Connect(function()
 	Holding = not Holding
@@ -251,7 +265,7 @@ espButton.MouseButton1Click:Connect(function()
 	if not espEnabled then clearESP() end
 end)
 
--- Noclip логіка (оновлено)
+-- Noclip логіка
 local noclipEnabled = false
 local noclipConnection
 
@@ -284,6 +298,37 @@ noclipButton.MouseButton1Click:Connect(function()
 		end
 	end
 end)
+
+-- BunnyHop кнопка (НОВА)
+bunnyHopButton.MouseButton1Click:Connect(function()
+	bunnyHopEnabled = not bunnyHopEnabled
+	bunnyHopButton.Text = bunnyHopEnabled and "BunnyHop: ON" or "BunnyHop: OFF"
+
+	if bunnyHopEnabled then
+		bunnyHopConnection = RunService.RenderStepped:Connect(function()
+			local char = LocalPlayer.Character
+			if char and char:FindFirstChildOfClass("Humanoid") then
+				local hum = char:FindFirstChildOfClass("Humanoid")
+				hum.WalkSpeed = 100
+				hum.JumpPower = 35
+				if hum.FloorMaterial ~= Enum.Material.Air then
+					hum:ChangeState("Jumping")
+				end
+			end
+		end)
+	else
+		if bunnyHopConnection then
+			bunnyHopConnection:Disconnect()
+			bunnyHopConnection = nil
+		end
+		-- Повертаємо звичайну швидкість
+		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").JumpPower = 50
+		end
+	end
+end)
+
 -- Кнопка "хрестик" згортання (над мод меню)
 local minimizeButton = Instance.new("TextButton", frame)
 minimizeButton.Size = UDim2.new(0, 20, 0, 20)
@@ -336,47 +381,6 @@ minimizedCircle.MouseButton1Click:Connect(function()
 	minimizeButton.Visible = true
 	minimizedCircle.Visible = false
 end)
-local UserInputService = game:GetService("UserInputService")
-
-local dragging = false
-local dragInput = nil
-local dragStart = nil
-local startPos = nil
-
-frame.Active = true
-
-frame.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		dragStart = input.Position
-		startPos = frame.Position
-		
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
-end)
-
-frame.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-		dragInput = input
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if input == dragInput and dragging then
-		local delta = input.Position - dragStart
-		frame.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	end
-end)
-local UserInputService = game:GetService("UserInputService")
 
 -- Функція drag, яку можна викликати для будь-якого UI-елемента
 local function makeDraggable(frame)
@@ -425,78 +429,3 @@ makeDraggable(frame)
 
 -- Викликаємо для кружка-згорнутого меню
 makeDraggable(minimizedCircle)
--- Speed Hack Module (додати в кінець скрипта)
-do
-    -- Додаємо кнопку
-    local speedButton = Instance.new("TextButton", frame)
-    speedButton.Size = UDim2.new(0.9, 0, 0, 30)
-    speedButton.Position = UDim2.new(0.05, 0, 0, 200) -- Після останньої кнопки
-    speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    speedButton.BorderSizePixel = 2  -- Жирна обводка
-    speedButton.BorderColor3 = Color3.fromRGB(80, 80, 80)
-    speedButton.TextColor3 = Color3.new(1,1,1)
-    speedButton.Font = Enum.Font.SourceSansBold
-    speedButton.TextSize = 16
-    speedButton.Text = "SPEED: OFF"
-
-    -- Поле для введення швидкості
-    local speedInput = Instance.new("TextBox", frame)
-    speedInput.Size = UDim2.new(0.9, 0, 0, 30)
-    speedInput.Position = UDim2.new(0.05, 0, 0, 235)
-    speedInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    speedInput.TextColor3 = Color3.new(1,1,1)
-    speedInput.Font = Enum.Font.SourceSansBold
-    speedInput.TextSize = 16
-    speedInput.PlaceholderText = "Enter speed (16-500)"
-    speedInput.Text = "50"
-    speedInput.Visible = false
-
-    -- Змінні
-    local speedEnabled = false
-    local currentSpeed = 50
-    local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-
-    -- Функція оновлення швидкості
-    local function updateSpeed()
-        if humanoid then
-            humanoid.WalkSpeed = speedEnabled and currentSpeed or 16
-        end
-        speedButton.Text = speedEnabled and "SPEED: ON ("..currentSpeed..")" or "SPEED: OFF"
-    end
-
-    -- Обробник кнопки
-    speedButton.MouseButton1Click:Connect(function()
-        speedEnabled = not speedEnabled
-        updateSpeed()
-    end)
-
-    -- Показувати поле введення при натисканні правою кнопкою
-    speedButton.MouseButton2Click:Connect(function()
-        speedInput.Visible = not speedInput.Visible
-        if speedInput.Visible then
-            speedInput:CaptureFocus()
-        end
-    end)
-
-    -- Обробник введення тексту
-    speedInput.FocusLost:Connect(function()
-        local newSpeed = tonumber(speedInput.Text)
-        if newSpeed and newSpeed >= 16 and newSpeed <= 500 then
-            currentSpeed = newSpeed
-            if speedEnabled then
-                updateSpeed()
-            end
-        else
-            speedInput.Text = tostring(currentSpeed)
-        end
-    end)
-
-    -- Обробка зміни персонажа
-    player.CharacterAdded:Connect(function(character)
-        humanoid = character:WaitForChild("Humanoid")
-        updateSpeed()
-    end)
-
-    -- Збільшуємо розмір фрейму
-    frame.Size = UDim2.new(0, 180, 0, 270) -- +70 до висоти
-end
