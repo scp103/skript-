@@ -24,16 +24,20 @@ screenGui.Name = "SmileModMenu"
 screenGui.ResetOnSpawn = false
 
 local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 180, 0, 200) -- Повертаю меншу висоту
+frame.Size = UDim2.new(0, 180, 0, 230) -- Збільшую висоту для кнопки згортання
 frame.Position = UDim2.new(0.5, -90, 0.6, 0)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
 
+-- Додаємо округлені краї до основного фрейму
+local frameCorner = Instance.new("UICorner", frame)
+frameCorner.CornerRadius = UDim.new(0, 12) -- Красиві округлені краї
+
 -- Додаємо ScrollingFrame для прокрутки
 local scrollFrame = Instance.new("ScrollingFrame", frame)
-scrollFrame.Size = UDim2.new(1, 0, 1, -30) -- Віднімаємо місце для заголовка
+scrollFrame.Size = UDim2.new(1, 0, 1, -60) -- Віднімаємо більше місця для заголовка та кнопки згортання
 scrollFrame.Position = UDim2.new(0, 0, 0, 30)
 scrollFrame.BackgroundTransparency = 1
 scrollFrame.ScrollBarThickness = 6
@@ -60,6 +64,10 @@ aimButton.Font = Enum.Font.SourceSansBold
 aimButton.TextSize = 16
 aimButton.Text = "AIM: OFF"
 
+-- Додаємо округлені краї до кнопки AIM
+local aimButtonCorner = Instance.new("UICorner", aimButton)
+aimButtonCorner.CornerRadius = UDim.new(0, 8)
+
 -- Кнопка WallCheck
 local wallButton = Instance.new("TextButton", scrollFrame)
 wallButton.Size = UDim2.new(0.9, 0, 0, 30)
@@ -69,6 +77,10 @@ wallButton.TextColor3 = Color3.new(1,1,1)
 wallButton.Font = Enum.Font.SourceSansBold
 wallButton.TextSize = 16
 wallButton.Text = "WallCheck: OFF"
+
+-- Додаємо округлені краї до кнопки WallCheck
+local wallButtonCorner = Instance.new("UICorner", wallButton)
+wallButtonCorner.CornerRadius = UDim.new(0, 8)
 
 -- Кнопка ESP
 local espButton = Instance.new("TextButton", scrollFrame)
@@ -80,6 +92,10 @@ espButton.Font = Enum.Font.SourceSansBold
 espButton.TextSize = 16
 espButton.Text = "ESP: OFF"
 
+-- Додаємо округлені краї до кнопки ESP
+local espButtonCorner = Instance.new("UICorner", espButton)
+espButtonCorner.CornerRadius = UDim.new(0, 8)
+
 -- Кнопка Noclip
 local noclipButton = Instance.new("TextButton", scrollFrame)
 noclipButton.Size = UDim2.new(0.9, 0, 0, 30)
@@ -90,6 +106,10 @@ noclipButton.Font = Enum.Font.SourceSansBold
 noclipButton.TextSize = 16
 noclipButton.Text = "Noclip: OFF"
 
+-- Додаємо округлені краї до кнопки Noclip
+local noclipButtonCorner = Instance.new("UICorner", noclipButton)
+noclipButtonCorner.CornerRadius = UDim.new(0, 8)
+
 -- Кнопка BunnyHop
 local bunnyHopButton = Instance.new("TextButton", scrollFrame)
 bunnyHopButton.Size = UDim2.new(0.9, 0, 0, 30)
@@ -99,6 +119,10 @@ bunnyHopButton.TextColor3 = Color3.new(1,1,1)
 bunnyHopButton.Font = Enum.Font.SourceSansBold
 bunnyHopButton.TextSize = 16
 bunnyHopButton.Text = "BunnyHop: OFF"
+
+-- Додаємо округлені краї до кнопки BunnyHop
+local bunnyHopButtonCorner = Instance.new("UICorner", bunnyHopButton)
+bunnyHopButtonCorner.CornerRadius = UDim.new(0, 8)
 
 -- Speed Hack секція
 -- Поле для введення швидкості
@@ -121,6 +145,10 @@ speedInput.Font = Enum.Font.SourceSans
 speedInput.TextSize = 14
 speedInput.Text = "16"
 speedInput.PlaceholderText = "16-400"
+
+-- Додаємо округлені краї до поля введення швидкості
+local speedInputCorner = Instance.new("UICorner", speedInput)
+speedInputCorner.CornerRadius = UDim.new(0, 6)
 
 -- Круглий слайдер для швидкості
 local sliderFrame = Instance.new("Frame", scrollFrame)
@@ -150,6 +178,41 @@ speedButton.TextColor3 = Color3.new(1,1,1)
 speedButton.Font = Enum.Font.SourceSansBold
 speedButton.TextSize = 16
 speedButton.Text = "Speed: OFF"
+
+-- Додаємо округлені краї до кнопки Speed
+local speedButtonCorner = Instance.new("UICorner", speedButton)
+speedButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Кнопка "хрестик" згортання (ПЕРЕНЕСЕНА В МЕНЮ ЗНИЗУ)
+local minimizeButton = Instance.new("TextButton", frame)
+minimizeButton.Size = UDim2.new(0.9, 0, 0, 25)
+minimizeButton.Position = UDim2.new(0.05, 0, 1, -30) -- Розміщуємо знизу меню
+minimizeButton.Text = "✕ Згорнути меню"
+minimizeButton.TextColor3 = Color3.new(1, 1, 1)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+minimizeButton.BorderSizePixel = 0
+minimizeButton.ZIndex = 10
+minimizeButton.Font = Enum.Font.SourceSansBold
+minimizeButton.TextSize = 14
+
+-- Додаємо округлені краї до кнопки згортання
+local minimizeButtonCorner = Instance.new("UICorner", minimizeButton)
+minimizeButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Кнопка кружок для розгортання (зовні меню)
+local minimizedCircle = Instance.new("TextButton", screenGui)
+minimizedCircle.Size = UDim2.new(0, 30, 0, 30)
+minimizedCircle.Position = UDim2.new(0, 300, 0, 200) -- змінюй на потрібне
+minimizedCircle.Text = ""
+minimizedCircle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+minimizedCircle.BorderSizePixel = 0
+minimizedCircle.Visible = false
+minimizedCircle.AutoButtonColor = false
+minimizedCircle.ZIndex = 10
+minimizedCircle.AnchorPoint = Vector2.new(0.5, 0.5)
+
+local corner = Instance.new("UICorner", minimizedCircle)
+corner.CornerRadius = UDim.new(1, 0) -- круг
 
 -- Анімація кольору заголовка
 local hue = 0
@@ -393,17 +456,20 @@ local function updateSlider()
 	speedInput.Text = tostring(currentSpeed)
 end
 
--- Нова логіка слайдера для тач і мишки
+-- ПОФІКСОВАНА логіка слайдера для тач і мишки
 local function handleSliderInput()
 	local mouse = UserInputService:GetMouseLocation()
 	local sliderPos = sliderFrame.AbsolutePosition
 	local sliderSize = sliderFrame.AbsoluteSize
 	
 	if mouse.X >= sliderPos.X and mouse.X <= sliderPos.X + sliderSize.X then
-		local relativeX = mouse.X - sliderPos.X
-		local percentage = math.clamp(relativeX / sliderSize.X, 0, 1)
+		local relativeX = math.clamp(mouse.X - sliderPos.X, 0, sliderSize.X) -- ФІКС: додано clamp
+		local percentage = relativeX / sliderSize.X
 		
-		currentSpeed = math.floor(16 + (400 - 16) * percentage)
+		-- ФІКС: правильно округлюємо до цілого числа і забезпечуємо точні межі
+		currentSpeed = math.floor(16 + (400 - 16) * percentage + 0.5)
+		currentSpeed = math.clamp(currentSpeed, 16, 400) -- ФІКС: гарантуємо межі 16-400
+		
 		updateSlider()
 		
 		if speedHackEnabled then
@@ -555,31 +621,6 @@ end)
 -- Ініціалізуємо слайдер
 updateSlider()
 
--- Кнопка "хрестик" згортання (над мод меню)
-local minimizeButton = Instance.new("TextButton", frame)
-minimizeButton.Size = UDim2.new(0, 20, 0, 20)
-minimizeButton.Position = UDim2.new(1, -22, 0, -22) -- трохи зверху справа
-minimizeButton.Text = "✕"
-minimizeButton.TextColor3 = Color3.new(1, 1, 1)
-minimizeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-minimizeButton.BorderSizePixel = 0
-minimizeButton.ZIndex = 10
-
--- Кнопка кружок для розгортання (зовні меню)
-local minimizedCircle = Instance.new("TextButton", screenGui)
-minimizedCircle.Size = UDim2.new(0, 30, 0, 30)
-minimizedCircle.Position = UDim2.new(0, 300, 0, 200) -- змінюй на потрібне
-minimizedCircle.Text = ""
-minimizedCircle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-minimizedCircle.BorderSizePixel = 0
-minimizedCircle.Visible = false
-minimizedCircle.AutoButtonColor = false
-minimizedCircle.ZIndex = 10
-minimizedCircle.AnchorPoint = Vector2.new(0.5, 0.5)
-
-local corner = Instance.new("UICorner", minimizedCircle)
-corner.CornerRadius = UDim.new(1, 0) -- круг
-
 -- Анімація переливу кольору кружка
 task.spawn(function()
 	while true do
@@ -597,14 +638,12 @@ end)
 -- Обробник кліку на хрестик (згортання)
 minimizeButton.MouseButton1Click:Connect(function()
 	frame.Visible = false
-	minimizeButton.Visible = false
 	minimizedCircle.Visible = true
 end)
 
 -- Обробник кліку на кружок (розгортання)
 minimizedCircle.MouseButton1Click:Connect(function()
 	frame.Visible = true
-	minimizeButton.Visible = true
 	minimizedCircle.Visible = false
 end)
 
