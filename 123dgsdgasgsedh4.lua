@@ -209,7 +209,14 @@ local function createESP(p)
 	distance.Color = Color3.fromRGB(255, 255, 0)
 	distance.Visible = false
 
-	espObjects[p] = {Box = box, Name = name, Health = health, Distance = distance}
+	-- Додаємо трейсер (лінія)
+	local tracer = Drawing.new("Line")
+	tracer.Thickness = 1
+	tracer.Color = Color3.fromRGB(255, 255, 255)
+	tracer.Transparency = 0.8
+	tracer.Visible = false
+
+	espObjects[p] = {Box = box, Name = name, Health = health, Distance = distance, Tracer = tracer}
 end
 
 -- Створюємо ESP для всіх гравців
@@ -262,21 +269,31 @@ RunService.RenderStepped:Connect(function()
 						local scale = math.clamp(3000 / dist, 100, 300)
 						local width, height = scale / 2, scale
 
+						-- Оновлюємо бокс
 						esp.Box.Size = Vector2.new(width, height)
 						esp.Box.Position = Vector2.new(pos.X - width / 2, pos.Y - height / 1.5)
 						esp.Box.Visible = true
 
+						-- Оновлюємо ім'я
 						esp.Name.Position = Vector2.new(pos.X, pos.Y - height / 1.5 - 15)
 						esp.Name.Text = p.Name
 						esp.Name.Visible = true
 
+						-- Оновлюємо здоров'я
 						esp.Health.Position = Vector2.new(pos.X, pos.Y - height / 1.5)
 						esp.Health.Text = "HP: " .. math.floor(hum.Health)
 						esp.Health.Visible = true
 
+						-- Оновлюємо дистанцію
 						esp.Distance.Position = Vector2.new(pos.X, pos.Y + height / 2 + 5)
 						esp.Distance.Text = "Dist: " .. math.floor(dist)
 						esp.Distance.Visible = true
+
+						-- Оновлюємо трейсер (лінія з низу екрану до гравця)
+						local screenBottom = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+						esp.Tracer.From = screenBottom
+						esp.Tracer.To = Vector2.new(pos.X, pos.Y)
+						esp.Tracer.Visible = true
 					else
 						-- Гравець поза екраном - ховаємо ESP
 						for _, v in pairs(esp) do v.Visible = false end
