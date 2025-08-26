@@ -14,6 +14,8 @@ local WallCheckEnabled = false
 local espEnabled = false
 local espObjects = {}
 local bunnyHopEnabled = false
+local speedHackEnabled = false
+local currentSpeed = 16
 
 -- GUI
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -22,7 +24,7 @@ screenGui.Name = "SmileModMenu"
 screenGui.ResetOnSpawn = false
 
 local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 180, 0, 240) -- Збільшив висоту для нової кнопки
+frame.Size = UDim2.new(0, 180, 0, 320) -- Збільшив висоту для слайдера
 frame.Position = UDim2.new(0.5, -90, 0.6, 0)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
@@ -87,6 +89,52 @@ bunnyHopButton.TextColor3 = Color3.new(1,1,1)
 bunnyHopButton.Font = Enum.Font.SourceSansBold
 bunnyHopButton.TextSize = 16
 bunnyHopButton.Text = "BunnyHop: OFF"
+
+-- Speed Hack секція
+-- Поле для введення швидкості
+local speedInputLabel = Instance.new("TextLabel", frame)
+speedInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
+speedInputLabel.Position = UDim2.new(0.05, 0, 0, 240)
+speedInputLabel.BackgroundTransparency = 1
+speedInputLabel.Text = "Speed:"
+speedInputLabel.Font = Enum.Font.SourceSansBold
+speedInputLabel.TextSize = 14
+speedInputLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedInputLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local speedInput = Instance.new("TextBox", frame)
+speedInput.Size = UDim2.new(0.45, 0, 0, 25)
+speedInput.Position = UDim2.new(0.5, 0, 0, 240)
+speedInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+speedInput.TextColor3 = Color3.new(1,1,1)
+speedInput.Font = Enum.Font.SourceSans
+speedInput.TextSize = 14
+speedInput.Text = "16"
+speedInput.PlaceholderText = "16-400"
+
+-- Слайдер для швидкості
+local sliderFrame = Instance.new("Frame", frame)
+sliderFrame.Size = UDim2.new(0.9, 0, 0, 20)
+sliderFrame.Position = UDim2.new(0.05, 0, 0, 270)
+sliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+sliderFrame.BorderSizePixel = 0
+
+local sliderButton = Instance.new("TextButton", sliderFrame)
+sliderButton.Size = UDim2.new(0, 15, 1, 0)
+sliderButton.Position = UDim2.new(0, 0, 0, 0)
+sliderButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+sliderButton.Text = ""
+sliderButton.BorderSizePixel = 0
+
+-- Кнопка Speed Hack ON/OFF
+local speedButton = Instance.new("TextButton", frame)
+speedButton.Size = UDim2.new(0.9, 0, 0, 25)
+speedButton.Position = UDim2.new(0.05, 0, 0, 295)
+speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedButton.TextColor3 = Color3.new(1,1,1)
+speedButton.Font = Enum.Font.SourceSansBold
+speedButton.TextSize = 16
+speedButton.Text = "Speed: OFF"
 
 -- Анімація кольору заголовка
 local hue = 0
@@ -313,6 +361,76 @@ end)
 -- BunnyHop логіка (НОВА)
 local bunnyHopConnection
 
+-- Speed Hack логіка
+local speedHackConnection
+
+-- Функція оновлення швидкості
+local function updateSpeed()
+	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+		LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
+	end
+end
+
+-- Функція оновлення слайдера
+local function updateSlider()
+	local percentage = (currentSpeed - 16) / (400 - 16)
+	sliderButton.Position = UDim2.new(percentage, -7, 0, 0)
+	speedInput.Text = tostring(currentSpeed)
+end
+
+-- Слайдер логіка
+local dragging = false
+UserInputService.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		local mousePos = UserInputService:GetMouseLocation()
+		local sliderPos = sliderFrame.AbsolutePosition
+		local sliderSize = sliderFrame.AbsoluteSize
+		
+		if mousePos.X >= sliderPos.X and mousePos.X <= sliderPos.X + sliderSize.X and
+		   mousePos.Y >= sliderPos.Y and mousePos.Y <= sliderPos.Y + sliderSize.Y then
+			dragging = true
+		end
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = false
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		local mousePos = UserInputService:GetMouseLocation()
+		local sliderPos = sliderFrame.AbsolutePosition
+		local sliderSize = sliderFrame.AbsoluteSize
+		
+		local relativeX = mousePos.X - sliderPos.X
+		local percentage = math.clamp(relativeX / sliderSize.X, 0, 1)
+		
+		currentSpeed = math.floor(16 + (400 - 16) * percentage)
+		updateSlider()
+		
+		if speedHackEnabled then
+			updateSpeed()
+		end
+	end
+end)
+
+-- Обробка введення в текстове поле
+speedInput.FocusLost:Connect(function()
+	local inputSpeed = tonumber(speedInput.Text)
+	if inputSpeed and inputSpeed >= 16 and inputSpeed <= 400 then
+		currentSpeed = inputSpeed
+		updateSlider()
+		if speedHackEnabled then
+			updateSpeed()
+		end
+	else
+		speedInput.Text = tostring(currentSpeed)
+	end
+end)
+
 -- AIM кнопка
 aimButton.MouseButton1Click:Connect(function()
 	Holding = not Holding
@@ -390,11 +508,35 @@ bunnyHopButton.MouseButton1Click:Connect(function()
 		end
 		-- Повертаємо звичайну швидкість
 		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = speedHackEnabled and currentSpeed or 16
 			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").JumpPower = 50
 		end
 	end
 end)
+
+-- Speed Hack кнопка (НОВА)
+speedButton.MouseButton1Click:Connect(function()
+	speedHackEnabled = not speedHackEnabled
+	speedButton.Text = speedHackEnabled and "Speed: ON" or "Speed: OFF"
+
+	if speedHackEnabled then
+		speedHackConnection = RunService.RenderStepped:Connect(function()
+			updateSpeed()
+		end)
+	else
+		if speedHackConnection then
+			speedHackConnection:Disconnect()
+			speedHackConnection = nil
+		end
+		-- Повертаємо звичайну швидкість якщо BunnyHop не активний
+		if not bunnyHopEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+		end
+	end
+end)
+
+-- Ініціалізуємо слайдер
+updateSlider()
 
 -- Кнопка "хрестик" згортання (над мод меню)
 local minimizeButton = Instance.new("TextButton", frame)
