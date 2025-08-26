@@ -24,12 +24,22 @@ screenGui.Name = "SmileModMenu"
 screenGui.ResetOnSpawn = false
 
 local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 180, 0, 320) -- Збільшив висоту для слайдера
+frame.Size = UDim2.new(0, 180, 0, 200) -- Повертаю меншу висоту
 frame.Position = UDim2.new(0.5, -90, 0.6, 0)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
+
+-- Додаємо ScrollingFrame для прокрутки
+local scrollFrame = Instance.new("ScrollingFrame", frame)
+scrollFrame.Size = UDim2.new(1, 0, 1, -30) -- Віднімаємо місце для заголовка
+scrollFrame.Position = UDim2.new(0, 0, 0, 30)
+scrollFrame.BackgroundTransparency = 1
+scrollFrame.ScrollBarThickness = 6
+scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 350) -- Висота всього контенту
+scrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
 
 local titleLabel = Instance.new("TextLabel", frame)
 titleLabel.Size = UDim2.new(1, 0, 0, 30)
@@ -41,9 +51,9 @@ titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 -- Кнопка AIM
-local aimButton = Instance.new("TextButton", frame)
+local aimButton = Instance.new("TextButton", scrollFrame)
 aimButton.Size = UDim2.new(0.9, 0, 0, 30)
-aimButton.Position = UDim2.new(0.05, 0, 0, 40)
+aimButton.Position = UDim2.new(0.05, 0, 0, 10)
 aimButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 aimButton.TextColor3 = Color3.new(1,1,1)
 aimButton.Font = Enum.Font.SourceSansBold
@@ -51,9 +61,9 @@ aimButton.TextSize = 16
 aimButton.Text = "AIM: OFF"
 
 -- Кнопка WallCheck
-local wallButton = Instance.new("TextButton", frame)
+local wallButton = Instance.new("TextButton", scrollFrame)
 wallButton.Size = UDim2.new(0.9, 0, 0, 30)
-wallButton.Position = UDim2.new(0.05, 0, 0, 80)
+wallButton.Position = UDim2.new(0.05, 0, 0, 50)
 wallButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 wallButton.TextColor3 = Color3.new(1,1,1)
 wallButton.Font = Enum.Font.SourceSansBold
@@ -61,9 +71,9 @@ wallButton.TextSize = 16
 wallButton.Text = "WallCheck: OFF"
 
 -- Кнопка ESP
-local espButton = Instance.new("TextButton", frame)
+local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
-espButton.Position = UDim2.new(0.05, 0, 0, 120)
+espButton.Position = UDim2.new(0.05, 0, 0, 90)
 espButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 espButton.TextColor3 = Color3.new(1,1,1)
 espButton.Font = Enum.Font.SourceSansBold
@@ -71,19 +81,19 @@ espButton.TextSize = 16
 espButton.Text = "ESP: OFF"
 
 -- Кнопка Noclip
-local noclipButton = Instance.new("TextButton", frame)
+local noclipButton = Instance.new("TextButton", scrollFrame)
 noclipButton.Size = UDim2.new(0.9, 0, 0, 30)
-noclipButton.Position = UDim2.new(0.05, 0, 0, 160)
+noclipButton.Position = UDim2.new(0.05, 0, 0, 130)
 noclipButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 noclipButton.TextColor3 = Color3.new(1,1,1)
 noclipButton.Font = Enum.Font.SourceSansBold
 noclipButton.TextSize = 16
 noclipButton.Text = "Noclip: OFF"
 
--- Кнопка BunnyHop (НОВА)
-local bunnyHopButton = Instance.new("TextButton", frame)
+-- Кнопка BunnyHop
+local bunnyHopButton = Instance.new("TextButton", scrollFrame)
 bunnyHopButton.Size = UDim2.new(0.9, 0, 0, 30)
-bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 200)
+bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 170)
 bunnyHopButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bunnyHopButton.TextColor3 = Color3.new(1,1,1)
 bunnyHopButton.Font = Enum.Font.SourceSansBold
@@ -92,9 +102,9 @@ bunnyHopButton.Text = "BunnyHop: OFF"
 
 -- Speed Hack секція
 -- Поле для введення швидкості
-local speedInputLabel = Instance.new("TextLabel", frame)
+local speedInputLabel = Instance.new("TextLabel", scrollFrame)
 speedInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-speedInputLabel.Position = UDim2.new(0.05, 0, 0, 240)
+speedInputLabel.Position = UDim2.new(0.05, 0, 0, 210)
 speedInputLabel.BackgroundTransparency = 1
 speedInputLabel.Text = "Speed:"
 speedInputLabel.Font = Enum.Font.SourceSansBold
@@ -102,9 +112,9 @@ speedInputLabel.TextSize = 14
 speedInputLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 speedInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-local speedInput = Instance.new("TextBox", frame)
+local speedInput = Instance.new("TextBox", scrollFrame)
 speedInput.Size = UDim2.new(0.45, 0, 0, 25)
-speedInput.Position = UDim2.new(0.5, 0, 0, 240)
+speedInput.Position = UDim2.new(0.5, 0, 0, 210)
 speedInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 speedInput.TextColor3 = Color3.new(1,1,1)
 speedInput.Font = Enum.Font.SourceSans
@@ -112,24 +122,29 @@ speedInput.TextSize = 14
 speedInput.Text = "16"
 speedInput.PlaceholderText = "16-400"
 
--- Слайдер для швидкості
-local sliderFrame = Instance.new("Frame", frame)
-sliderFrame.Size = UDim2.new(0.9, 0, 0, 20)
-sliderFrame.Position = UDim2.new(0.05, 0, 0, 270)
+-- Круглий слайдер для швидкості
+local sliderFrame = Instance.new("Frame", scrollFrame)
+sliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
+sliderFrame.Position = UDim2.new(0.05, 0, 0, 240)
 sliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 sliderFrame.BorderSizePixel = 0
 
-local sliderButton = Instance.new("TextButton", sliderFrame)
-sliderButton.Size = UDim2.new(0, 15, 1, 0)
-sliderButton.Position = UDim2.new(0, 0, 0, 0)
+local sliderCorner = Instance.new("UICorner", sliderFrame)
+sliderCorner.CornerRadius = UDim.new(0, 8)
+
+local sliderButton = Instance.new("Frame", sliderFrame)
+sliderButton.Size = UDim2.new(0, 20, 0, 20)
+sliderButton.Position = UDim2.new(0, -2, 0, -2.5)
 sliderButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-sliderButton.Text = ""
 sliderButton.BorderSizePixel = 0
 
+local sliderButtonCorner = Instance.new("UICorner", sliderButton)
+sliderButtonCorner.CornerRadius = UDim.new(1, 0) -- Робимо круглим
+
 -- Кнопка Speed Hack ON/OFF
-local speedButton = Instance.new("TextButton", frame)
-speedButton.Size = UDim2.new(0.9, 0, 0, 25)
-speedButton.Position = UDim2.new(0.05, 0, 0, 295)
+local speedButton = Instance.new("TextButton", scrollFrame)
+speedButton.Size = UDim2.new(0.9, 0, 0, 30)
+speedButton.Position = UDim2.new(0.05, 0, 0, 270)
 speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 speedButton.TextColor3 = Color3.new(1,1,1)
 speedButton.Font = Enum.Font.SourceSansBold
@@ -374,38 +389,18 @@ end
 -- Функція оновлення слайдера
 local function updateSlider()
 	local percentage = (currentSpeed - 16) / (400 - 16)
-	sliderButton.Position = UDim2.new(percentage, -7, 0, 0)
+	sliderButton.Position = UDim2.new(percentage, -10, 0, -2.5)
 	speedInput.Text = tostring(currentSpeed)
 end
 
--- Слайдер логіка
-local dragging = false
-UserInputService.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		local mousePos = UserInputService:GetMouseLocation()
-		local sliderPos = sliderFrame.AbsolutePosition
-		local sliderSize = sliderFrame.AbsoluteSize
-		
-		if mousePos.X >= sliderPos.X and mousePos.X <= sliderPos.X + sliderSize.X and
-		   mousePos.Y >= sliderPos.Y and mousePos.Y <= sliderPos.Y + sliderSize.Y then
-			dragging = true
-		end
-	end
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = false
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-		local mousePos = UserInputService:GetMouseLocation()
-		local sliderPos = sliderFrame.AbsolutePosition
-		local sliderSize = sliderFrame.AbsoluteSize
-		
-		local relativeX = mousePos.X - sliderPos.X
+-- Нова логіка слайдера для тач і мишки
+local function handleSliderInput()
+	local mouse = UserInputService:GetMouseLocation()
+	local sliderPos = sliderFrame.AbsolutePosition
+	local sliderSize = sliderFrame.AbsoluteSize
+	
+	if mouse.X >= sliderPos.X and mouse.X <= sliderPos.X + sliderSize.X then
+		local relativeX = mouse.X - sliderPos.X
 		local percentage = math.clamp(relativeX / sliderSize.X, 0, 1)
 		
 		currentSpeed = math.floor(16 + (400 - 16) * percentage)
@@ -414,6 +409,28 @@ UserInputService.InputChanged:Connect(function(input)
 		if speedHackEnabled then
 			updateSpeed()
 		end
+	end
+end
+
+-- Обробка тач/кліків на слайдері
+local draggingSlider = false
+
+sliderFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingSlider = true
+		handleSliderInput()
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingSlider = false
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if draggingSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		handleSliderInput()
 	end
 end)
 
