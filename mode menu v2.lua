@@ -14,6 +14,8 @@ local WallCheckEnabled = false
 local espEnabled = false
 local espObjects = {}
 local bunnyHopEnabled = false
+local speedHackEnabled = false
+local currentSpeed = 16
 
 -- GUI
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -22,12 +24,26 @@ screenGui.Name = "SmileModMenu"
 screenGui.ResetOnSpawn = false
 
 local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 180, 0, 240) -- Збільшив висоту для нової кнопки
+frame.Size = UDim2.new(0, 180, 0, 230) -- Збільшую висоту для кнопки згортання
 frame.Position = UDim2.new(0.5, -90, 0.6, 0)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
+
+-- Додаємо округлені краї до основного фрейму
+local frameCorner = Instance.new("UICorner", frame)
+frameCorner.CornerRadius = UDim.new(0, 12) -- Красиві округлені краї
+
+-- Додаємо ScrollingFrame для прокрутки
+local scrollFrame = Instance.new("ScrollingFrame", frame)
+scrollFrame.Size = UDim2.new(1, 0, 1, -60) -- Віднімаємо більше місця для заголовка та кнопки згортання
+scrollFrame.Position = UDim2.new(0, 0, 0, 30)
+scrollFrame.BackgroundTransparency = 1
+scrollFrame.ScrollBarThickness = 6
+scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 350) -- Висота всього контенту
+scrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
 
 local titleLabel = Instance.new("TextLabel", frame)
 titleLabel.Size = UDim2.new(1, 0, 0, 30)
@@ -39,54 +55,164 @@ titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 -- Кнопка AIM
-local aimButton = Instance.new("TextButton", frame)
+local aimButton = Instance.new("TextButton", scrollFrame)
 aimButton.Size = UDim2.new(0.9, 0, 0, 30)
-aimButton.Position = UDim2.new(0.05, 0, 0, 40)
+aimButton.Position = UDim2.new(0.05, 0, 0, 10)
 aimButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 aimButton.TextColor3 = Color3.new(1,1,1)
 aimButton.Font = Enum.Font.SourceSansBold
 aimButton.TextSize = 16
 aimButton.Text = "AIM: OFF"
 
+-- Додаємо округлені краї до кнопки AIM
+local aimButtonCorner = Instance.new("UICorner", aimButton)
+aimButtonCorner.CornerRadius = UDim.new(0, 8)
+
 -- Кнопка WallCheck
-local wallButton = Instance.new("TextButton", frame)
+local wallButton = Instance.new("TextButton", scrollFrame)
 wallButton.Size = UDim2.new(0.9, 0, 0, 30)
-wallButton.Position = UDim2.new(0.05, 0, 0, 80)
+wallButton.Position = UDim2.new(0.05, 0, 0, 50)
 wallButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 wallButton.TextColor3 = Color3.new(1,1,1)
 wallButton.Font = Enum.Font.SourceSansBold
 wallButton.TextSize = 16
 wallButton.Text = "WallCheck: OFF"
 
+-- Додаємо округлені краї до кнопки WallCheck
+local wallButtonCorner = Instance.new("UICorner", wallButton)
+wallButtonCorner.CornerRadius = UDim.new(0, 8)
+
 -- Кнопка ESP
-local espButton = Instance.new("TextButton", frame)
+local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
-espButton.Position = UDim2.new(0.05, 0, 0, 120)
+espButton.Position = UDim2.new(0.05, 0, 0, 90)
 espButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 espButton.TextColor3 = Color3.new(1,1,1)
 espButton.Font = Enum.Font.SourceSansBold
 espButton.TextSize = 16
 espButton.Text = "ESP: OFF"
 
+-- Додаємо округлені краї до кнопки ESP
+local espButtonCorner = Instance.new("UICorner", espButton)
+espButtonCorner.CornerRadius = UDim.new(0, 8)
+
 -- Кнопка Noclip
-local noclipButton = Instance.new("TextButton", frame)
+local noclipButton = Instance.new("TextButton", scrollFrame)
 noclipButton.Size = UDim2.new(0.9, 0, 0, 30)
-noclipButton.Position = UDim2.new(0.05, 0, 0, 160)
+noclipButton.Position = UDim2.new(0.05, 0, 0, 130)
 noclipButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 noclipButton.TextColor3 = Color3.new(1,1,1)
 noclipButton.Font = Enum.Font.SourceSansBold
 noclipButton.TextSize = 16
 noclipButton.Text = "Noclip: OFF"
 
--- Кнопка BunnyHop (НОВА)
-local bunnyHopButton = Instance.new("TextButton", frame)
+-- Додаємо округлені краї до кнопки Noclip
+local noclipButtonCorner = Instance.new("UICorner", noclipButton)
+noclipButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Кнопка BunnyHop
+local bunnyHopButton = Instance.new("TextButton", scrollFrame)
 bunnyHopButton.Size = UDim2.new(0.9, 0, 0, 30)
-bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 200)
+bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 170)
 bunnyHopButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bunnyHopButton.TextColor3 = Color3.new(1,1,1)
 bunnyHopButton.Font = Enum.Font.SourceSansBold
 bunnyHopButton.TextSize = 16
 bunnyHopButton.Text = "BunnyHop: OFF"
+
+-- Додаємо округлені краї до кнопки BunnyHop
+local bunnyHopButtonCorner = Instance.new("UICorner", bunnyHopButton)
+bunnyHopButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Speed Hack секція
+-- Поле для введення швидкості
+local speedInputLabel = Instance.new("TextLabel", scrollFrame)
+speedInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
+speedInputLabel.Position = UDim2.new(0.05, 0, 0, 210)
+speedInputLabel.BackgroundTransparency = 1
+speedInputLabel.Text = "Speed:"
+speedInputLabel.Font = Enum.Font.SourceSansBold
+speedInputLabel.TextSize = 14
+speedInputLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedInputLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local speedInput = Instance.new("TextBox", scrollFrame)
+speedInput.Size = UDim2.new(0.45, 0, 0, 25)
+speedInput.Position = UDim2.new(0.5, 0, 0, 210)
+speedInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+speedInput.TextColor3 = Color3.new(1,1,1)
+speedInput.Font = Enum.Font.SourceSans
+speedInput.TextSize = 14
+speedInput.Text = "16"
+speedInput.PlaceholderText = "16-400"
+
+-- Додаємо округлені краї до поля введення швидкості
+local speedInputCorner = Instance.new("UICorner", speedInput)
+speedInputCorner.CornerRadius = UDim.new(0, 6)
+
+-- Круглий слайдер для швидкості
+local sliderFrame = Instance.new("Frame", scrollFrame)
+sliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
+sliderFrame.Position = UDim2.new(0.05, 0, 0, 240)
+sliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+sliderFrame.BorderSizePixel = 0
+
+local sliderCorner = Instance.new("UICorner", sliderFrame)
+sliderCorner.CornerRadius = UDim.new(0, 8)
+
+local sliderButton = Instance.new("Frame", sliderFrame)
+sliderButton.Size = UDim2.new(0, 20, 0, 20)
+sliderButton.Position = UDim2.new(0, -2, 0, -2.5)
+sliderButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+sliderButton.BorderSizePixel = 0
+
+local sliderButtonCorner = Instance.new("UICorner", sliderButton)
+sliderButtonCorner.CornerRadius = UDim.new(1, 0) -- Робимо круглим
+
+-- Кнопка Speed Hack ON/OFF
+local speedButton = Instance.new("TextButton", scrollFrame)
+speedButton.Size = UDim2.new(0.9, 0, 0, 30)
+speedButton.Position = UDim2.new(0.05, 0, 0, 270)
+speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedButton.TextColor3 = Color3.new(1,1,1)
+speedButton.Font = Enum.Font.SourceSansBold
+speedButton.TextSize = 16
+speedButton.Text = "Speed: OFF"
+
+-- Додаємо округлені краї до кнопки Speed
+local speedButtonCorner = Instance.new("UICorner", speedButton)
+speedButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Кнопка "хрестик" згортання (ПЕРЕНЕСЕНА В МЕНЮ ЗНИЗУ)
+local minimizeButton = Instance.new("TextButton", frame)
+minimizeButton.Size = UDim2.new(0.9, 0, 0, 25)
+minimizeButton.Position = UDim2.new(0.05, 0, 1, -30) -- Розміщуємо знизу меню
+minimizeButton.Text = "✕ Close menu"
+minimizeButton.TextColor3 = Color3.new(1, 1, 1)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+minimizeButton.BorderSizePixel = 0
+minimizeButton.ZIndex = 10
+minimizeButton.Font = Enum.Font.SourceSansBold
+minimizeButton.TextSize = 14
+
+-- Додаємо округлені краї до кнопки згортання
+local minimizeButtonCorner = Instance.new("UICorner", minimizeButton)
+minimizeButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Кнопка кружок для розгортання (зовні меню)
+local minimizedCircle = Instance.new("TextButton", screenGui)
+minimizedCircle.Size = UDim2.new(0, 30, 0, 30)
+minimizedCircle.Position = UDim2.new(0, 300, 0, 200) -- змінюй на потрібне
+minimizedCircle.Text = ""
+minimizedCircle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+minimizedCircle.BorderSizePixel = 0
+minimizedCircle.Visible = false
+minimizedCircle.AutoButtonColor = false
+minimizedCircle.ZIndex = 10
+minimizedCircle.AnchorPoint = Vector2.new(0.5, 0.5)
+
+local corner = Instance.new("UICorner", minimizedCircle)
+corner.CornerRadius = UDim.new(1, 0) -- круг
 
 -- Анімація кольору заголовка
 local hue = 0
@@ -209,7 +335,14 @@ local function createESP(p)
 	distance.Color = Color3.fromRGB(255, 255, 0)
 	distance.Visible = false
 
-	espObjects[p] = {Box = box, Name = name, Health = health, Distance = distance}
+	-- Додаємо трейсер (лінія)
+	local tracer = Drawing.new("Line")
+	tracer.Thickness = 1
+	tracer.Color = Color3.fromRGB(255, 255, 255)
+	tracer.Transparency = 0.8
+	tracer.Visible = false
+
+	espObjects[p] = {Box = box, Name = name, Health = health, Distance = distance, Tracer = tracer}
 end
 
 -- Створюємо ESP для всіх гравців
@@ -262,21 +395,31 @@ RunService.RenderStepped:Connect(function()
 						local scale = math.clamp(3000 / dist, 100, 300)
 						local width, height = scale / 2, scale
 
+						-- Оновлюємо бокс
 						esp.Box.Size = Vector2.new(width, height)
 						esp.Box.Position = Vector2.new(pos.X - width / 2, pos.Y - height / 1.5)
 						esp.Box.Visible = true
 
+						-- Оновлюємо ім'я
 						esp.Name.Position = Vector2.new(pos.X, pos.Y - height / 1.5 - 15)
 						esp.Name.Text = p.Name
 						esp.Name.Visible = true
 
+						-- Оновлюємо здоров'я
 						esp.Health.Position = Vector2.new(pos.X, pos.Y - height / 1.5)
 						esp.Health.Text = "HP: " .. math.floor(hum.Health)
 						esp.Health.Visible = true
 
+						-- Оновлюємо дистанцію
 						esp.Distance.Position = Vector2.new(pos.X, pos.Y + height / 2 + 5)
 						esp.Distance.Text = "Dist: " .. math.floor(dist)
 						esp.Distance.Visible = true
+
+						-- Оновлюємо трейсер (лінія з низу екрану до гравця)
+						local screenBottom = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+						esp.Tracer.From = screenBottom
+						esp.Tracer.To = Vector2.new(pos.X, pos.Y)
+						esp.Tracer.Visible = true
 					else
 						-- Гравець поза екраном - ховаємо ESP
 						for _, v in pairs(esp) do v.Visible = false end
@@ -295,6 +438,81 @@ end)
 
 -- BunnyHop логіка (НОВА)
 local bunnyHopConnection
+
+-- Speed Hack логіка
+local speedHackConnection
+
+-- Функція оновлення швидкості
+local function updateSpeed()
+	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+		LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
+	end
+end
+
+-- Функція оновлення слайдера
+local function updateSlider()
+	local percentage = (currentSpeed - 16) / (400 - 16)
+	sliderButton.Position = UDim2.new(percentage, -10, 0, -2.5)
+	speedInput.Text = tostring(currentSpeed)
+end
+
+-- ПОФІКСОВАНА логіка слайдера для тач і мишки
+local function handleSliderInput()
+	local mouse = UserInputService:GetMouseLocation()
+	local sliderPos = sliderFrame.AbsolutePosition
+	local sliderSize = sliderFrame.AbsoluteSize
+	
+	if mouse.X >= sliderPos.X and mouse.X <= sliderPos.X + sliderSize.X then
+		local relativeX = math.clamp(mouse.X - sliderPos.X, 0, sliderSize.X) -- ФІКС: додано clamp
+		local percentage = relativeX / sliderSize.X
+		
+		-- ФІКС: правильно округлюємо до цілого числа і забезпечуємо точні межі
+		currentSpeed = math.floor(16 + (400 - 16) * percentage + 0.5)
+		currentSpeed = math.clamp(currentSpeed, 16, 400) -- ФІКС: гарантуємо межі 16-400
+		
+		updateSlider()
+		
+		if speedHackEnabled then
+			updateSpeed()
+		end
+	end
+end
+
+-- Обробка тач/кліків на слайдері
+local draggingSlider = false
+
+sliderFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingSlider = true
+		handleSliderInput()
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingSlider = false
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if draggingSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		handleSliderInput()
+	end
+end)
+
+-- Обробка введення в текстове поле
+speedInput.FocusLost:Connect(function()
+	local inputSpeed = tonumber(speedInput.Text)
+	if inputSpeed and inputSpeed >= 16 and inputSpeed <= 400 then
+		currentSpeed = inputSpeed
+		updateSlider()
+		if speedHackEnabled then
+			updateSpeed()
+		end
+	else
+		speedInput.Text = tostring(currentSpeed)
+	end
+end)
 
 -- AIM кнопка
 aimButton.MouseButton1Click:Connect(function()
@@ -373,36 +591,35 @@ bunnyHopButton.MouseButton1Click:Connect(function()
 		end
 		-- Повертаємо звичайну швидкість
 		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = speedHackEnabled and currentSpeed or 16
 			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").JumpPower = 50
 		end
 	end
 end)
 
--- Кнопка "хрестик" згортання (над мод меню)
-local minimizeButton = Instance.new("TextButton", frame)
-minimizeButton.Size = UDim2.new(0, 20, 0, 20)
-minimizeButton.Position = UDim2.new(1, -22, 0, -22) -- трохи зверху справа
-minimizeButton.Text = "✕"
-minimizeButton.TextColor3 = Color3.new(1, 1, 1)
-minimizeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-minimizeButton.BorderSizePixel = 0
-minimizeButton.ZIndex = 10
+-- Speed Hack кнопка (НОВА)
+speedButton.MouseButton1Click:Connect(function()
+	speedHackEnabled = not speedHackEnabled
+	speedButton.Text = speedHackEnabled and "Speed: ON" or "Speed: OFF"
 
--- Кнопка кружок для розгортання (зовні меню)
-local minimizedCircle = Instance.new("TextButton", screenGui)
-minimizedCircle.Size = UDim2.new(0, 30, 0, 30)
-minimizedCircle.Position = UDim2.new(0, 300, 0, 200) -- змінюй на потрібне
-minimizedCircle.Text = ""
-minimizedCircle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-minimizedCircle.BorderSizePixel = 0
-minimizedCircle.Visible = false
-minimizedCircle.AutoButtonColor = false
-minimizedCircle.ZIndex = 10
-minimizedCircle.AnchorPoint = Vector2.new(0.5, 0.5)
+	if speedHackEnabled then
+		speedHackConnection = RunService.RenderStepped:Connect(function()
+			updateSpeed()
+		end)
+	else
+		if speedHackConnection then
+			speedHackConnection:Disconnect()
+			speedHackConnection = nil
+		end
+		-- Повертаємо звичайну швидкість якщо BunnyHop не активний
+		if not bunnyHopEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+		end
+	end
+end)
 
-local corner = Instance.new("UICorner", minimizedCircle)
-corner.CornerRadius = UDim.new(1, 0) -- круг
+-- Ініціалізуємо слайдер
+updateSlider()
 
 -- Анімація переливу кольору кружка
 task.spawn(function()
@@ -421,14 +638,12 @@ end)
 -- Обробник кліку на хрестик (згортання)
 minimizeButton.MouseButton1Click:Connect(function()
 	frame.Visible = false
-	minimizeButton.Visible = false
 	minimizedCircle.Visible = true
 end)
 
 -- Обробник кліку на кружок (розгортання)
 minimizedCircle.MouseButton1Click:Connect(function()
 	frame.Visible = true
-	minimizeButton.Visible = true
 	minimizedCircle.Visible = false
 end)
 
@@ -473,9 +688,3 @@ local function makeDraggable(frame)
 		end
 	end)
 end
-
--- Викликаємо для основного меню
-makeDraggable(frame)
-
--- Викликаємо для кружка-згорнутого меню
-makeDraggable(minimizedCircle)
