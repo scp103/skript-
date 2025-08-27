@@ -61,7 +61,7 @@ local teleportTitle = Instance.new("TextLabel", teleportFrame)
 teleportTitle.Size = UDim2.new(1, 0, 0, 30)
 teleportTitle.Position = UDim2.new(0, 0, 0, 0)
 teleportTitle.BackgroundTransparency = 1
-teleportTitle.Text = "📍 Телепорт до гравців"
+teleportTitle.Text = " teleport to players"
 teleportTitle.Font = Enum.Font.SourceSansBold
 teleportTitle.TextSize = 16
 teleportTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -207,7 +207,7 @@ skyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 skyButton.TextColor3 = Color3.new(1,1,1)
 skyButton.Font = Enum.Font.SourceSansBold
 skyButton.TextSize = 16
-skyButton.Text = "🌌 Sky: Дефолт"
+skyButton.Text = " Sky: Дефолт"
 
 local skyButtonCorner = Instance.new("UICorner", skyButton)
 skyButtonCorner.CornerRadius = UDim.new(0, 8)
