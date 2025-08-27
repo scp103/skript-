@@ -13,6 +13,7 @@ local AimPart = "Head"
 local FieldOfView = 60
 local Holding = false
 local WallCheckEnabled = false
+local fovCircleEnabled = true
 local espEnabled = false
 local espObjects = {}
 local bunnyHopEnabled = false
@@ -135,10 +136,22 @@ aimButton.Text = "AIM: OFF"
 local aimButtonCorner = Instance.new("UICorner", aimButton)
 aimButtonCorner.CornerRadius = UDim.new(0, 8)
 
+local fovCircleButton = Instance.new("TextButton", scrollFrame)
+fovCircleButton.Size = UDim2.new(0.9, 0, 0, 30)
+fovCircleButton.Position = UDim2.new(0.05, 0, 0, 90)
+fovCircleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+fovCircleButton.TextColor3 = Color3.new(1,1,1)
+fovCircleButton.Font = Enum.Font.SourceSansBold
+fovCircleButton.TextSize = 16
+fovCircleButton.Text = "FOV Circle: ON"
+
+local fovCircleButtonCorner = Instance.new("UICorner", fovCircleButton)
+fovCircleButtonCorner.CornerRadius = UDim.new(0, 8)
+
 -- Кнопка WallCheck
 local wallButton = Instance.new("TextButton", scrollFrame)
 wallButton.Size = UDim2.new(0.9, 0, 0, 30)
-wallButton.Position = UDim2.new(0.05, 0, 0, 90)
+wallButton.Position = UDim2.new(0.05, 0, 0, 130)
 wallButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 wallButton.TextColor3 = Color3.new(1,1,1)
 wallButton.Font = Enum.Font.SourceSansBold
@@ -151,7 +164,7 @@ wallButtonCorner.CornerRadius = UDim.new(0, 8)
 -- Кнопка ESP
 local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
-espButton.Position = UDim2.new(0.05, 0, 0, 130)
+espButton.Position = UDim2.new(0.05, 0, 0, 170)
 espButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 espButton.TextColor3 = Color3.new(1,1,1)
 espButton.Font = Enum.Font.SourceSansBold
@@ -164,7 +177,7 @@ espButtonCorner.CornerRadius = UDim.new(0, 8)
 -- Кнопка Charms
 local charmsButton = Instance.new("TextButton", scrollFrame)
 charmsButton.Size = UDim2.new(0.9, 0, 0, 30)
-charmsButton.Position = UDim2.new(0.05, 0, 0, 170)
+charmsButton.Position = UDim2.new(0.05, 0, 0, 210)
 charmsButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 charmsButton.TextColor3 = Color3.new(1,1,1)
 charmsButton.Font = Enum.Font.SourceSansBold
@@ -177,7 +190,7 @@ charmsButtonCorner.CornerRadius = UDim.new(0, 8)
 -- Кнопка Infinite Jump (НОВА)
 local infiniteJumpButton = Instance.new("TextButton", scrollFrame)
 infiniteJumpButton.Size = UDim2.new(0.9, 0, 0, 30)
-infiniteJumpButton.Position = UDim2.new(0.05, 0, 0, 210)
+infiniteJumpButton.Position = UDim2.new(0.05, 0, 0, 250)
 infiniteJumpButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 infiniteJumpButton.TextColor3 = Color3.new(1,1,1)
 infiniteJumpButton.Font = Enum.Font.SourceSansBold
@@ -190,7 +203,7 @@ infiniteJumpButtonCorner.CornerRadius = UDim.new(0, 8)
 -- Кнопка Noclip
 local noclipButton = Instance.new("TextButton", scrollFrame)
 noclipButton.Size = UDim2.new(0.9, 0, 0, 30)
-noclipButton.Position = UDim2.new(0.05, 0, 0, 250)
+noclipButton.Position = UDim2.new(0.05, 0, 0, 290)
 noclipButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 noclipButton.TextColor3 = Color3.new(1,1,1)
 noclipButton.Font = Enum.Font.SourceSansBold
@@ -203,7 +216,7 @@ noclipButtonCorner.CornerRadius = UDim.new(0, 8)
 -- Кнопка BunnyHop
 local bunnyHopButton = Instance.new("TextButton", scrollFrame)
 bunnyHopButton.Size = UDim2.new(0.9, 0, 0, 30)
-bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 290)
+bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 330)
 bunnyHopButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bunnyHopButton.TextColor3 = Color3.new(1,1,1)
 bunnyHopButton.Font = Enum.Font.SourceSansBold
@@ -216,7 +229,7 @@ bunnyHopButtonCorner.CornerRadius = UDim.new(0, 8)
 -- Кнопка Sky Changer
 local skyButton = Instance.new("TextButton", scrollFrame)
 skyButton.Size = UDim2.new(0.9, 0, 0, 30)
-skyButton.Position = UDim2.new(0.05, 0, 0, 330)
+skyButton.Position = UDim2.new(0.05, 0, 0, 370)
 skyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 skyButton.TextColor3 = Color3.new(1,1,1)
 skyButton.Font = Enum.Font.SourceSansBold
@@ -230,7 +243,7 @@ skyButtonCorner.CornerRadius = UDim.new(0, 8)
 -- Поле для введення швидкості польоту
 local flyInputLabel = Instance.new("TextLabel", scrollFrame)
 flyInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-flyInputLabel.Position = UDim2.new(0.05, 0, 0, 370)
+flyInputLabel.Position = UDim2.new(0.05, 0, 0, 410)
 flyInputLabel.BackgroundTransparency = 1
 flyInputLabel.Text = "Fly Speed:"
 flyInputLabel.Font = Enum.Font.SourceSansBold
@@ -240,7 +253,7 @@ flyInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local flyInput = Instance.new("TextBox", scrollFrame)
 flyInput.Size = UDim2.new(0.45, 0, 0, 25)
-flyInput.Position = UDim2.new(0.5, 0, 0, 370)
+flyInput.Position = UDim2.new(0.5, 0, 0, 410)
 flyInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyInput.TextColor3 = Color3.new(1,1,1)
 flyInput.Font = Enum.Font.SourceSans
@@ -254,7 +267,7 @@ flyInputCorner.CornerRadius = UDim.new(0, 6)
 -- Кнопка Fly ON/OFF
 local flyButton = Instance.new("TextButton", scrollFrame)
 flyButton.Size = UDim2.new(0.9, 0, 0, 30)
-flyButton.Position = UDim2.new(0.05, 0, 0, 400)
+flyButton.Position = UDim2.new(0.05, 0, 0, 440)
 flyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 flyButton.TextColor3 = Color3.new(1,1,1)
 flyButton.Font = Enum.Font.SourceSansBold
@@ -267,7 +280,7 @@ flyButtonCorner.CornerRadius = UDim.new(0, 8)
 -- Speed Hack секція
 local speedInputLabel = Instance.new("TextLabel", scrollFrame)
 speedInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-speedInputLabel.Position = UDim2.new(0.05, 0, 0, 440)
+speedInputLabel.Position = UDim2.new(0.05, 0, 0, 480)
 speedInputLabel.BackgroundTransparency = 1
 speedInputLabel.Text = "Speed:"
 speedInputLabel.Font = Enum.Font.SourceSansBold
@@ -277,7 +290,7 @@ speedInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local speedInput = Instance.new("TextBox", scrollFrame)
 speedInput.Size = UDim2.new(0.45, 0, 0, 25)
-speedInput.Position = UDim2.new(0.5, 0, 0, 440)
+speedInput.Position = UDim2.new(0.5, 0, 0, 480)
 speedInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 speedInput.TextColor3 = Color3.new(1,1,1)
 speedInput.Font = Enum.Font.SourceSans
@@ -291,7 +304,7 @@ speedInputCorner.CornerRadius = UDim.new(0, 6)
 -- Слайдер для швидкості
 local sliderFrame = Instance.new("Frame", scrollFrame)
 sliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
-sliderFrame.Position = UDim2.new(0.05, 0, 0, 470)
+sliderFrame.Position = UDim2.new(0.05, 0, 0, 510)
 sliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 sliderFrame.BorderSizePixel = 0
 
@@ -310,7 +323,7 @@ sliderButtonCorner.CornerRadius = UDim.new(1, 0)
 -- Кнопка Speed Hack ON/OFF
 local speedButton = Instance.new("TextButton", scrollFrame)
 speedButton.Size = UDim2.new(0.9, 0, 0, 30)
-speedButton.Position = UDim2.new(0.05, 0, 0, 500)
+speedButton.Position = UDim2.new(0.05, 0, 0, 540)
 speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 speedButton.TextColor3 = Color3.new(1,1,1)
 speedButton.Font = Enum.Font.SourceSansBold
@@ -323,7 +336,7 @@ speedButtonCorner.CornerRadius = UDim.new(0, 8)
 -- FOV Changer секція
 local fovInputLabel = Instance.new("TextLabel", scrollFrame)
 fovInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-fovInputLabel.Position = UDim2.new(0.05, 0, 0, 540)
+fovInputLabel.Position = UDim2.new(0.05, 0, 0, 580)
 fovInputLabel.BackgroundTransparency = 1
 fovInputLabel.Text = "FOV:"
 fovInputLabel.Font = Enum.Font.SourceSansBold
@@ -333,7 +346,7 @@ fovInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local fovInput = Instance.new("TextBox", scrollFrame)
 fovInput.Size = UDim2.new(0.45, 0, 0, 25)
-fovInput.Position = UDim2.new(0.5, 0, 0, 540)
+fovInput.Position = UDim2.new(0.5, 0, 0, 580)
 fovInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 fovInput.TextColor3 = Color3.new(1,1,1)
 fovInput.Font = Enum.Font.SourceSans
@@ -347,7 +360,7 @@ fovInputCorner.CornerRadius = UDim.new(0, 6)
 -- Слайдер для FOV
 local fovSliderFrame = Instance.new("Frame", scrollFrame)
 fovSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
-fovSliderFrame.Position = UDim2.new(0.05, 0, 0, 570)
+fovSliderFrame.Position = UDim2.new(0.05, 0, 0, 610)
 fovSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 fovSliderFrame.BorderSizePixel = 0
 
@@ -366,12 +379,12 @@ fovSliderButtonCorner.CornerRadius = UDim.new(1, 0)
 -- Кнопка FOV Changer ON/OFF
 local fovButton = Instance.new("TextButton", scrollFrame)
 fovButton.Size = UDim2.new(0.9, 0, 0, 30)
-fovButton.Position = UDim2.new(0.05, 0, 0, 600)
+fovButton.Position = UDim2.new(0.05, 0, 0, 640)
 fovButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 fovButton.TextColor3 = Color3.new(1,1,1)
 fovButton.Font = Enum.Font.SourceSansBold
 fovButton.TextSize = 16
-fovButton.Text = "👁️ FOV: OFF"
+fovButton.Text = " FOV: OFF"
 
 local fovButtonCorner = Instance.new("UICorner", fovButton)
 fovButtonCorner.CornerRadius = UDim.new(0, 8)
@@ -405,6 +418,12 @@ minimizedCircle.AnchorPoint = Vector2.new(0.5, 0.5)
 
 local corner = Instance.new("UICorner", minimizedCircle)
 corner.CornerRadius = UDim.new(1, 0)
+
+-- FOV Circle кнопка
+fovCircleButton.MouseButton1Click:Connect(function()
+	fovCircleEnabled = not fovCircleEnabled
+	fovCircleButton.Text = fovCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
+end)
 
 -- Змінні для системи
 local flyConnection
@@ -559,6 +578,7 @@ RunService.RenderStepped:Connect(function()
 		circle.Color = Color3.fromRGB(0, 255, 0)
 	end
 	circle.Position = screenCenter
+	circle.Visible = fovCircleEnabled
 end)
 
 -- ESP логіка
