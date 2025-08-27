@@ -32,9 +32,9 @@ local screenGui = Instance.new("ScreenGui", playerGui)
 screenGui.Name = "SmileModMenu"
 screenGui.ResetOnSpawn = false
 
--- Основне меню (зменшена висота щоб було видно тільки 4 кнопки)
+-- Основне меню (висота для 4 кнопок)
 local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 180, 0, 200) -- Зменшив висоту з 400 до 200
+frame.Size = UDim2.new(0, 180, 0, 230) -- Збільшив щоб було видно рівно 4 кнопки
 frame.Position = UDim2.new(0.5, -90, 0.3, 0)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
@@ -62,7 +62,7 @@ local teleportTitle = Instance.new("TextLabel", teleportFrame)
 teleportTitle.Size = UDim2.new(1, 0, 0, 30)
 teleportTitle.Position = UDim2.new(0, 0, 0, 0)
 teleportTitle.BackgroundTransparency = 1
-teleportTitle.Text = " teleport to players"
+teleportTitle.Text = "Teleport to players"
 teleportTitle.Font = Enum.Font.SourceSansBold
 teleportTitle.TextSize = 16
 teleportTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -75,7 +75,7 @@ backButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 backButton.TextColor3 = Color3.new(1,1,1)
 backButton.Font = Enum.Font.SourceSansBold
 backButton.TextSize = 14
-backButton.Text = "← Назад"
+backButton.Text = "← Back"
 
 local backButtonCorner = Instance.new("UICorner", backButton)
 backButtonCorner.CornerRadius = UDim.new(0, 6)
@@ -97,14 +97,14 @@ scrollFrame.Position = UDim2.new(0, 0, 0, 30)
 scrollFrame.BackgroundTransparency = 1
 scrollFrame.ScrollBarThickness = 6
 scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
-scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 800) -- Збільшую для всіх кнопок
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 630) -- Зменшив щоб не можна було прокручувати забагато
 scrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
 
 local titleLabel = Instance.new("TextLabel", frame)
 titleLabel.Size = UDim2.new(1, 0, 0, 30)
 titleLabel.Position = UDim2.new(0, 0, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "🎯 Smile Mod Menu"
+titleLabel.Text = "Smile Mod Menu"
 titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -117,7 +117,7 @@ teleportButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 teleportButton.TextColor3 = Color3.new(1,1,1)
 teleportButton.Font = Enum.Font.SourceSansBold
 teleportButton.TextSize = 16
-teleportButton.Text = "📍 Телепорт"
+teleportButton.Text = "Teleport"
 
 local teleportButtonCorner = Instance.new("UICorner", teleportButton)
 teleportButtonCorner.CornerRadius = UDim.new(0, 8)
@@ -221,48 +221,12 @@ skyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 skyButton.TextColor3 = Color3.new(1,1,1)
 skyButton.Font = Enum.Font.SourceSansBold
 skyButton.TextSize = 16
-skyButton.Text = " Sky: Дефолт"
+skyButton.Text = "Sky: Default"
 
 local skyButtonCorner = Instance.new("UICorner", skyButton)
 skyButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- FLY секція з кнопками управління
-local flyControlsFrame = Instance.new("Frame", screenGui)
-flyControlsFrame.Size = UDim2.new(0, 150, 0, 200)
-flyControlsFrame.Position = UDim2.new(0, 10, 0.5, -100)
-flyControlsFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-flyControlsFrame.BorderSizePixel = 0
-flyControlsFrame.Visible = false
-flyControlsFrame.Active = true
-
-local flyControlsCorner = Instance.new("UICorner", flyControlsFrame)
-flyControlsCorner.CornerRadius = UDim.new(0, 12)
-
--- Кнопки керування польотом
-local flyUpButton = Instance.new("TextButton", flyControlsFrame)
-flyUpButton.Size = UDim2.new(0.8, 0, 0, 30)
-flyUpButton.Position = UDim2.new(0.1, 0, 0, 10)
-flyUpButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-flyUpButton.TextColor3 = Color3.new(1,1,1)
-flyUpButton.Font = Enum.Font.SourceSansBold
-flyUpButton.TextSize = 14
-flyUpButton.Text = "⬆️ UP"
-
-local flyUpCorner = Instance.new("UICorner", flyUpButton)
-flyUpCorner.CornerRadius = UDim.new(0, 6)
-
-local flyDownButton = Instance.new("TextButton", flyControlsFrame)
-flyDownButton.Size = UDim2.new(0.8, 0, 0, 30)
-flyDownButton.Position = UDim2.new(0.1, 0, 0, 50)
-flyDownButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-flyDownButton.TextColor3 = Color3.new(1,1,1)
-flyDownButton.Font = Enum.Font.SourceSansBold
-flyDownButton.TextSize = 14
-flyDownButton.Text = "⬇️ DOWN"
-
-local flyDownCorner = Instance.new("UICorner", flyDownButton)
-flyDownCorner.CornerRadius = UDim.new(0, 6)
-
+-- FLY секція (ПРОСТИЙ РЕЖИМ - без кнопок управління)
 -- Поле для введення швидкості польоту
 local flyInputLabel = Instance.new("TextLabel", scrollFrame)
 flyInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
@@ -295,7 +259,7 @@ flyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 flyButton.TextColor3 = Color3.new(1,1,1)
 flyButton.Font = Enum.Font.SourceSansBold
 flyButton.TextSize = 16
-flyButton.Text = "✈️ Fly: OFF"
+flyButton.Text = "Fly: OFF"
 
 local flyButtonCorner = Instance.new("UICorner", flyButton)
 flyButtonCorner.CornerRadius = UDim.new(0, 8)
@@ -416,7 +380,7 @@ fovButtonCorner.CornerRadius = UDim.new(0, 8)
 local minimizeButton = Instance.new("TextButton", frame)
 minimizeButton.Size = UDim2.new(0.9, 0, 0, 25)
 minimizeButton.Position = UDim2.new(0.05, 0, 1, -30)
-minimizeButton.Text = "✕ Згорнути меню"
+minimizeButton.Text = "Minimize menu"
 minimizeButton.TextColor3 = Color3.new(1, 1, 1)
 minimizeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 minimizeButton.BorderSizePixel = 0
@@ -517,11 +481,11 @@ local function updateTeleportList()
 	teleportScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
 end
 
--- Sky Changer функція (ВИПРАВЛЕНА)
+-- Sky Changer функція (ТІЛЬКИ ДЕФОЛТ І КОСМОС)
 local function changeSky()
 	local sky = Lighting:FindFirstChildOfClass("Sky")
 	
-	if skyIndex == 1 then -- Дефолт -> Космос
+	if skyIndex == 1 then -- Default -> Space
 		if not sky then
 			sky = Instance.new("Sky", Lighting)
 		end
@@ -531,37 +495,13 @@ local function changeSky()
 		sky.SkyboxLf = "rbxassetid://159454286"
 		sky.SkyboxRt = "rbxassetid://159454300"
 		sky.SkyboxUp = "rbxassetid://159454288"
-		skyButton.Text = "🌌 Sky: Космос"
+		skyButton.Text = "Sky: Space"
 		skyIndex = 2
-	elseif skyIndex == 2 then -- Космос -> Місяць
-		if not sky then
-			sky = Instance.new("Sky", Lighting)
-		end
-		sky.SkyboxBk = "rbxassetid://281040094"
-		sky.SkyboxDn = "rbxassetid://281040094"
-		sky.SkyboxFt = "rbxassetid://281040094"
-		sky.SkyboxLf = "rbxassetid://281040094"
-		sky.SkyboxRt = "rbxassetid://281040094"
-		sky.SkyboxUp = "rbxassetid://281040094"
-		skyButton.Text = "🌌 Sky: Місяць"
-		skyIndex = 3
-	elseif skyIndex == 3 then -- Місяць -> Сонце
-		if not sky then
-			sky = Instance.new("Sky", Lighting)
-		end
-		sky.SkyboxBk = "rbxassetid://323493360"
-		sky.SkyboxDn = "rbxassetid://323493481"
-		sky.SkyboxFt = "rbxassetid://323493629"
-		sky.SkyboxLf = "rbxassetid://323493785"
-		sky.SkyboxRt = "rbxassetid://323494003"
-		sky.SkyboxUp = "rbxassetid://323494143"
-		skyButton.Text = "🌌 Sky: Сонце"
-		skyIndex = 4
-	elseif skyIndex == 4 then -- Сонце -> Дефолт
+	elseif skyIndex == 2 then -- Space -> Default
 		if sky then
 			sky:Destroy()
 		end
-		skyButton.Text = "🌌 Sky: Дефолт"
+		skyButton.Text = "Sky: Default"
 		skyIndex = 1
 	end
 end
@@ -827,7 +767,7 @@ local function updateFOVSlider()
 	fovInput.Text = tostring(currentFOV)
 end
 
--- Fly функції (ВИПРАВЛЕНО для телефону)
+-- Fly функції (ПРОСТИЙ РЕЖИМ - тиснув і летиш)
 local function startFly()
 	local char = LocalPlayer.Character
 	if char and char:FindFirstChild("HumanoidRootPart") then
@@ -850,7 +790,7 @@ local function startFly()
 				local camera = workspace.CurrentCamera
 				local moveVector = Vector3.new(0, 0, 0)
 				
-				-- Керування клавіатурою (для ПК)
+				-- Автоматичне керування - летиш у напрямку камери
 				if UserInputService:IsKeyDown(Enum.KeyCode.W) then
 					moveVector = moveVector + camera.CFrame.LookVector
 				end
@@ -863,11 +803,16 @@ local function startFly()
 				if UserInputService:IsKeyDown(Enum.KeyCode.D) then
 					moveVector = moveVector + camera.CFrame.RightVector
 				end
-				if UserInputService:IsKeyDown(Enum.KeyCode.Space) or flyUpPressed then
+				if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
 					moveVector = moveVector + Vector3.new(0, 1, 0)
 				end
-				if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or flyDownPressed then
+				if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then
 					moveVector = moveVector + Vector3.new(0, -1, 0)
+				end
+				
+				-- Якщо на телефоні та немає клавіш - просто летиш вперед
+				if moveVector.Magnitude == 0 and UserInputService.TouchEnabled then
+					moveVector = camera.CFrame.LookVector
 				end
 				
 				if moveVector.Magnitude > 0 then
@@ -877,9 +822,6 @@ local function startFly()
 				end
 			end
 		end)
-		
-		-- Показати кнопки керування на телефоні
-		flyControlsFrame.Visible = true
 	end
 end
 
@@ -896,11 +838,6 @@ local function stopFly()
 		bodyAngularVelocity:Destroy()
 		bodyAngularVelocity = nil
 	end
-	
-	-- Сховати кнопки керування
-	flyControlsFrame.Visible = false
-	flyUpPressed = false
-	flyDownPressed = false
 end
 
 -- Логіка слайдерів
@@ -1000,21 +937,7 @@ fovInput.FocusLost:Connect(function()
 end)
 
 -- Кнопки керування польотом
-flyUpButton.MouseButton1Down:Connect(function()
-	flyUpPressed = true
-end)
-
-flyUpButton.MouseButton1Up:Connect(function()
-	flyUpPressed = false
-end)
-
-flyDownButton.MouseButton1Down:Connect(function()
-	flyDownPressed = true
-end)
-
-flyDownButton.MouseButton1Up:Connect(function()
-	flyDownPressed = false
-end)
+-- (ВИДАЛЕНО - тепер просте керування)
 
 -- Кнопки обробка
 teleportButton.MouseButton1Click:Connect(function()
@@ -1042,6 +965,32 @@ espButton.MouseButton1Click:Connect(function()
 	espEnabled = not espEnabled
 	espButton.Text = espEnabled and "ESP: ON" or "ESP: OFF"
 	if not espEnabled then clearESP() end
+end)
+
+charmsButton.MouseButton1Click:Connect(function()
+	charmsEnabled = not charmsEnabled
+	charmsButton.Text = charmsEnabled and "Charms: ON" or "Charms: OFF"
+	if not charmsEnabled then clearCharms() end
+end)
+
+-- Infinite Jump кнопка (НОВА)
+infiniteJumpButton.MouseButton1Click:Connect(function()
+	infiniteJumpEnabled = not infiniteJumpEnabled
+	infiniteJumpButton.Text = infiniteJumpEnabled and "Infinite Jump: ON" or "Infinite Jump: OFF"
+
+	if infiniteJumpEnabled then
+		infiniteJumpConnection = UserInputService.JumpRequest:Connect(function()
+			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+				LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+			end
+		end)
+	else
+		if infiniteJumpConnection then
+			infiniteJumpConnection:Disconnect()
+			infiniteJumpConnection = nil
+		end
+	end
+end)() end
 end)
 
 charmsButton.MouseButton1Click:Connect(function()
@@ -1132,7 +1081,7 @@ end)
 
 flyButton.MouseButton1Click:Connect(function()
 	flyEnabled = not flyEnabled
-	flyButton.Text = flyEnabled and "✈️ Fly: ON" or "✈️ Fly: OFF"
+	flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
 
 	if flyEnabled then
 		startFly()
@@ -1162,7 +1111,7 @@ end)
 
 fovButton.MouseButton1Click:Connect(function()
 	fovChangerEnabled = not fovChangerEnabled
-	fovButton.Text = fovChangerEnabled and "👁️ FOV: ON" or "👁️ FOV: OFF"
+	fovButton.Text = fovChangerEnabled and "FOV: ON" or "FOV: OFF"
 
 	if fovChangerEnabled then
 		fovChangerConnection = RunService.RenderStepped:Connect(function()
@@ -1174,7 +1123,7 @@ fovButton.MouseButton1Click:Connect(function()
 			fovChangerConnection = nil
 		end
 		if Camera then
-			Camera.FieldOfView = 70 -- Дефолтне значення
+			Camera.FieldOfView = 70 -- Default value
 		end
 	end
 end)
@@ -1254,4 +1203,3 @@ end
 makeDraggable(frame)
 makeDraggable(teleportFrame)
 makeDraggable(minimizedCircle)
-makeDraggable(flyControlsFrame)
