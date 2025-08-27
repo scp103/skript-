@@ -973,26 +973,6 @@ charmsButton.MouseButton1Click:Connect(function()
 	if not charmsEnabled then clearCharms() end
 end)
 
--- Infinite Jump кнопка (НОВА)
-infiniteJumpButton.MouseButton1Click:Connect(function()
-	infiniteJumpEnabled = not infiniteJumpEnabled
-	infiniteJumpButton.Text = infiniteJumpEnabled and "Infinite Jump: ON" or "Infinite Jump: OFF"
-
-	if infiniteJumpEnabled then
-		infiniteJumpConnection = UserInputService.JumpRequest:Connect(function()
-			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-				LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
-			end
-		end)
-	else
-		if infiniteJumpConnection then
-			infiniteJumpConnection:Disconnect()
-			infiniteJumpConnection = nil
-		end
-	end
-end)() end
-end)
-
 charmsButton.MouseButton1Click:Connect(function()
 	charmsEnabled = not charmsEnabled
 	charmsButton.Text = charmsEnabled and "Charms: ON" or "Charms: OFF"
