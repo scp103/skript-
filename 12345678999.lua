@@ -212,17 +212,7 @@ titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 -- Кнопка AIM Settings (права сторона)
-local aimSettingsOpenButton = Instance.new("TextButton", frame)
-aimSettingsOpenButton.Size = UDim2.new(0, 25, 0, 25)
-aimSettingsOpenButton.Position = UDim2.new(1, -30, 0, 5)
-aimSettingsOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-aimSettingsOpenButton.TextColor3 = Color3.new(1,1,1)
-aimSettingsOpenButton.Font = Enum.Font.SourceSansBold
-aimSettingsOpenButton.TextSize = 16
-aimSettingsOpenButton.Text = "+"
 
-local aimSettingsOpenButtonCorner = Instance.new("UICorner", aimSettingsOpenButton)
-aimSettingsOpenButtonCorner.CornerRadius = UDim.new(1, 0)
 
 -- Кнопки основного меню (БЕЗ FOV Circle та WallCheck - вони перенесені в AIM меню)
 local teleportButton = Instance.new("TextButton", scrollFrame)
@@ -248,6 +238,18 @@ aimButton.Text = "AIM: OFF"
 
 local aimButtonCorner = Instance.new("UICorner", aimButton)
 aimButtonCorner.CornerRadius = UDim.new(0, 8)
+
+local aimPlusButton = Instance.new("TextButton", scrollFrame)
+aimPlusButton.Size = UDim2.new(0.15, 0, 0, 30)
+aimPlusButton.Position = UDim2.new(0.8, 0, 0, 50) -- та сама висота як aimButton
+aimPlusButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+aimPlusButton.TextColor3 = Color3.new(1,1,1)
+aimPlusButton.Font = Enum.Font.SourceSansBold
+aimPlusButton.TextSize = 16
+aimPlusButton.Text = "+"
+
+local aimPlusCorner = Instance.new("UICorner", aimPlusButton)
+aimPlusCorner.CornerRadius = UDim.new(0, 8)
 
 local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
@@ -1115,6 +1117,12 @@ fovCircleButton.MouseButton1Click:Connect(function()
 		fovCircleEnabled = not fovCircleEnabled
 		fovCircleButton.Text = fovCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
 	end
+end)
+
+aimPlusButton.MouseButton1Click:Connect(function()
+    if canClick() then
+        aimSettingsFrame.Visible = not aimSettingsFrame.Visible
+    end
 end)
 
 wallButton.MouseButton1Click:Connect(function()
