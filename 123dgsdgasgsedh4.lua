@@ -1395,7 +1395,7 @@ local function makeDraggable(frame)
 	end)
 end
 
-makeDraggable(frame)
+makeDraggable(mainDragArea)
 makeDraggable(teleportFrame)
 makeDraggable(minimizedCircle)
 makeDraggable(aimDragArea)
