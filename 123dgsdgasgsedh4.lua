@@ -33,20 +33,123 @@ local screenGui = Instance.new("ScreenGui", playerGui)
 screenGui.Name = "SmileModMenu"
 screenGui.ResetOnSpawn = false
 
--- Основне меню (висота для 4 кнопок)
+-- Основне меню
 local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 180, 0, 230) -- Збільшив щоб було видно рівно 4 кнопки
+frame.Size = UDim2.new(0, 180, 0, 230)
 frame.Position = UDim2.new(0.5, -90, 0.3, 0)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Active = true
-frame.Draggable = true
+frame.Draggable = false
 
--- Додаємо округлені краї до основного фрейму
 local frameCorner = Instance.new("UICorner", frame)
 frameCorner.CornerRadius = UDim.new(0, 12)
 
--- Вікно телепорту (спочатку неvidible)
+-- Бічне меню AIM налаштувань
+local aimSettingsFrame = Instance.new("Frame", screenGui)
+aimSettingsFrame.Size = UDim2.new(0, 200, 0, 280)
+aimSettingsFrame.Position = UDim2.new(0.5, 100, 0.3, 0)
+aimSettingsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+aimSettingsFrame.BorderSizePixel = 0
+aimSettingsFrame.Visible = false
+aimSettingsFrame.Active = true
+
+local aimSettingsCorner = Instance.new("UICorner", aimSettingsFrame)
+aimSettingsCorner.CornerRadius = UDim.new(0, 12)
+
+-- Заголовок AIM меню
+local aimSettingsTitle = Instance.new("TextLabel", aimSettingsFrame)
+aimSettingsTitle.Size = UDim2.new(1, 0, 0, 30)
+aimSettingsTitle.Position = UDim2.new(0, 0, 0, 0)
+aimSettingsTitle.BackgroundTransparency = 1
+aimSettingsTitle.Text = "AIM Settings"
+aimSettingsTitle.Font = Enum.Font.SourceSansBold
+aimSettingsTitle.TextSize = 16
+aimSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- Кнопка закриття AIM меню
+local aimCloseButton = Instance.new("TextButton", aimSettingsFrame)
+aimCloseButton.Size = UDim2.new(0.9, 0, 0, 25)
+aimCloseButton.Position = UDim2.new(0.05, 0, 1, -30)
+aimCloseButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+aimCloseButton.TextColor3 = Color3.new(1,1,1)
+aimCloseButton.Font = Enum.Font.SourceSansBold
+aimCloseButton.TextSize = 14
+aimCloseButton.Text = "Close Menu"
+
+local aimCloseButtonCorner = Instance.new("UICorner", aimCloseButton)
+aimCloseButtonCorner.CornerRadius = UDim.new(0, 6)
+
+-- Кнопка FOV Circle в AIM меню
+local fovCircleButton = Instance.new("TextButton", aimSettingsFrame)
+fovCircleButton.Size = UDim2.new(0.9, 0, 0, 30)
+fovCircleButton.Position = UDim2.new(0.05, 0, 0, 40)
+fovCircleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+fovCircleButton.TextColor3 = Color3.new(1,1,1)
+fovCircleButton.Font = Enum.Font.SourceSansBold
+fovCircleButton.TextSize = 16
+fovCircleButton.Text = "FOV Circle: ON"
+
+local fovCircleButtonCorner = Instance.new("UICorner", fovCircleButton)
+fovCircleButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Кнопка WallCheck в AIM меню
+local wallButton = Instance.new("TextButton", aimSettingsFrame)
+wallButton.Size = UDim2.new(0.9, 0, 0, 30)
+wallButton.Position = UDim2.new(0.05, 0, 0, 80)
+wallButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+wallButton.TextColor3 = Color3.new(1,1,1)
+wallButton.Font = Enum.Font.SourceSansBold
+wallButton.TextSize = 16
+wallButton.Text = "WallCheck: OFF"
+
+local wallButtonCorner = Instance.new("UICorner", wallButton)
+wallButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- FOV налаштування в AIM меню
+local aimFOVInputLabel = Instance.new("TextLabel", aimSettingsFrame)
+aimFOVInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
+aimFOVInputLabel.Position = UDim2.new(0.05, 0, 0, 120)
+aimFOVInputLabel.BackgroundTransparency = 1
+aimFOVInputLabel.Text = "Aim FOV:"
+aimFOVInputLabel.Font = Enum.Font.SourceSansBold
+aimFOVInputLabel.TextSize = 14
+aimFOVInputLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+aimFOVInputLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local aimFOVInput = Instance.new("TextBox", aimSettingsFrame)
+aimFOVInput.Size = UDim2.new(0.45, 0, 0, 25)
+aimFOVInput.Position = UDim2.new(0.5, 0, 0, 120)
+aimFOVInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+aimFOVInput.TextColor3 = Color3.new(1,1,1)
+aimFOVInput.Font = Enum.Font.SourceSans
+aimFOVInput.TextSize = 14
+aimFOVInput.Text = "60"
+aimFOVInput.PlaceholderText = "30-200"
+
+local aimFOVInputCorner = Instance.new("UICorner", aimFOVInput)
+aimFOVInputCorner.CornerRadius = UDim.new(0, 6)
+
+-- Слайдер для Aim FOV
+local aimFOVSliderFrame = Instance.new("Frame", aimSettingsFrame)
+aimFOVSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
+aimFOVSliderFrame.Position = UDim2.new(0.05, 0, 0, 150)
+aimFOVSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+aimFOVSliderFrame.BorderSizePixel = 0
+
+local aimFOVSliderCorner = Instance.new("UICorner", aimFOVSliderFrame)
+aimFOVSliderCorner.CornerRadius = UDim.new(0, 8)
+
+local aimFOVSliderButton = Instance.new("Frame", aimFOVSliderFrame)
+aimFOVSliderButton.Size = UDim2.new(0, 20, 0, 20)
+aimFOVSliderButton.Position = UDim2.new(0.18, -10, 0, -2.5)
+aimFOVSliderButton.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
+aimFOVSliderButton.BorderSizePixel = 0
+
+local aimFOVSliderButtonCorner = Instance.new("UICorner", aimFOVSliderButton)
+aimFOVSliderButtonCorner.CornerRadius = UDim.new(1, 0)
+
+-- Вікно телепорту
 local teleportFrame = Instance.new("Frame", screenGui)
 teleportFrame.Size = UDim2.new(0, 200, 0, 300)
 teleportFrame.Position = UDim2.new(0.5, -100, 0.5, -150)
@@ -58,7 +161,6 @@ teleportFrame.Active = true
 local teleportFrameCorner = Instance.new("UICorner", teleportFrame)
 teleportFrameCorner.CornerRadius = UDim.new(0, 12)
 
--- Заголовок телепорту
 local teleportTitle = Instance.new("TextLabel", teleportFrame)
 teleportTitle.Size = UDim2.new(1, 0, 0, 30)
 teleportTitle.Position = UDim2.new(0, 0, 0, 0)
@@ -68,7 +170,6 @@ teleportTitle.Font = Enum.Font.SourceSansBold
 teleportTitle.TextSize = 16
 teleportTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- Кнопка "Назад"
 local backButton = Instance.new("TextButton", teleportFrame)
 backButton.Size = UDim2.new(0.9, 0, 0, 25)
 backButton.Position = UDim2.new(0.05, 0, 1, -30)
@@ -81,7 +182,6 @@ backButton.Text = "← Back"
 local backButtonCorner = Instance.new("UICorner", backButton)
 backButtonCorner.CornerRadius = UDim.new(0, 6)
 
--- Скрол для списку гравців
 local teleportScroll = Instance.new("ScrollingFrame", teleportFrame)
 teleportScroll.Size = UDim2.new(1, 0, 1, -65)
 teleportScroll.Position = UDim2.new(0, 0, 0, 35)
@@ -91,14 +191,14 @@ teleportScroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
 teleportScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 teleportScroll.ScrollingDirection = Enum.ScrollingDirection.Y
 
--- Додаємо ScrollingFrame для прокрутки основного меню
+-- ScrollingFrame для основного меню
 local scrollFrame = Instance.new("ScrollingFrame", frame)
 scrollFrame.Size = UDim2.new(1, 0, 1, -60)
 scrollFrame.Position = UDim2.new(0, 0, 0, 30)
 scrollFrame.BackgroundTransparency = 1
 scrollFrame.ScrollBarThickness = 6
 scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
-scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 630) -- Зменшив щоб не можна було прокручувати забагато
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 700) -- Збільшено прокручування
 scrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
 
 local titleLabel = Instance.new("TextLabel", frame)
@@ -110,7 +210,9 @@ titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- Кнопка Телепорт (ПЕРША)
+-- Кнопка AIM Settings (права сторона)
+
+-- Кнопки основного меню (БЕЗ FOV Circle та WallCheck - вони перенесені в AIM меню)
 local teleportButton = Instance.new("TextButton", scrollFrame)
 teleportButton.Size = UDim2.new(0.9, 0, 0, 30)
 teleportButton.Position = UDim2.new(0.05, 0, 0, 10)
@@ -123,9 +225,8 @@ teleportButton.Text = "Teleport"
 local teleportButtonCorner = Instance.new("UICorner", teleportButton)
 teleportButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- Кнопка AIM
 local aimButton = Instance.new("TextButton", scrollFrame)
-aimButton.Size = UDim2.new(0.9, 0, 0, 30)
+aimButton.Size = UDim2.new(0.7, 0, 0, 30)
 aimButton.Position = UDim2.new(0.05, 0, 0, 50)
 aimButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 aimButton.TextColor3 = Color3.new(1,1,1)
@@ -136,35 +237,21 @@ aimButton.Text = "AIM: OFF"
 local aimButtonCorner = Instance.new("UICorner", aimButton)
 aimButtonCorner.CornerRadius = UDim.new(0, 8)
 
-local fovCircleButton = Instance.new("TextButton", scrollFrame)
-fovCircleButton.Size = UDim2.new(0.9, 0, 0, 30)
-fovCircleButton.Position = UDim2.new(0.05, 0, 0, 90)
-fovCircleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-fovCircleButton.TextColor3 = Color3.new(1,1,1)
-fovCircleButton.Font = Enum.Font.SourceSansBold
-fovCircleButton.TextSize = 16
-fovCircleButton.Text = "FOV Circle: ON"
+local aimPlusButton = Instance.new("TextButton", scrollFrame)
+aimPlusButton.Size = UDim2.new(0.15, 0, 0, 30)
+aimPlusButton.Position = UDim2.new(0.8, 0, 0, 50) -- та сама висота як aimButton
+aimPlusButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+aimPlusButton.TextColor3 = Color3.new(1,1,1)
+aimPlusButton.Font = Enum.Font.SourceSansBold
+aimPlusButton.TextSize = 16
+aimPlusButton.Text = "+"
 
-local fovCircleButtonCorner = Instance.new("UICorner", fovCircleButton)
-fovCircleButtonCorner.CornerRadius = UDim.new(0, 8)
+local aimPlusCorner = Instance.new("UICorner", aimPlusButton)
+aimPlusCorner.CornerRadius = UDim.new(0, 8)
 
--- Кнопка WallCheck
-local wallButton = Instance.new("TextButton", scrollFrame)
-wallButton.Size = UDim2.new(0.9, 0, 0, 30)
-wallButton.Position = UDim2.new(0.05, 0, 0, 130)
-wallButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-wallButton.TextColor3 = Color3.new(1,1,1)
-wallButton.Font = Enum.Font.SourceSansBold
-wallButton.TextSize = 16
-wallButton.Text = "WallCheck: OFF"
-
-local wallButtonCorner = Instance.new("UICorner", wallButton)
-wallButtonCorner.CornerRadius = UDim.new(0, 8)
-
--- Кнопка ESP
 local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
-espButton.Position = UDim2.new(0.05, 0, 0, 170)
+espButton.Position = UDim2.new(0.05, 0, 0, 90)
 espButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 espButton.TextColor3 = Color3.new(1,1,1)
 espButton.Font = Enum.Font.SourceSansBold
@@ -174,10 +261,9 @@ espButton.Text = "ESP: OFF"
 local espButtonCorner = Instance.new("UICorner", espButton)
 espButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- Кнопка Charms
 local charmsButton = Instance.new("TextButton", scrollFrame)
 charmsButton.Size = UDim2.new(0.9, 0, 0, 30)
-charmsButton.Position = UDim2.new(0.05, 0, 0, 210)
+charmsButton.Position = UDim2.new(0.05, 0, 0, 130)
 charmsButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 charmsButton.TextColor3 = Color3.new(1,1,1)
 charmsButton.Font = Enum.Font.SourceSansBold
@@ -187,10 +273,9 @@ charmsButton.Text = "Charms: OFF"
 local charmsButtonCorner = Instance.new("UICorner", charmsButton)
 charmsButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- Кнопка Infinite Jump (НОВА)
 local infiniteJumpButton = Instance.new("TextButton", scrollFrame)
 infiniteJumpButton.Size = UDim2.new(0.9, 0, 0, 30)
-infiniteJumpButton.Position = UDim2.new(0.05, 0, 0, 250)
+infiniteJumpButton.Position = UDim2.new(0.05, 0, 0, 170)
 infiniteJumpButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 infiniteJumpButton.TextColor3 = Color3.new(1,1,1)
 infiniteJumpButton.Font = Enum.Font.SourceSansBold
@@ -200,10 +285,9 @@ infiniteJumpButton.Text = "Infinite Jump: OFF"
 local infiniteJumpButtonCorner = Instance.new("UICorner", infiniteJumpButton)
 infiniteJumpButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- Кнопка Noclip
 local noclipButton = Instance.new("TextButton", scrollFrame)
 noclipButton.Size = UDim2.new(0.9, 0, 0, 30)
-noclipButton.Position = UDim2.new(0.05, 0, 0, 290)
+noclipButton.Position = UDim2.new(0.05, 0, 0, 210)
 noclipButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 noclipButton.TextColor3 = Color3.new(1,1,1)
 noclipButton.Font = Enum.Font.SourceSansBold
@@ -213,10 +297,9 @@ noclipButton.Text = "Noclip: OFF"
 local noclipButtonCorner = Instance.new("UICorner", noclipButton)
 noclipButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- Кнопка BunnyHop
 local bunnyHopButton = Instance.new("TextButton", scrollFrame)
 bunnyHopButton.Size = UDim2.new(0.9, 0, 0, 30)
-bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 330)
+bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 250)
 bunnyHopButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bunnyHopButton.TextColor3 = Color3.new(1,1,1)
 bunnyHopButton.Font = Enum.Font.SourceSansBold
@@ -226,10 +309,9 @@ bunnyHopButton.Text = "BunnyHop: OFF"
 local bunnyHopButtonCorner = Instance.new("UICorner", bunnyHopButton)
 bunnyHopButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- Кнопка Sky Changer
 local skyButton = Instance.new("TextButton", scrollFrame)
 skyButton.Size = UDim2.new(0.9, 0, 0, 30)
-skyButton.Position = UDim2.new(0.05, 0, 0, 370)
+skyButton.Position = UDim2.new(0.05, 0, 0, 290)
 skyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 skyButton.TextColor3 = Color3.new(1,1,1)
 skyButton.Font = Enum.Font.SourceSansBold
@@ -239,11 +321,10 @@ skyButton.Text = "Sky: Default"
 local skyButtonCorner = Instance.new("UICorner", skyButton)
 skyButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- FLY секція (ПРОСТИЙ РЕЖИМ - без кнопок управління)
--- Поле для введення швидкості польоту
+-- FLY секція
 local flyInputLabel = Instance.new("TextLabel", scrollFrame)
 flyInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-flyInputLabel.Position = UDim2.new(0.05, 0, 0, 410)
+flyInputLabel.Position = UDim2.new(0.05, 0, 0, 330)
 flyInputLabel.BackgroundTransparency = 1
 flyInputLabel.Text = "Fly Speed:"
 flyInputLabel.Font = Enum.Font.SourceSansBold
@@ -253,7 +334,7 @@ flyInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local flyInput = Instance.new("TextBox", scrollFrame)
 flyInput.Size = UDim2.new(0.45, 0, 0, 25)
-flyInput.Position = UDim2.new(0.5, 0, 0, 410)
+flyInput.Position = UDim2.new(0.5, 0, 0, 330)
 flyInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyInput.TextColor3 = Color3.new(1,1,1)
 flyInput.Font = Enum.Font.SourceSans
@@ -264,10 +345,9 @@ flyInput.PlaceholderText = "10-150"
 local flyInputCorner = Instance.new("UICorner", flyInput)
 flyInputCorner.CornerRadius = UDim.new(0, 6)
 
--- Кнопка Fly ON/OFF
 local flyButton = Instance.new("TextButton", scrollFrame)
 flyButton.Size = UDim2.new(0.9, 0, 0, 30)
-flyButton.Position = UDim2.new(0.05, 0, 0, 440)
+flyButton.Position = UDim2.new(0.05, 0, 0, 360)
 flyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 flyButton.TextColor3 = Color3.new(1,1,1)
 flyButton.Font = Enum.Font.SourceSansBold
@@ -280,7 +360,7 @@ flyButtonCorner.CornerRadius = UDim.new(0, 8)
 -- Speed Hack секція
 local speedInputLabel = Instance.new("TextLabel", scrollFrame)
 speedInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-speedInputLabel.Position = UDim2.new(0.05, 0, 0, 480)
+speedInputLabel.Position = UDim2.new(0.05, 0, 0, 400)
 speedInputLabel.BackgroundTransparency = 1
 speedInputLabel.Text = "Speed:"
 speedInputLabel.Font = Enum.Font.SourceSansBold
@@ -290,7 +370,7 @@ speedInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local speedInput = Instance.new("TextBox", scrollFrame)
 speedInput.Size = UDim2.new(0.45, 0, 0, 25)
-speedInput.Position = UDim2.new(0.5, 0, 0, 480)
+speedInput.Position = UDim2.new(0.5, 0, 0, 400)
 speedInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 speedInput.TextColor3 = Color3.new(1,1,1)
 speedInput.Font = Enum.Font.SourceSans
@@ -301,10 +381,9 @@ speedInput.PlaceholderText = "16-400"
 local speedInputCorner = Instance.new("UICorner", speedInput)
 speedInputCorner.CornerRadius = UDim.new(0, 6)
 
--- Слайдер для швидкості
 local sliderFrame = Instance.new("Frame", scrollFrame)
 sliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
-sliderFrame.Position = UDim2.new(0.05, 0, 0, 510)
+sliderFrame.Position = UDim2.new(0.05, 0, 0, 430)
 sliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 sliderFrame.BorderSizePixel = 0
 
@@ -320,10 +399,9 @@ sliderButton.BorderSizePixel = 0
 local sliderButtonCorner = Instance.new("UICorner", sliderButton)
 sliderButtonCorner.CornerRadius = UDim.new(1, 0)
 
--- Кнопка Speed Hack ON/OFF
 local speedButton = Instance.new("TextButton", scrollFrame)
 speedButton.Size = UDim2.new(0.9, 0, 0, 30)
-speedButton.Position = UDim2.new(0.05, 0, 0, 540)
+speedButton.Position = UDim2.new(0.05, 0, 0, 460)
 speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 speedButton.TextColor3 = Color3.new(1,1,1)
 speedButton.Font = Enum.Font.SourceSansBold
@@ -336,7 +414,7 @@ speedButtonCorner.CornerRadius = UDim.new(0, 8)
 -- FOV Changer секція
 local fovInputLabel = Instance.new("TextLabel", scrollFrame)
 fovInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-fovInputLabel.Position = UDim2.new(0.05, 0, 0, 580)
+fovInputLabel.Position = UDim2.new(0.05, 0, 0, 500)
 fovInputLabel.BackgroundTransparency = 1
 fovInputLabel.Text = "FOV:"
 fovInputLabel.Font = Enum.Font.SourceSansBold
@@ -346,7 +424,7 @@ fovInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local fovInput = Instance.new("TextBox", scrollFrame)
 fovInput.Size = UDim2.new(0.45, 0, 0, 25)
-fovInput.Position = UDim2.new(0.5, 0, 0, 580)
+fovInput.Position = UDim2.new(0.5, 0, 0, 500)
 fovInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 fovInput.TextColor3 = Color3.new(1,1,1)
 fovInput.Font = Enum.Font.SourceSans
@@ -357,10 +435,9 @@ fovInput.PlaceholderText = "30-120"
 local fovInputCorner = Instance.new("UICorner", fovInput)
 fovInputCorner.CornerRadius = UDim.new(0, 6)
 
--- Слайдер для FOV
 local fovSliderFrame = Instance.new("Frame", scrollFrame)
 fovSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
-fovSliderFrame.Position = UDim2.new(0.05, 0, 0, 610)
+fovSliderFrame.Position = UDim2.new(0.05, 0, 0, 530)
 fovSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 fovSliderFrame.BorderSizePixel = 0
 
@@ -369,27 +446,26 @@ fovSliderCorner.CornerRadius = UDim.new(0, 8)
 
 local fovSliderButton = Instance.new("Frame", fovSliderFrame)
 fovSliderButton.Size = UDim2.new(0, 20, 0, 20)
-fovSliderButton.Position = UDim2.new(0.44, -10, 0, -2.5) -- 70/120*0.66 приблизно
+fovSliderButton.Position = UDim2.new(0.44, -10, 0, -2.5)
 fovSliderButton.BackgroundColor3 = Color3.fromRGB(255, 100, 0)
 fovSliderButton.BorderSizePixel = 0
 
 local fovSliderButtonCorner = Instance.new("UICorner", fovSliderButton)
 fovSliderButtonCorner.CornerRadius = UDim.new(1, 0)
 
--- Кнопка FOV Changer ON/OFF
 local fovButton = Instance.new("TextButton", scrollFrame)
 fovButton.Size = UDim2.new(0.9, 0, 0, 30)
-fovButton.Position = UDim2.new(0.05, 0, 0, 640)
+fovButton.Position = UDim2.new(0.05, 0, 0, 560)
 fovButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 fovButton.TextColor3 = Color3.new(1,1,1)
 fovButton.Font = Enum.Font.SourceSansBold
 fovButton.TextSize = 16
-fovButton.Text = " FOV: OFF"
+fovButton.Text = "FOV: OFF"
 
 local fovButtonCorner = Instance.new("UICorner", fovButton)
 fovButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- Кнопка згортання (знизу)
+-- Кнопка згортання
 local minimizeButton = Instance.new("TextButton", frame)
 minimizeButton.Size = UDim2.new(0.9, 0, 0, 25)
 minimizeButton.Position = UDim2.new(0.05, 0, 1, -30)
@@ -404,7 +480,7 @@ minimizeButton.TextSize = 14
 local minimizeButtonCorner = Instance.new("UICorner", minimizeButton)
 minimizeButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- Кнопка кружок для розгортання
+-- Кнопка розгортання
 local minimizedCircle = Instance.new("TextButton", screenGui)
 minimizedCircle.Size = UDim2.new(0, 30, 0, 30)
 minimizedCircle.Position = UDim2.new(0, 300, 0, 200)
@@ -419,12 +495,6 @@ minimizedCircle.AnchorPoint = Vector2.new(0.5, 0.5)
 local corner = Instance.new("UICorner", minimizedCircle)
 corner.CornerRadius = UDim.new(1, 0)
 
--- FOV Circle кнопка
-fovCircleButton.MouseButton1Click:Connect(function()
-	fovCircleEnabled = not fovCircleEnabled
-	fovCircleButton.Text = fovCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
-end)
-
 -- Змінні для системи
 local flyConnection
 local speedHackConnection
@@ -436,6 +506,20 @@ local bodyVelocity
 local bodyAngularVelocity
 local flyUpPressed = false
 local flyDownPressed = false
+
+-- Змінні для запобігання мікро-кліків
+local lastClickTime = 0
+local clickDelay = 0.1 -- 100мс затримка між кліками
+
+-- Функція для перевірки дубльованих кліків
+local function canClick()
+    local currentTime = tick()
+    if currentTime - lastClickTime < clickDelay then
+        return false
+    end
+    lastClickTime = currentTime
+    return true
+end
 
 -- Анімація кольору заголовка
 local hue = 0
@@ -464,7 +548,6 @@ end
 
 -- Функція оновлення списку гравців в телепорті
 local function updateTeleportList()
-	-- Очищаємо старі кнопки
 	for _, child in pairs(teleportScroll:GetChildren()) do
 		if child:IsA("TextButton") then
 			child:Destroy()
@@ -486,25 +569,24 @@ local function updateTeleportList()
 			local playerButtonCorner = Instance.new("UICorner", playerButton)
 			playerButtonCorner.CornerRadius = UDim.new(0, 6)
 			
-			-- Обробка кліку (БЕЗ закриття меню)
 			playerButton.MouseButton1Click:Connect(function()
-				teleportToPlayer(player)
-				-- НЕ закриваємо меню телепорту
+				if canClick() then
+					teleportToPlayer(player)
+				end
 			end)
 			
 			yPos = yPos + 35
 		end
 	end
 	
-	-- Оновлюємо розмір канваса
 	teleportScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
 end
 
--- Sky Changer функція (ТІЛЬКИ ДЕФОЛТ І КОСМОС)
+-- Sky Changer функція
 local function changeSky()
 	local sky = Lighting:FindFirstChildOfClass("Sky")
 	
-	if skyIndex == 1 then -- Default -> Space
+	if skyIndex == 1 then
 		if not sky then
 			sky = Instance.new("Sky", Lighting)
 		end
@@ -516,7 +598,7 @@ local function changeSky()
 		sky.SkyboxUp = "rbxassetid://159454288"
 		skyButton.Text = "Sky: Space"
 		skyIndex = 2
-	elseif skyIndex == 2 then -- Space -> Default
+	elseif skyIndex == 2 then
 		if sky then
 			sky:Destroy()
 		end
@@ -639,7 +721,7 @@ local function createESP(p)
 	espObjects[p] = {Box = box, Name = name, Health = health, Distance = distance, Tracer = tracer}
 end
 
--- Charms логіка (зелені підсвічування)
+-- Charms логіка
 local charmsObjects = {}
 
 local function clearCharms()
@@ -672,13 +754,8 @@ end
 -- Створюємо ESP для всіх гравців
 for _, p in pairs(game.Players:GetPlayers()) do createESP(p) end
 
--- Додаємо ESP коли гравець заходить
 game.Players.PlayerAdded:Connect(createESP)
-
--- Видаляємо ESP коли гравець виходить
 game.Players.PlayerRemoving:Connect(removePlayerESP)
-
--- Видаляємо Charms коли гравець виходить
 game.Players.PlayerRemoving:Connect(removePlayerCharms)
 
 RunService.RenderStepped:Connect(function()
@@ -782,12 +859,20 @@ local function updateFOV()
 end
 
 local function updateFOVSlider()
-	local percentage = (currentFOV - 30) / (120 - 30) -- Виправлено діапазон FOV
+	local percentage = (currentFOV - 30) / (120 - 30)
 	fovSliderButton.Position = UDim2.new(percentage, -10, 0, -2.5)
 	fovInput.Text = tostring(currentFOV)
 end
 
--- Fly функції (ПРОСТИЙ РЕЖИМ - тиснув і летиш)
+-- Оновлення AIM FOV слайдера
+local function updateAimFOVSlider()
+	local percentage = (FieldOfView - 30) / (200 - 30)
+	aimFOVSliderButton.Position = UDim2.new(percentage, -10, 0, -2.5)
+	aimFOVInput.Text = tostring(FieldOfView)
+	circle.Radius = FieldOfView
+end
+
+-- Fly функції
 local function startFly()
 	local char = LocalPlayer.Character
 	if char and char:FindFirstChild("HumanoidRootPart") then
@@ -810,7 +895,6 @@ local function startFly()
 				local camera = workspace.CurrentCamera
 				local moveVector = Vector3.new(0, 0, 0)
 				
-				-- Автоматичне керування - летиш у напрямку камери
 				if UserInputService:IsKeyDown(Enum.KeyCode.W) then
 					moveVector = moveVector + camera.CFrame.LookVector
 				end
@@ -830,7 +914,6 @@ local function startFly()
 					moveVector = moveVector + Vector3.new(0, -1, 0)
 				end
 				
-				-- Якщо на телефоні та немає клавіш - просто летиш вперед
 				if moveVector.Magnitude == 0 and UserInputService.TouchEnabled then
 					moveVector = camera.CFrame.LookVector
 				end
@@ -884,16 +967,31 @@ local function handleFOVSliderInput()
 	if mouse.X >= sliderPos.X and mouse.X <= sliderPos.X + sliderSize.X then
 		local relativeX = math.clamp(mouse.X - sliderPos.X, 0, sliderSize.X)
 		local percentage = relativeX / sliderSize.X
-		currentFOV = math.floor(30 + (120 - 30) * percentage + 0.5) -- Виправлено діапазон
+		currentFOV = math.floor(30 + (120 - 30) * percentage + 0.5)
 		currentFOV = math.clamp(currentFOV, 30, 120)
 		updateFOVSlider()
 		if fovChangerEnabled then updateFOV() end
 	end
 end
 
+local function handleAimFOVSliderInput()
+	local mouse = UserInputService:GetMouseLocation()
+	local sliderPos = aimFOVSliderFrame.AbsolutePosition
+	local sliderSize = aimFOVSliderFrame.AbsoluteSize
+	
+	if mouse.X >= sliderPos.X and mouse.X <= sliderPos.X + sliderSize.X then
+		local relativeX = math.clamp(mouse.X - sliderPos.X, 0, sliderSize.X)
+		local percentage = relativeX / sliderSize.X
+		FieldOfView = math.floor(30 + (200 - 30) * percentage + 0.5)
+		FieldOfView = math.clamp(FieldOfView, 30, 200)
+		updateAimFOVSlider()
+	end
+end
+
 -- Слайдери обробка
 local draggingSlider = false
 local draggingFOVSlider = false
+local draggingAimFOVSlider = false
 
 sliderFrame.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -909,10 +1007,18 @@ fovSliderFrame.InputBegan:Connect(function(input)
 	end
 end)
 
+aimFOVSliderFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingAimFOVSlider = true
+		handleAimFOVSliderInput()
+	end
+end)
+
 UserInputService.InputEnded:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		draggingSlider = false
 		draggingFOVSlider = false
+		draggingAimFOVSlider = false
 	end
 end)
 
@@ -921,6 +1027,8 @@ UserInputService.InputChanged:Connect(function(input)
 		handleSliderInput()
 	elseif draggingFOVSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
 		handleFOVSliderInput()
+	elseif draggingAimFOVSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		handleAimFOVSliderInput()
 	end
 end)
 
@@ -947,7 +1055,7 @@ end)
 
 fovInput.FocusLost:Connect(function()
 	local inputFOV = tonumber(fovInput.Text)
-	if inputFOV and inputFOV >= 30 and inputFOV <= 120 then -- Виправлено діапазон
+	if inputFOV and inputFOV >= 30 and inputFOV <= 120 then
 		currentFOV = inputFOV
 		updateFOVSlider()
 		if fovChangerEnabled then updateFOV() end
@@ -956,91 +1064,131 @@ fovInput.FocusLost:Connect(function()
 	end
 end)
 
--- Кнопки керування польотом
--- (ВИДАЛЕНО - тепер просте керування)
+aimFOVInput.FocusLost:Connect(function()
+	local inputFOV = tonumber(aimFOVInput.Text)
+	if inputFOV and inputFOV >= 30 and inputFOV <= 200 then
+		FieldOfView = inputFOV
+		updateAimFOVSlider()
+	else
+		aimFOVInput.Text = tostring(FieldOfView)
+	end
+end)
 
--- Кнопки обробка
+-- Кнопки обробка з захистом від мікро-кліків
 teleportButton.MouseButton1Click:Connect(function()
-	frame.Visible = false
-	teleportFrame.Visible = true
-	updateTeleportList()
+	if canClick() then
+		frame.Visible = false
+		aimSettingsFrame.Visible = false
+		teleportFrame.Visible = true
+		updateTeleportList()
+	end
 end)
 
 backButton.MouseButton1Click:Connect(function()
-	teleportFrame.Visible = false
-	frame.Visible = true
+	if canClick() then
+		teleportFrame.Visible = false
+		frame.Visible = true
+	end
+end)
+
+
+aimCloseButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		aimSettingsFrame.Visible = false
+	end
 end)
 
 aimButton.MouseButton1Click:Connect(function()
-	Holding = not Holding
-	aimButton.Text = Holding and "AIM: ON" or "AIM: OFF"
+	if canClick() then
+		Holding = not Holding
+		aimButton.Text = Holding and "AIM: ON" or "AIM: OFF"
+	end
+end)
+
+aimPlusButton.MouseButton1Click:Connect(function()
+    if canClick() then
+        aimSettingsFrame.Visible = not aimSettingsFrame.Visible
+    end
+end)
+
+fovCircleButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		fovCircleEnabled = not fovCircleEnabled
+		fovCircleButton.Text = fovCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
+	end
 end)
 
 wallButton.MouseButton1Click:Connect(function()
-	WallCheckEnabled = not WallCheckEnabled
-	wallButton.Text = WallCheckEnabled and "WallCheck: ON" or "WallCheck: OFF"
+	if canClick() then
+		WallCheckEnabled = not WallCheckEnabled
+		wallButton.Text = WallCheckEnabled and "WallCheck: ON" or "WallCheck: OFF"
+	end
 end)
 
 espButton.MouseButton1Click:Connect(function()
-	espEnabled = not espEnabled
-	espButton.Text = espEnabled and "ESP: ON" or "ESP: OFF"
-	if not espEnabled then clearESP() end
+	if canClick() then
+		espEnabled = not espEnabled
+		espButton.Text = espEnabled and "ESP: ON" or "ESP: OFF"
+		if not espEnabled then clearESP() end
+	end
 end)
 
+-- ВИПРАВЛЕНА кнопка Charms
 charmsButton.MouseButton1Click:Connect(function()
-	charmsEnabled = not charmsEnabled
-	charmsButton.Text = charmsEnabled and "Charms: ON" or "Charms: OFF"
-	if not charmsEnabled then clearCharms() end
+	if canClick() then
+		charmsEnabled = not charmsEnabled
+		charmsButton.Text = charmsEnabled and "Charms: ON" or "Charms: OFF"
+		if not charmsEnabled then 
+			clearCharms() 
+		end
+	end
 end)
 
-charmsButton.MouseButton1Click:Connect(function()
-	charmsEnabled = not charmsEnabled
-	charmsButton.Text = charmsEnabled and "Charms: ON" or "Charms: OFF"
-	if not charmsEnabled then clearCharms() end
-end)
-
--- Infinite Jump кнопка (НОВА)
 infiniteJumpButton.MouseButton1Click:Connect(function()
-	infiniteJumpEnabled = not infiniteJumpEnabled
-	infiniteJumpButton.Text = infiniteJumpEnabled and "Infinite Jump: ON" or "Infinite Jump: OFF"
+	if canClick() then
+		infiniteJumpEnabled = not infiniteJumpEnabled
+		infiniteJumpButton.Text = infiniteJumpEnabled and "Infinite Jump: ON" or "Infinite Jump: OFF"
 
-	if infiniteJumpEnabled then
-		infiniteJumpConnection = UserInputService.JumpRequest:Connect(function()
-			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-				LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+		if infiniteJumpEnabled then
+			infiniteJumpConnection = UserInputService.JumpRequest:Connect(function()
+				if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+					LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+				end
+			end)
+		else
+			if infiniteJumpConnection then
+				infiniteJumpConnection:Disconnect()
+				infiniteJumpConnection = nil
 			end
-		end)
-	else
-		if infiniteJumpConnection then
-			infiniteJumpConnection:Disconnect()
-			infiniteJumpConnection = nil
 		end
 	end
 end)
 
 noclipButton.MouseButton1Click:Connect(function()
-	local noclipEnabled = not (noclipConnection ~= nil)
-	noclipButton.Text = noclipEnabled and "Noclip: ON" or "Noclip: OFF"
+	if canClick() then
+		local noclipEnabled = not (noclipConnection ~= nil)
+		noclipButton.Text = noclipEnabled and "Noclip: ON" or "Noclip: OFF"
 
-	if noclipEnabled then
-		noclipConnection = RunService.Stepped:Connect(function()
+		if noclipEnabled then
+			noclipConnection = RunService.Stepped:Connect(function()
+				if LocalPlayer.Character then
+					for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+						if part:IsA("BasePart") then
+							part.CanCollide = false
+						end
+					end
+				end
+			end)
+		else
+			if noclipConnection then
+				noclipConnection:Disconnect()
+				noclipConnection = nil
+			end
 			if LocalPlayer.Character then
 				for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
 					if part:IsA("BasePart") then
-						part.CanCollide = false
+						part.CanCollide = true
 					end
-				end
-			end
-		end)
-	else
-		if noclipConnection then
-			noclipConnection:Disconnect()
-			noclipConnection = nil
-		end
-		if LocalPlayer.Character then
-			for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
-				if part:IsA("BasePart") then
-					part.CanCollide = true
 				end
 			end
 		end
@@ -1048,82 +1196,92 @@ noclipButton.MouseButton1Click:Connect(function()
 end)
 
 bunnyHopButton.MouseButton1Click:Connect(function()
-	bunnyHopEnabled = not bunnyHopEnabled
-	bunnyHopButton.Text = bunnyHopEnabled and "BunnyHop: ON" or "BunnyHop: OFF"
+	if canClick() then
+		bunnyHopEnabled = not bunnyHopEnabled
+		bunnyHopButton.Text = bunnyHopEnabled and "BunnyHop: ON" or "BunnyHop: OFF"
 
-	if bunnyHopEnabled then
-		bunnyHopConnection = RunService.RenderStepped:Connect(function()
-			local char = LocalPlayer.Character
-			if char and char:FindFirstChildOfClass("Humanoid") then
-				local hum = char:FindFirstChildOfClass("Humanoid")
-				hum.WalkSpeed = 100
-				hum.JumpPower = 35
-				if hum.FloorMaterial ~= Enum.Material.Air then
-					hum:ChangeState("Jumping")
+		if bunnyHopEnabled then
+			bunnyHopConnection = RunService.RenderStepped:Connect(function()
+				local char = LocalPlayer.Character
+				if char and char:FindFirstChildOfClass("Humanoid") then
+					local hum = char:FindFirstChildOfClass("Humanoid")
+					hum.WalkSpeed = 100
+					hum.JumpPower = 35
+					if hum.FloorMaterial ~= Enum.Material.Air then
+						hum:ChangeState("Jumping")
+					end
 				end
+			end)
+		else
+			if bunnyHopConnection then
+				bunnyHopConnection:Disconnect()
+				bunnyHopConnection = nil
 			end
-		end)
-	else
-		if bunnyHopConnection then
-			bunnyHopConnection:Disconnect()
-			bunnyHopConnection = nil
-		end
-		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = speedHackEnabled and currentSpeed or 16
-			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").JumpPower = 50
+			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+				LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = speedHackEnabled and currentSpeed or 16
+				LocalPlayer.Character:FindFirstChildOfClass("Humanoid").JumpPower = 50
+			end
 		end
 	end
 end)
 
 skyButton.MouseButton1Click:Connect(function()
-	changeSky()
+	if canClick() then
+		changeSky()
+	end
 end)
 
 flyButton.MouseButton1Click:Connect(function()
-	flyEnabled = not flyEnabled
-	flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
+	if canClick() then
+		flyEnabled = not flyEnabled
+		flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
 
-	if flyEnabled then
-		startFly()
-	else
-		stopFly()
+		if flyEnabled then
+			startFly()
+		else
+			stopFly()
+		end
 	end
 end)
 
 speedButton.MouseButton1Click:Connect(function()
-	speedHackEnabled = not speedHackEnabled
-	speedButton.Text = speedHackEnabled and "Speed: ON" or "Speed: OFF"
+	if canClick() then
+		speedHackEnabled = not speedHackEnabled
+		speedButton.Text = speedHackEnabled and "Speed: ON" or "Speed: OFF"
 
-	if speedHackEnabled then
-		speedHackConnection = RunService.RenderStepped:Connect(function()
-			updateSpeed()
-		end)
-	else
-		if speedHackConnection then
-			speedHackConnection:Disconnect()
-			speedHackConnection = nil
-		end
-		if not bunnyHopEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-			LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+		if speedHackEnabled then
+			speedHackConnection = RunService.RenderStepped:Connect(function()
+				updateSpeed()
+			end)
+		else
+			if speedHackConnection then
+				speedHackConnection:Disconnect()
+				speedHackConnection = nil
+			end
+			if not bunnyHopEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+				LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+			end
 		end
 	end
 end)
 
 fovButton.MouseButton1Click:Connect(function()
-	fovChangerEnabled = not fovChangerEnabled
-	fovButton.Text = fovChangerEnabled and "FOV: ON" or "FOV: OFF"
+	if canClick() then
+		fovChangerEnabled = not fovChangerEnabled
+		fovButton.Text = fovChangerEnabled and "FOV: ON" or "FOV: OFF"
 
-	if fovChangerEnabled then
-		fovChangerConnection = RunService.RenderStepped:Connect(function()
-			updateFOV()
-		end)
-	else
-		if fovChangerConnection then
-			fovChangerConnection:Disconnect()
-			fovChangerConnection = nil
-		end
-		if Camera then
-			Camera.FieldOfView = 70 -- Default value
+		if fovChangerEnabled then
+			fovChangerConnection = RunService.RenderStepped:Connect(function()
+				updateFOV()
+			end)
+		else
+			if fovChangerConnection then
+				fovChangerConnection:Disconnect()
+				fovChangerConnection = nil
+			end
+			if Camera then
+				Camera.FieldOfView = 70
+			end
 		end
 	end
 end)
@@ -1131,6 +1289,7 @@ end)
 -- Ініціалізація
 updateSlider()
 updateFOVSlider()
+updateAimFOVSlider()
 
 -- Анімація кружка
 task.spawn(function()
@@ -1148,47 +1307,53 @@ end)
 
 -- Згортання/розгортання
 minimizeButton.MouseButton1Click:Connect(function()
-	frame.Visible = false
-	teleportFrame.Visible = false
-	minimizedCircle.Visible = true
+	if canClick() then
+		frame.Visible = false
+		teleportFrame.Visible = false
+		aimSettingsFrame.Visible = false
+		minimizedCircle.Visible = true
+	end
 end)
 
 minimizedCircle.MouseButton1Click:Connect(function()
-	frame.Visible = true
-	minimizedCircle.Visible = false
+	if canClick() then
+		frame.Visible = true
+		minimizedCircle.Visible = false
+	end
 end)
 
--- Драг функція
+-- Драг функція (виправлена для запобігання конфліктів)
 local function makeDraggable(frame)
 	local dragging = false
-	local dragInput = nil
 	local dragStart = nil
 	local startPos = nil
+	local dragConnection = nil
 
-	frame.Active = true
+	local function endDragging()
+		dragging = false
+		if dragConnection then
+			dragConnection:Disconnect()
+			dragConnection = nil
+		end
+	end
 
 	frame.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			dragging = true
 			dragStart = input.Position
 			startPos = frame.Position
-
-			input.Changed:Connect(function()
+			
+			-- Створюємо окреме з'єднання для відстеження закінчення
+			dragConnection = input.Changed:Connect(function()
 				if input.UserInputState == Enum.UserInputState.End then
-					dragging = false
+					endDragging()
 				end
 			end)
 		end
 	end)
 
-	frame.InputChanged:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-			dragInput = input
-		end
-	end)
-
 	UserInputService.InputChanged:Connect(function(input)
-		if input == dragInput and dragging then
+		if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
 			local delta = input.Position - dragStart
 			frame.Position = UDim2.new(
 				startPos.X.Scale,
@@ -1198,8 +1363,16 @@ local function makeDraggable(frame)
 			)
 		end
 	end)
+	
+	-- Додаткова перевірка для завершення перетягування
+	UserInputService.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			endDragging()
+		end
+	end)
 end
 
 makeDraggable(frame)
 makeDraggable(teleportFrame)
 makeDraggable(minimizedCircle)
+makeDraggable(aimSettingsFrame)
