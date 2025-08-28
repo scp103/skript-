@@ -1,5 +1,5 @@
 -- Об'єднане мод-меню (AIM + ESP + Noclip + BunnyHop + Fly + FOV + Sky) | Для KRNL
-aimFOVSliderFrame.InputBegan:Connect(function(input)
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -211,6 +211,17 @@ titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 -- Кнопка AIM Settings (права сторона)
+local aimSettingsOpenButton = Instance.new("TextButton", frame)
+aimSettingsOpenButton.Size = UDim2.new(0, 25, 0, 25)
+aimSettingsOpenButton.Position = UDim2.new(1, -30, 0, 5)
+aimSettingsOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+aimSettingsOpenButton.TextColor3 = Color3.new(1,1,1)
+aimSettingsOpenButton.Font = Enum.Font.SourceSansBold
+aimSettingsOpenButton.TextSize = 16
+aimSettingsOpenButton.Text = "+"
+
+local aimSettingsOpenButtonCorner = Instance.new("UICorner", aimSettingsOpenButton)
+aimSettingsOpenButtonCorner.CornerRadius = UDim.new(1, 0)
 
 -- Кнопки основного меню (БЕЗ FOV Circle та WallCheck - вони перенесені в AIM меню)
 local teleportButton = Instance.new("TextButton", scrollFrame)
@@ -226,7 +237,7 @@ local teleportButtonCorner = Instance.new("UICorner", teleportButton)
 teleportButtonCorner.CornerRadius = UDim.new(0, 8)
 
 local aimButton = Instance.new("TextButton", scrollFrame)
-aimButton.Size = UDim2.new(0.7, 0, 0, 30)
+aimButton.Size = UDim2.new(0.9, 0, 0, 30)
 aimButton.Position = UDim2.new(0.05, 0, 0, 50)
 aimButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 aimButton.TextColor3 = Color3.new(1,1,1)
@@ -236,18 +247,6 @@ aimButton.Text = "AIM: OFF"
 
 local aimButtonCorner = Instance.new("UICorner", aimButton)
 aimButtonCorner.CornerRadius = UDim.new(0, 8)
-
-local aimPlusButton = Instance.new("TextButton", scrollFrame)
-aimPlusButton.Size = UDim2.new(0.15, 0, 0, 30)
-aimPlusButton.Position = UDim2.new(0.8, 0, 0, 50) -- та сама висота як aimButton
-aimPlusButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-aimPlusButton.TextColor3 = Color3.new(1,1,1)
-aimPlusButton.Font = Enum.Font.SourceSansBold
-aimPlusButton.TextSize = 16
-aimPlusButton.Text = "+"
-
-local aimPlusCorner = Instance.new("UICorner", aimPlusButton)
-aimPlusCorner.CornerRadius = UDim.new(0, 8)
 
 local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
@@ -464,19 +463,6 @@ fovButton.Text = "FOV: OFF"
 
 local fovButtonCorner = Instance.new("UICorner", fovButton)
 fovButtonCorner.CornerRadius = UDim.new(0, 8)
-
--- Додай Touch підтримку:
-aimFOVSliderFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        draggingAimFOVSlider = true
-        handleAimFOVSliderInput()
-        input.Changed:Connect(function() -- додай цю перевірку
-            if input.UserInputState == Enum.UserInputState.End then
-                draggingAimFOVSlider = false
-            end
-        end)
-    end
-end)
 
 -- Кнопка згортання
 local minimizeButton = Instance.new("TextButton", frame)
@@ -1104,6 +1090,11 @@ backButton.MouseButton1Click:Connect(function()
 	end
 end)
 
+aimSettingsOpenButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		aimSettingsFrame.Visible = not aimSettingsFrame.Visible
+	end
+end)
 
 aimCloseButton.MouseButton1Click:Connect(function()
 	if canClick() then
@@ -1116,12 +1107,6 @@ aimButton.MouseButton1Click:Connect(function()
 		Holding = not Holding
 		aimButton.Text = Holding and "AIM: ON" or "AIM: OFF"
 	end
-end)
-
-aimPlusButton.MouseButton1Click:Connect(function()
-    if canClick() then
-        aimSettingsFrame.Visible = not aimSettingsFrame.Visible
-    end
 end)
 
 fovCircleButton.MouseButton1Click:Connect(function()
@@ -1385,7 +1370,7 @@ local function makeDraggable(frame)
 	end)
 end
 
-makeDraggable(Frame)
+makeDraggable(frame)
 makeDraggable(teleportFrame)
 makeDraggable(minimizedCircle)
 makeDraggable(aimSettingsFrame)
