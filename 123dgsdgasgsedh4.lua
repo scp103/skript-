@@ -67,6 +67,13 @@ aimSettingsTitle.Font = Enum.Font.SourceSansBold
 aimSettingsTitle.TextSize = 16
 aimSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
+-- Невидима зона для перетягування
+local aimDragArea = Instance.new("Frame", aimSettingsFrame)
+aimDragArea.Size = UDim2.new(1, 0, 0, 30) -- тільки заголовок
+aimDragArea.Position = UDim2.new(0, 0, 0, 0)
+aimDragArea.BackgroundTransparency = 1
+aimDragArea.ZIndex = 5 -- вище за інші елементи
+
 -- Кнопка закриття AIM меню
 local aimCloseButton = Instance.new("TextButton", aimSettingsFrame)
 aimCloseButton.Size = UDim2.new(0.9, 0, 0, 25)
@@ -136,6 +143,7 @@ aimFOVSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
 aimFOVSliderFrame.Position = UDim2.new(0.05, 0, 0, 150)
 aimFOVSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 aimFOVSliderFrame.BorderSizePixel = 0
+aimFOVSliderFrame.ZIndex = 10
 
 local aimFOVSliderCorner = Instance.new("UICorner", aimFOVSliderFrame)
 aimFOVSliderCorner.CornerRadius = UDim.new(0, 8)
@@ -1388,4 +1396,4 @@ end
 makeDraggable(frame)
 makeDraggable(teleportFrame)
 makeDraggable(minimizedCircle)
-makeDraggable(aimSettingsFrame)
+makeDraggable(aimDragArea)
