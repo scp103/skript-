@@ -1388,4 +1388,4 @@ end
 makeDraggable(frame)
 makeDraggable(teleportFrame)
 makeDraggable(minimizedCircle)
-
+makeDraggable(aimSettingsFrame)
