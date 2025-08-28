@@ -1,5 +1,6 @@
 -- Об'єднане мод-меню (AIM + ESP + Noclip + BunnyHop + Fly + FOV + Sky) | Для KRNL
 aimButton.Size
+aimSettingsOpenButton
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
