@@ -249,12 +249,6 @@ aimPlusButton.Text = "+"
 local aimPlusCorner = Instance.new("UICorner", aimPlusButton)
 aimPlusCorner.CornerRadius = UDim.new(0, 8)
 
-aimPlusButton.MouseButton1Click:Connect(function()
-    if canClick() then
-        aimSettingsFrame.Visible = not aimSettingsFrame.Visible
-    end
-end)
-
 local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
 espButton.Position = UDim2.new(0.05, 0, 0, 90)
@@ -1109,6 +1103,12 @@ aimButton.MouseButton1Click:Connect(function()
 		Holding = not Holding
 		aimButton.Text = Holding and "AIM: ON" or "AIM: OFF"
 	end
+end)
+
+aimPlusButton.MouseButton1Click:Connect(function()
+    if canClick() then
+        aimSettingsFrame.Visible = not aimSettingsFrame.Visible
+    end
 end)
 
 fovCircleButton.MouseButton1Click:Connect(function()
