@@ -138,6 +138,7 @@ aimFOVSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
 aimFOVSliderFrame.Position = UDim2.new(0.05, 0, 0, 150)
 aimFOVSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 aimFOVSliderFrame.BorderSizePixel = 0
+aimFOVSliderFrame.ZIndex = 10
 
 local aimFOVSliderCorner = Instance.new("UICorner", aimFOVSliderFrame)
 aimFOVSliderCorner.CornerRadius = UDim.new(0, 8)
