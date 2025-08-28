@@ -389,6 +389,7 @@ sliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
 sliderFrame.Position = UDim2.new(0.05, 0, 0, 430)
 sliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 sliderFrame.BorderSizePixel = 0
+sliderFrame.ZIndex = 10
 
 local sliderCorner = Instance.new("UICorner", sliderFrame)
 sliderCorner.CornerRadius = UDim.new(0, 8)
