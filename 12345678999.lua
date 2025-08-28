@@ -1,6 +1,5 @@
 -- Об'єднане мод-меню (AIM + ESP + Noclip + BunnyHop + Fly + FOV + Sky) | Для KRNL
-aimButton.Size
-aimSettingsOpenButton
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -466,6 +465,19 @@ fovButton.Text = "FOV: OFF"
 
 local fovButtonCorner = Instance.new("UICorner", fovButton)
 fovButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Додай Touch підтримку:
+aimFOVSliderFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingAimFOVSlider = true
+        handleAimFOVSliderInput()
+        input.Changed:Connect(function() -- додай цю перевірку
+            if input.UserInputState == Enum.UserInputState.End then
+                draggingAimFOVSlider = false
+            end
+        end)
+    end
+end)
 
 -- Кнопка згортання
 local minimizeButton = Instance.new("TextButton", frame)
