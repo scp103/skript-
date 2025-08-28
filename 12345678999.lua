@@ -1,7 +1,5 @@
 -- Об'єднане мод-меню (AIM + ESP + Noclip + BunnyHop + Fly + FOV + Sky) | Для KRNL
-aimFOVSliderFrame.ZIndex = 10
-sliderFrame.ZIndex = 10
-fovSliderFrame.ZIndex = 10
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -138,7 +136,6 @@ aimFOVSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
 aimFOVSliderFrame.Position = UDim2.new(0.05, 0, 0, 150)
 aimFOVSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 aimFOVSliderFrame.BorderSizePixel = 0
-aimFOVSliderFrame.ZIndex = 10
 
 local aimFOVSliderCorner = Instance.new("UICorner", aimFOVSliderFrame)
 aimFOVSliderCorner.CornerRadius = UDim.new(0, 8)
@@ -214,6 +211,17 @@ titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 -- Кнопка AIM Settings (права сторона)
+local aimSettingsOpenButton = Instance.new("TextButton", frame)
+aimSettingsOpenButton.Size = UDim2.new(0, 25, 0, 25)
+aimSettingsOpenButton.Position = UDim2.new(1, -30, 0, 5)
+aimSettingsOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+aimSettingsOpenButton.TextColor3 = Color3.new(1,1,1)
+aimSettingsOpenButton.Font = Enum.Font.SourceSansBold
+aimSettingsOpenButton.TextSize = 16
+aimSettingsOpenButton.Text = "+"
+
+local aimSettingsOpenButtonCorner = Instance.new("UICorner", aimSettingsOpenButton)
+aimSettingsOpenButtonCorner.CornerRadius = UDim.new(1, 0)
 
 -- Кнопки основного меню (БЕЗ FOV Circle та WallCheck - вони перенесені в AIM меню)
 local teleportButton = Instance.new("TextButton", scrollFrame)
@@ -229,7 +237,7 @@ local teleportButtonCorner = Instance.new("UICorner", teleportButton)
 teleportButtonCorner.CornerRadius = UDim.new(0, 8)
 
 local aimButton = Instance.new("TextButton", scrollFrame)
-aimButton.Size = UDim2.new(0.7, 0, 0, 30)
+aimButton.Size = UDim2.new(0.9, 0, 0, 30)
 aimButton.Position = UDim2.new(0.05, 0, 0, 50)
 aimButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 aimButton.TextColor3 = Color3.new(1,1,1)
@@ -239,18 +247,6 @@ aimButton.Text = "AIM: OFF"
 
 local aimButtonCorner = Instance.new("UICorner", aimButton)
 aimButtonCorner.CornerRadius = UDim.new(0, 8)
-
-local aimPlusButton = Instance.new("TextButton", scrollFrame)
-aimPlusButton.Size = UDim2.new(0.15, 0, 0, 30)
-aimPlusButton.Position = UDim2.new(0.8, 0, 0, 50) -- та сама висота як aimButton
-aimPlusButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-aimPlusButton.TextColor3 = Color3.new(1,1,1)
-aimPlusButton.Font = Enum.Font.SourceSansBold
-aimPlusButton.TextSize = 16
-aimPlusButton.Text = "+"
-
-local aimPlusCorner = Instance.new("UICorner", aimPlusButton)
-aimPlusCorner.CornerRadius = UDim.new(0, 8)
 
 local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
@@ -389,7 +385,6 @@ sliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
 sliderFrame.Position = UDim2.new(0.05, 0, 0, 430)
 sliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 sliderFrame.BorderSizePixel = 0
-sliderFrame.ZIndex = 10
 
 local sliderCorner = Instance.new("UICorner", sliderFrame)
 sliderCorner.CornerRadius = UDim.new(0, 8)
@@ -444,7 +439,6 @@ fovSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
 fovSliderFrame.Position = UDim2.new(0.05, 0, 0, 530)
 fovSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 fovSliderFrame.BorderSizePixel = 0
-fovSliderFrame.ZIndex = 10
 
 local fovSliderCorner = Instance.new("UICorner", fovSliderFrame)
 fovSliderCorner.CornerRadius = UDim.new(0, 8)
@@ -1096,6 +1090,11 @@ backButton.MouseButton1Click:Connect(function()
 	end
 end)
 
+aimSettingsOpenButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		aimSettingsFrame.Visible = not aimSettingsFrame.Visible
+	end
+end)
 
 aimCloseButton.MouseButton1Click:Connect(function()
 	if canClick() then
@@ -1108,12 +1107,6 @@ aimButton.MouseButton1Click:Connect(function()
 		Holding = not Holding
 		aimButton.Text = Holding and "AIM: ON" or "AIM: OFF"
 	end
-end)
-
-aimPlusButton.MouseButton1Click:Connect(function()
-    if canClick() then
-        aimSettingsFrame.Visible = not aimSettingsFrame.Visible
-    end
 end)
 
 fovCircleButton.MouseButton1Click:Connect(function()
@@ -1377,7 +1370,7 @@ local function makeDraggable(frame)
 	end)
 end
 
-makeDraggable(mainDragArea)
+makeDraggable(frame)
 makeDraggable(teleportFrame)
 makeDraggable(minimizedCircle)
 makeDraggable(aimSettingsFrame)
