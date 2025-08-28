@@ -246,14 +246,14 @@ aimPlusButton.Font = Enum.Font.SourceSansBold
 aimPlusButton.TextSize = 16
 aimPlusButton.Text = "+"
 
+local aimPlusCorner = Instance.new("UICorner", aimPlusButton)
+aimPlusCorner.CornerRadius = UDim.new(0, 8)
+
 aimPlusButton.MouseButton1Click:Connect(function()
     if canClick() then
         aimSettingsFrame.Visible = not aimSettingsFrame.Visible
     end
 end)
-
-local aimPlusCorner = Instance.new("UICorner", aimPlusButton)
-aimPlusCorner.CornerRadius = UDim.new(0, 8)
 
 local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
