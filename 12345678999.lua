@@ -1,5 +1,7 @@
 -- Об'єднане мод-меню (AIM + ESP + Noclip + BunnyHop + Fly + FOV + Sky) | Для KRNL
-
+aimFOVSliderFrame.ZIndex = 10
+sliderFrame.ZIndex = 10
+fovSliderFrame.ZIndex = 10
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
