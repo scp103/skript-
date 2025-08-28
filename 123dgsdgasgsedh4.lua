@@ -67,13 +67,6 @@ aimSettingsTitle.Font = Enum.Font.SourceSansBold
 aimSettingsTitle.TextSize = 16
 aimSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- Невидима зона для перетягування
-local aimDragArea = Instance.new("Frame", aimSettingsFrame)
-aimDragArea.Size = UDim2.new(1, 0, 0, 30) -- тільки заголовок
-aimDragArea.Position = UDim2.new(0, 0, 0, 0)
-aimDragArea.BackgroundTransparency = 1
-aimDragArea.ZIndex = 5 -- вище за інші елементи
-
 -- Кнопка закриття AIM меню
 local aimCloseButton = Instance.new("TextButton", aimSettingsFrame)
 aimCloseButton.Size = UDim2.new(0.9, 0, 0, 25)
@@ -143,7 +136,6 @@ aimFOVSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
 aimFOVSliderFrame.Position = UDim2.new(0.05, 0, 0, 150)
 aimFOVSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 aimFOVSliderFrame.BorderSizePixel = 0
-aimFOVSliderFrame.ZIndex = 10
 
 local aimFOVSliderCorner = Instance.new("UICorner", aimFOVSliderFrame)
 aimFOVSliderCorner.CornerRadius = UDim.new(0, 8)
@@ -394,7 +386,6 @@ sliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
 sliderFrame.Position = UDim2.new(0.05, 0, 0, 430)
 sliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 sliderFrame.BorderSizePixel = 0
-sliderFrame.ZIndex = 10
 
 local sliderCorner = Instance.new("UICorner", sliderFrame)
 sliderCorner.CornerRadius = UDim.new(0, 8)
@@ -449,7 +440,6 @@ fovSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
 fovSliderFrame.Position = UDim2.new(0.05, 0, 0, 530)
 fovSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 fovSliderFrame.BorderSizePixel = 0
-fovSliderFrame.ZIndex = 10
 
 local fovSliderCorner = Instance.new("UICorner", fovSliderFrame)
 fovSliderCorner.CornerRadius = UDim.new(0, 8)
@@ -1395,7 +1385,7 @@ local function makeDraggable(frame)
 	end)
 end
 
-makeDraggable(mainDragArea)
+makeDraggable(Frame)
 makeDraggable(teleportFrame)
 makeDraggable(minimizedCircle)
-makeDraggable(aimDragArea)
+makeDraggable(aimSettingsFrame)
