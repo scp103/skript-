@@ -210,10 +210,7 @@ titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- Кнопка AIM Settings (права сторона)
-
-
--- Кнопки основного меню (БЕЗ FOV Circle та WallCheck - вони перенесені в AIM меню)
+-- Кнопки основного меню
 local teleportButton = Instance.new("TextButton", scrollFrame)
 teleportButton.Size = UDim2.new(0.9, 0, 0, 30)
 teleportButton.Position = UDim2.new(0.05, 0, 0, 10)
@@ -226,8 +223,9 @@ teleportButton.Text = "Teleport"
 local teleportButtonCorner = Instance.new("UICorner", teleportButton)
 teleportButtonCorner.CornerRadius = UDim.new(0, 8)
 
+-- ВИПРАВЛЕНІ КНОПКИ AIM: розділені на велику кнопку AIM і маленьку кнопку "+"
 local aimButton = Instance.new("TextButton", scrollFrame)
-aimButton.Size = UDim2.new(0.7, 0, 0, 30)
+aimButton.Size = UDim2.new(0.75, -5, 0, 30) -- Зменшено ширину для великої кнопки
 aimButton.Position = UDim2.new(0.05, 0, 0, 50)
 aimButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 aimButton.TextColor3 = Color3.new(1,1,1)
@@ -238,17 +236,18 @@ aimButton.Text = "AIM: OFF"
 local aimButtonCorner = Instance.new("UICorner", aimButton)
 aimButtonCorner.CornerRadius = UDim.new(0, 8)
 
-local aimPlusButton = Instance.new("TextButton", scrollFrame)
-aimPlusButton.Size = UDim2.new(0.15, 0, 0, 30)
-aimPlusButton.Position = UDim2.new(0.8, 0, 0, 50) -- та сама висота як aimButton
-aimPlusButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-aimPlusButton.TextColor3 = Color3.new(1,1,1)
-aimPlusButton.Font = Enum.Font.SourceSansBold
-aimPlusButton.TextSize = 16
-aimPlusButton.Text = "+"
+-- Маленька кнопка "+" поруч з AIM
+local aimSettingsOpenButton = Instance.new("TextButton", scrollFrame)
+aimSettingsOpenButton.Size = UDim2.new(0.15, -5, 0, 30) -- Маленька кнопка
+aimSettingsOpenButton.Position = UDim2.new(0.8, 0, 0, 50) -- Поруч з великою кнопкою
+aimSettingsOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+aimSettingsOpenButton.TextColor3 = Color3.new(1,1,1)
+aimSettingsOpenButton.Font = Enum.Font.SourceSansBold
+aimSettingsOpenButton.TextSize = 18
+aimSettingsOpenButton.Text = "+"
 
-local aimPlusCorner = Instance.new("UICorner", aimPlusButton)
-aimPlusCorner.CornerRadius = UDim.new(0, 8)
+local aimSettingsOpenButtonCorner = Instance.new("UICorner", aimSettingsOpenButton)
+aimSettingsOpenButtonCorner.CornerRadius = UDim.new(0, 8)
 
 local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
@@ -865,7 +864,7 @@ local function updateFOVSlider()
 	fovInput.Text = tostring(currentFOV)
 end
 
--- Оновлення AIM FOV слайдера
+-- ВИПРАВЛЕНА функція оновлення AIM FOV слайдера
 local function updateAimFOVSlider()
 	local percentage = (FieldOfView - 30) / (200 - 30)
 	aimFOVSliderButton.Position = UDim2.new(percentage, -10, 0, -2.5)
@@ -944,7 +943,7 @@ local function stopFly()
 	end
 end
 
--- Логіка слайдерів
+-- ВИПРАВЛЕНА логіка слайдерів з захистом від переміщення меню
 local function handleSliderInput()
 	local mouse = UserInputService:GetMouseLocation()
 	local sliderPos = sliderFrame.AbsolutePosition
@@ -975,6 +974,7 @@ local function handleFOVSliderInput()
 	end
 end
 
+-- ВИПРАВЛЕНА функція для AIM FOV слайдера
 local function handleAimFOVSliderInput()
 	local mouse = UserInputService:GetMouseLocation()
 	local sliderPos = aimFOVSliderFrame.AbsolutePosition
@@ -989,15 +989,27 @@ local function handleAimFOVSliderInput()
 	end
 end
 
--- Слайдери обробка
+-- ВИПРАВЛЕНА обробка слайдерів з запобіганням переміщення меню
 local draggingSlider = false
 local draggingFOVSlider = false
 local draggingAimFOVSlider = false
+
+-- Обробка слайдерів з блокуванням драгу
+local function preventDragWhileSliding(inputObject, sliderFrame)
+	-- Зупиняємо поширення події, щоб меню не переміщалось
+	inputObject.Changed:Connect(function()
+		if inputObject.UserInputState == Enum.UserInputState.End then
+			-- Дозволяємо знову перетягувати після відпускання
+		end
+	end)
+end
 
 sliderFrame.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		draggingSlider = true
 		handleSliderInput()
+		-- Блокуємо драг меню
+		preventDragWhileSliding(input, sliderFrame)
 	end
 end)
 
@@ -1005,13 +1017,16 @@ fovSliderFrame.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		draggingFOVSlider = true
 		handleFOVSliderInput()
+		preventDragWhileSliding(input, fovSliderFrame)
 	end
 end)
 
+-- ВИПРАВЛЕНА обробка AIM FOV слайдера
 aimFOVSliderFrame.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		draggingAimFOVSlider = true
 		handleAimFOVSliderInput()
+		preventDragWhileSliding(input, aimFOVSliderFrame)
 	end
 end)
 
@@ -1116,12 +1131,6 @@ fovCircleButton.MouseButton1Click:Connect(function()
 		fovCircleEnabled = not fovCircleEnabled
 		fovCircleButton.Text = fovCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
 	end
-end)
-
-aimPlusButton.MouseButton1Click:Connect(function()
-    if canClick() then
-        aimSettingsFrame.Visible = not aimSettingsFrame.Visible
-    end
 end)
 
 wallButton.MouseButton1Click:Connect(function()
@@ -1328,8 +1337,8 @@ minimizedCircle.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Драг функція (виправлена для запобігання конфліктів)
-local function makeDraggable(frame)
+-- ВИПРАВЛЕНА драг функція (тільки для заголовка, щоб уникнути конфліктів зі слайдерами)
+local function makeDraggable(frame, dragHandle)
 	local dragging = false
 	local dragStart = nil
 	local startPos = nil
@@ -1343,18 +1352,22 @@ local function makeDraggable(frame)
 		end
 	end
 
-	frame.InputBegan:Connect(function(input)
+	-- Використовуємо тільки заголовок для драгу
+	local handle = dragHandle or frame
+	handle.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			dragging = true
-			dragStart = input.Position
-			startPos = frame.Position
-			
-			-- Створюємо окреме з'єднання для відстеження закінчення
-			dragConnection = input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
-					endDragging()
-				end
-			end)
+			-- Перевіряємо, чи не клікнули по слайдеру
+			if not draggingSlider and not draggingFOVSlider and not draggingAimFOVSlider then
+				dragging = true
+				dragStart = input.Position
+				startPos = frame.Position
+				
+				dragConnection = input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						endDragging()
+					end
+				end)
+			end
 		end
 	end)
 
@@ -1370,7 +1383,6 @@ local function makeDraggable(frame)
 		end
 	end)
 	
-	-- Додаткова перевірка для завершення перетягування
 	UserInputService.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			endDragging()
@@ -1378,7 +1390,8 @@ local function makeDraggable(frame)
 	end)
 end
 
-makeDraggable(frame)
-makeDraggable(teleportFrame)
+-- Робимо перетягування тільки через заголовки
+makeDraggable(frame, titleLabel)
+makeDraggable(teleportFrame, teleportTitle)
 makeDraggable(minimizedCircle)
-makeDraggable(aimSettingsFrame)
+makeDraggable(aimSettingsFrame, aimSettingsTitle)
