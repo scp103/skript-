@@ -1,1 +1,1397 @@
---[[ v1.0.0 https://wearedevs.net/obfuscator ]] return(function(...)local q={"\107\080\049\104\069\100\072\068";"\076\087\114\065\076\083\090\071\069\080\107\061","\047\100\079\102\047\088\114\065\107\083\076\057\113\079\057\106\052\084\061\061","\069\054\074\061","\072\080\098\105\069\100\074\061";"\082\106\114\119\082\106\066\099";"\076\087\066\055\069\087\077\061","\069\113\049\077\072\065\068\115\050\083\090\109\075\079\098\118\117\113\089\061","\076\099\104\081\111\078\072\054\052\077\066\116\082\075\049\119";"\118\083\049\075\076\106\076\097\082\070\115\090\108\088\070\049\077\106\057\061","\107\106\049\099\069\113\049\099\082\078\047\115\082\080\098\068","\078\070\114\101\082\097\061\061","\072\078\090\073\069\100\074\061","\072\068\049\066\069\099\066\116\053\075\076\109\107\066\076\055\077\097\061\061","\107\087\117\115\069\087\097\061";"\069\087\114\115\072\083\117\099\107\080\068\119\072\097\061\061","\076\120\066\078\075\078\068\075\108\054\107\061";"\072\106\066\104\072\053\061\061","\050\113\117\066\077\087\098\080\075\068\072\086\075\077\049\111","\049\087\066\104\107\087\049\073\074\088\047\068\076\087\049\120\076\087\049\079\074\053\061\061";"\072\106\070\115\076\087\117\085","\077\106\089\100\053\106\068\113";"\053\049\107\097\047\113\115\097";"\072\100\117\070\082\089\061\061","\052\083\047\099\107\088\076\068\076\084\061\061","\050\071\117\069\055\086\057\108\108\081\101\108\076\057\088\118\085\111\108\056\099\057\117\056\079\101\076\072\098\122\115\088\071\097\109\104\048\076\055\054\043\057\105\076\087\088\047\118\104\049\076\043\108\104\110\066\100\071\103\049\074\117\083\067\113\080\053\120\082\053\075\108\120\054\052\108\109\054\053\066\080\082\111\114\067\056\075\043\112\055\100\114\082\053\089\119\117\118\112\061";"\076\087\114\119\076\113\070\055\072\078\074\061";"";"\077\077\057\102\069\120\047\106\049\079\070\118\108\075\072\099\050\089\061\061","\107\100\047\073\118\113\102\101";"\107\080\066\119\072\087\114\104";"\107\099\117\087\117\077\047\086\111\075\072\073\082\099\049\106\049\088\110\061";"\047\075\047\101\118\101\049\090\075\087\071\088\075\065\066\049";"\078\070\114\104\072\078\047\115\076\087\066\055\069\087\077\061";"\076\113\102\097\082\113\117\109","\082\101\068\099\072\053\061\061";"\082\106\115\115\107\089\061\061","\111\089\061\061","\069\113\066\099\118\084\061\061";"\069\054\088\061","\072\070\047\120\076\099\115\085\069\078\068\070\077\088\047\118\076\049\108\061";"\052\077\072\090\108\083\066\055\077\077\070\052\072\077\102\104","\069\087\049\119";"\111\055\089\068\072\116\085\071\111\089\061\061";"\078\070\114\071\069\080\047\068\050\084\061\061","\078\070\114\112\072\113\057\061","\072\101\051\120\077\120\117\047\076\065\076\083\049\099\114\080\076\097\061\061"}local function I(I)return q[I-(206469-205400)]end for I,s in ipairs({{-146975-(-146976);700142+-700095};{-1030081+1030082;849034+-849010};{720667+-720642;-892498+892545}})do while s[-287134+287135]<s[582199+-582197]do q[s[-338152+338153]],q[s[-108507+108509]],s[672076-672075],s[-512896+512898]=q[s[-877340-(-877342)]],q[s[981595-981594]],s[706495-706494]+(-204708-(-204709)),s[543073-543071]-(-968144-(-968145))end end do local I=q local s={["\043"]=1007072-1007009;q=-301036+301058;z=-250076+250087;["\057"]=-1016565+1016621,K=-601698+601717;Z=219908-219899,d=-517857-(-517912),n=853111-853051;y=-892187-(-892229),h=917766-917721,G=-44562-(-44603),M=236976+-236956,S=613944+-613937;j=700134-700080,N=-11892+11915;o=-546976-(-546990),l=-654809-(-654821),["\053"]=-856822-(-856838);x=485569+-485534,u=799112-799099;f=-279644-(-279701);Q=235249+-235191,["\051"]=-23143-(-23144),J=580146-580138,R=778885-778861,E=1030799-1030772,U=149982-149942,r=178568-178507;e=-161626-(-161665),H=-356246-(-356271),["\055"]=53367-53333;Y=930997+-930965,i=-107499-(-107546),k=412883+-412855,["\047"]=791808+-791791;b=-980960-(-981009);V=-420581+420596;O=-758883+758919,s=49718-49685,C=946154+-946092;g=-534876-(-534935),["\049"]=212617-212596;W=215096-215090;["\056"]=683511+-683480,T=319025-319025,I=-983165-(-983215);a=-696321-(-696369);["\054"]=1013986-1013983;t=17415+-17413,D=-202112-(-202149);["\050"]=142727-142697;v=257990-257964,X=-981037-(-981041);c=-131109-(-131161);["\048"]=-532176-(-532186);A=700303+-700252;B=-838638-(-838643),["\052"]=-846425-(-846443);L=-178020-(-178049);F=-46605+46658;p=10572+-10528,w=355176-355130,P=358483-358445,m=972296+-972253}local f=string.len local G=string.char local P=type local J=table.insert local S=string.sub local C=table.concat local D=math.floor for q=1010345+-1010344,#I,-647129-(-647130)do local Q=I[q]if P(Q)=="\115\116\114\105\110\103"then local P=f(Q)local k={}local a=-506188+506189 local v=841537-841537 local F=-997365-(-997365)while a<=P do local q=S(Q,a,a)local I=s[q]if I then v=v+I*(271658+-271594)^((396278+-396275)-F)F=F+(-706793-(-706794))if F==60074+-60070 then F=574309-574309 local q=D(v/(270003+-204467))local I=D((v%(-895492-(-961028)))/(514584-514328))local s=v%(741024-740768)J(k,G(q,I,s))v=-152730-(-152730)end elseif q=="\061"then J(k,G(D(v/(-290285+355821))))if a>=P or S(Q,a+(-196210+196211),a+(1020417+-1020416))~="\061"then J(k,G(D((v%(-404208-(-469744)))/(-855273+855529))))end break end a=a+(975501-975500)end I[q]=C(k)end end end return(function(q,f,G,P,J,S,C,o,F,A,v,B,X,T,k,O,Z,a,Q,j,D,s)Q,a,B,k,v,Z,s,A,T,X,D,o,j,F,O={},-143453-(-143453),function(q)Q[q]=Q[q]-(904353-904352)if Q[q]==-1013129+1013129 then Q[q],D[q]=nil,nil end end,function()a=(563948+-563947)+a Q[a]=-1037158-(-1037159)return a end,function(q)for I=-753192+753193,#q,777392+-777391 do Q[q[I]]=(-401682+401683)+Q[q[I]]end if G then local s=G(true)local f=J(s)f[I(-1043396-(-1044487))],f[I(-160805+161910)],f[I(535425-534333)]=q,F,function()return 2708270-(-2512)end return s else return P({},{[I(73288+-72183)]=F;[I(39466-38375)]=q;[I(68807+-67715)]=function()return 610928+2099854 end})end end,function(q,I)local f=v(I)local G=function(G,P,J,S,C)return s(q,{G,P,J,S;C},I,f)end return G end,function(s,G,P,J)local Q,h,u,K,z,x,L,i,H,R,l,m,C,N,d,M,n,c,E,g,Y,t,p,T,e,w,a,U,r,y,F,W,v,V while s do if s<-919467+9466738 then if s<712225+4124685 then if s<625281+1730467 then if s<383510+1161929 then if s<1763854-388836 then if s<-123425+1403835 then if s<222135-(-610732)then U=k()z=-483872-(-484127)i=356933-356833 E=I(-118095-(-119180))D[U]=e C=q[E]E=I(-507787+508864)m=493103-493102 t=I(-832988+834083)s=C[E]E=762519-762518 C=s(E,i)E=k()g=927492-927490 D[E]=C s=D[W]i=777906+-777906 C=s(i,z)i=k()D[i]=C z=125701-125700 s=D[W]p=D[E]C=s(z,p)z=k()D[z]=C C=D[W]p=C(m,g)C=214064+-214063 g=I(-765630+766714)s=p==C C=I(-449942-(-451032))p=k()D[p]=s r=q[t]K=215330-215330 V=D[W]Y=375631-365631 w={V(K,Y)}t=r(f(w))s=I(44177-43107)r=I(-527139+528223)c=t..r m=g..c s=y[s]s=s(y,C,m)m=k()g=I(154214-153106)D[m]=s C=q[g]c=O(16889066-628548,{W;U;x,v;a,M;p;m,E,z,i;H})g={C(c)}s={f(g)}g=s s=D[p]s=s and 503364+4563110 or-537042+9467423 else s=D[P[390218+-390217]]a=G[-116907+116909]Q=G[311165-311164]v=s s=v[a]s=s and 346944+10968500 or 154265+7888816 end else a=D[P[-87049-(-87051)]]s=6495534-(-167456)v=D[P[-877997+878000]]Q=a==v C=Q end else if s<1616500-153500 then s=451380+5136621 else L=x R=I(190703+-189627)u=q[R]R=I(-479928-(-481010))e=u[R]u=e(Q,L)e=D[P[-533102-(-533108)]]R=e()L=nil M=u+R y=M+N M=150176+-149920 h=y%M N=h M=v[a]R=-361149-(-361150)u=N+R e=F[u]y=M..e v[a]=y s=1042618+6558754 end end else if s<2495880-269184 then if s<2341806-448839 then s=-806945+6854997 D[a]=C else C={a}s=q[I(299385-298282)]end else if s<3242888-947410 then a=D[P[994379+-994377]]v=-750174+750319 Q=a*v a=-10689+21925503144354 C=Q+a Q=35184371341134-(-747698)s=C%Q D[P[-79834-(-79836)]]=s s=-675945+9961768 a=139646+-139645 Q=D[P[-1035486+1035489]]C=Q~=a else w=902348+-902346 V=g[w]w=D[m]s=9277284-(-855496)t=V==w c=t end end end else if s<509444+2126293 then if s<-413062+2915792 then if s<647811+1791396 then if s<1685594-(-697173)then s=true a=k()F=k()v=I(-164633-(-165709))D[a]=s Q=G C=q[v]v=I(572768+-571654)W=I(957196+-956088)s=C[v]v=k()D[v]=s s=O(4241893-(-477483),{})D[F]=s s=false T=k()D[T]=s N=q[W]L=Z(15249658-942339,{T})W=N(L)C=W s=W and 15097428-(-1007081)or 920574+10666440 else u=l==n e=u s=13994525-438627 end else r=s w=693824+-693823 V=g[w]w=false t=V==w s=t and 1479868-(-858224)or-347584+10480364 c=t end else if s<2012098-(-557647)then s=O(-411786+10208215,{F})u={s()}s=q[I(-519811+520890)]C={f(u)}else F=nil W=nil t=nil i={}p=I(859238+-858147)y={}M=k()D[M]=y N=nil U=k()g=I(-473346-(-474426))E=I(460726+-459622)s=q[I(-870436-(-871537))]d=o(11207901-(-657891),{M;H,x;T})y=k()L=nil D[y]=d d={}D[U]=d d=q[E]m=D[U]z={[p]=m,[g]=t}E=d(i,z)d=j(370990-(-881058),{U;M,n;H;x;y})n=B(n)v=E M=B(M)H=B(H)h=nil x=B(x)U=B(U)W=I(-436452+437563)y=B(y)T=B(T)l=nil l=-916242+30865525945142 C={}T=I(-503353+504462)x=I(837097-836025)F=q[T]a=d N=q[W]H=a(x,l)L=v[H]a=nil H=I(709395+-708324)H=N[H]v=nil W={H(N,L)}T=F(f(W))F=T()end end else if s<2202228-(-774735)then if s<-665101+3359651 then s=61167+16418880 h=I(-499303+500403)n=q[h]h=I(851943-850862)l=n[h]H=l else Q=I(-169314-(-170420))s=q[Q]v=-822917-(-822917)a=D[P[-483259+483267]]Q=s(a,v)s=-26275+13825860 end else if s<230077+3827198 then l=nil a=B(a)F=B(F)v=B(v)N=nil x=B(x)h=nil n=nil H=B(H)y=nil x=k()n=k()T=B(T)h={}y=-703275-(-703276)W=B(W)a=nil W=I(-397235-(-398320))M=B(M)N=I(-484169-(-485254))L=nil v=nil L=I(252459+-251359)H=I(196527-195451)T=q[N]N=I(-308209+309307)F=T[N]T=k()D[T]=F N=q[W]M=422969-422713 W=I(-199309-(-200386))F=N[W]W=q[L]L=I(155500-154406)N=W[L]L=q[H]H=I(-959318-(-960401))W=L[H]d=M L=-1037983-(-1037983)H=k()D[H]=L l={}L=-237678+237680 M=579391-579390 D[x]=L U=M L={}s=5983744-373088 M=274972-274972 D[n]=l l=-584140+584140 E=U<M M=y-U else C=I(922383+-921277)s=q[C]Q=I(776863+-775750)C=s(Q)s=q[I(-477319-(-478421))]C={}end end end end else if s<6034274-(-462147)then if s<5883630-235546 then if s<5621601-335736 then if s<688488+4566721 then if s<4592784-(-473870)then c=D[a]s=c and 2605695-114229 or 2532100-980577 C=c else s=true s=2424121-(-122380)end else l=-595972-(-595985)a=D[P[-197075-(-197078)]]v=899091-899059 Q=a%v F=D[P[-379185-(-379189)]]H=-418927-(-418929)W=D[P[-190272-(-190274)]]y=D[P[-26707-(-26710)]]h=y-Q y=-148268+148300 n=h/y x=l-n L=H^x N=W/L T=F(N)F=-580883+4295548179 v=T%F L=-543929-(-543930)H=98003+-97747 T=-920059+920061 F=T^Q a=v/F F=D[P[49662-49658]]W=a%L s=13587575-449191 L=4295036044-68748 N=W*L T=F(N)F=D[P[420209-420205]]l=-626053+626309 N=F(a)W=935959-870423 v=T+N T=-749216-(-814752)F=v%T N=v-F T=N/W W=-700898-(-701154)N=F%W L=F-N W=L/H Q=nil F=nil v=nil H=251434-251178 L=T%H x=T-L H=x/l T=nil x={N,W,L,H}D[P[352224+-352223]]=x a=nil N=nil L=nil H=nil W=nil end else if s<-409755+5999433 then s=true s=s and 5603398-(-765656)or 197250+13752439 else M=M+U y=M<=d i=not E y=i and y i=M>=d i=E and i y=i or y i=9557098-(-716498)s=y and i y=-856398+15276136 s=s or y end end else if s<5758589-(-292919)then if s<-391082+6393321 then v=-196389+6855053 C=839463+9866647 a=I(548083+-546968)Q=a^v s=C-Q Q=s C=I(233851-232741)s=C/Q C={s}s=q[I(461609-460497)]else m=B(m)i=B(i)s=9151920-793752 p=B(p)U=B(U)E=B(E)g=nil z=B(z)end else if s<5799882-(-553827)then s=D[P[-270574-(-270581)]]s=s and-277232+3017064 or 14760888-961303 else d=752689+-752683 s=D[W]R=-73476+73477 u=s(R,d)s=I(357807+-356710)d=I(-326287+327384)q[s]=u R=q[d]d=355785+-355783 s=R>d s=s and 15303278-(-951224)or 568580+9440502 end end end else if s<544957+7072431 then if s<7669471-912042 then if s<6007009-(-648933)then if s<5743580-(-882240)then x=I(339023+-337942)H=q[x]s=944804+7051014 C=H else K=-474115-(-474116)D[a]=c w=D[z]V=w+K t=g[V]r=l+t t=-740941+741197 s=r%t V=D[i]l=s s=5498142-(-549910)t=n+V V=-493818+494074 r=t%V n=r end else s=C and 15909210-222551 or 960714+5390224 end else if s<605548+6921675 then d=#h M=-59758+59759 y=F(M,d)s=9426665-(-191772)i=-261476-(-261477)M=N(h,y)d=D[n]E=M-i U=W(E)d[M]=U M=nil y=nil else x=x+l h=not n L=x<=H L=h and L h=x>=H h=n and h L=h or L h=2207070-667610 s=L and h L=9273536-315570 s=s or L end end else if s<8801796-792914 then if s<8404067-748624 then s=3788097-133356 else l=619720+-619655 x=189175-189172 h=I(-147438-(-148546))H=k()D[H]=C s=D[W]C=s(x,l)x=k()s=76839+-76839 R=I(-521598+522693)D[x]=C C=q[h]l=s y=X(16768534-729309,{})s=-610919+610919 n=s h={C(y)}C=242162+-242160 s={f(h)}h=s s=h[C]y=s C=I(972924-971851)s=q[C]M=D[v]u=q[R]R=u(y)u=I(-664360+665450)e=M(R,u)M={e()}C=s(f(M))M=k()D[M]=C C=863230-863229 e=D[x]u=e e=768324+-768323 R=e s=8249394-(-108774)e=-613902-(-613902)d=R<e e=C-R end else if s<47187+8049801 then s={}L=I(256609-255533)D[P[1009704+-1009702]]=s T=35184372805325-716493 C=D[P[328276+-328273]]F=C C=a%T D[P[254336+-254332]]=C W=557663-557408 N=a%W W=-66990-(-66992)T=N+W D[P[919753-919748]]=T W=q[L]L=I(848577+-847488)x=-805808-(-805809)N=W[L]W=N(Q)H=W s=8152510-551138 l=x L=-960518-(-960519)N=I(-30131-(-31205))v[a]=N N=165915-165874 x=-741217+741217 n=l<x x=L-l else U=not d e=e+R C=e<=u C=U and C U=e>=u U=d and U C=U or C U=943320+-194431 s=C and U C=9038464-(-670177)s=s or C end end end end end else if s<-163684+13612739 then if s<8849663-(-1002532)then if s<-488010+9916197 then if s<9641302-611704 then if s<8487624-(-443852)then if s<9264008-603128 then v=986119-986118 a=D[P[-285441-(-285444)]]Q=a~=v s=Q and 5279771-12900 or 10097609-811786 else r=D[a]c=r s=r and-420374+15521847 or 339209+6293164 end else N=nil F=nil W=nil s=-129377+2120093 end else if s<775455+8414930 then s=14695738-(-535904)v=D[P[158784+-158778]]a=v==Q C=a else v=-627834-(-627912)s=583470+8037410 a=D[P[278314-278311]]Q=a*v a=-783904+784161 C=Q%a D[P[-509051+509054]]=C end end else if s<-103046+9743523 then if s<395510+9155573 then s=6110918-522917 else d=53151-53151 M=#h y=M==d s=y and 3274312-656879 or 517659+6947314 end else if s<10734755-960025 then u=D[a]e=u s=u and-787099+3211196 or 951915+12603983 else s=16471522-(-58136)end end end else if s<-90373+11561160 then if s<-558651+11179829 then if s<-855582+11032070 then if s<-551332+10677942 then d=I(533386-532289)s=q[d]d=I(-523702-(-524788))q[d]=s s=217233+9297018 else s=r C=c s=94830+1456693 end else y=M i=y h[y]=i y=nil s=575968+5034688 end else if s<-109841+11011698 then W=not N v=v+T a=v<=F a=W and a W=v>=F W=N and W a=W or a W=16567215-898239 s=a and W a=12785544-(-227639)s=s or a else s=-1014183+3004899 end end else if s<11981519-(-353535)then if s<675097+10914499 then W=I(584808-583723)N=C n=I(191410-190310)C=q[W]W=I(226157-225080)L=I(-416442+417542)s=C[W]W=k()D[W]=s C=q[L]L=I(402950+-401851)s=C[L]l=q[n]x=s H=l L=s s=l and 362149+2275333 or 16024149-(-455898)else Q=D[P[479013+-479012]]C=#Q Q=954838+-954838 s=C==Q s=s and 459183+1792643 or 336110+12802274 end else if s<13783427-768343 then s=D[P[-530584-(-530594)]]a=D[P[-964503-(-964514)]]Q[s]=a s=D[P[-656258+656270]]a={s(Q)}C={f(a)}s=q[I(-212919-(-213994))]else v=I(589620-588520)a=q[v]v=I(-49975+51069)Q=a[v]v=D[P[-724009-(-724010)]]a={Q(v)}s=q[I(551936-550840)]C={f(a)}end end end end else if s<14366425-(-824167)then if s<-248601+14468450 then if s<14634850-831274 then if s<14704977-929823 then if s<13370007-(-228350)then D[a]=e s=D[a]s=s and 964318+6655254 or 725476+4438454 else C={}s=q[I(66577-65499)]end else v=D[P[2214+-2205]]s={}Q=s F=v v=1022962-1022961 a=-595791+595792 T=v v=566426-566426 N=T<v s=10520879-(-320011)v=a-T end else if s<13468865-(-718536)then s=q[I(-611369+612476)]C={}else s=true s=s and-676076+2075973 or-939082+3485583 end end else if s<14681235-(-239944)then if s<596991+13711001 then s=true C={}D[P[-864767+864768]]=s s=q[I(-3655-(-4743))]else s=497224+6967749 M=#h d=912958+-912958 y=M==d end else if s<15577465-445362 then s=815162+5817211 t=602656+-602655 r=g[t]c=r else Q=I(672222+-671136)C=I(-733020-(-734117))s=q[C]C=q[Q]Q=I(294314+-293228)q[Q]=s Q=I(885749-884652)q[Q]=C Q=D[P[36061+-36060]]a=Q()s=-560973+17090631 end end end else if s<-660553+16793848 then if s<711169+15075049 then if s<973198+14706417 then if s<14347118-(-1043275)then Q=nil s=130982+6219956 D[P[760555+-760550]]=C else L=-929921-(-929921)s=D[P[-359133-(-359134)]]a=v H=53304-53049 W=s(L,H)Q[a]=W s=11196863-355973 a=nil end else F=I(60451-59356)C=I(-59074-(-60147))s=q[C]Q=D[P[633218-633214]]H=A(6986858-996575,{})L=I(-780300-(-781408))v=q[F]W=q[L]L={W(H)}W=-381273+381275 N={f(L)}T=N[W]F=v(T)v=I(1048383+-1047293)a=Q(F,v)Q={a()}C=s(f(Q))Q=C a=D[P[-895369+895374]]s=a and-292213+9360747 or 14470671-(-760971)C=a end else if s<-76317+16117271 then v=625983+2110598 C=11399836-702948 a=I(178952-177836)Q=a^v s=C-Q Q=s C=I(928031-926938)s=C/Q C={s}s=q[I(-983091-(-984178))]else N=D[T]C=N s=-180201+11767215 end end else if s<849396+15600771 then if s<17018689-758253 then R=I(888749-887654)s=q[R]U=I(375984-374898)d=q[U]R=s(d)s=I(574389+-573292)q[s]=R s=-717071+10231322 else a=D[P[-808646-(-808647)]]T=711446-711444 F=-164400+164401 v=a(F,T)a=-610530+610531 Q=v==a C=Q s=Q and-582706+7245696 or-424203+1736891 end else if s<364879+16148623 then s=x C=H s=H and 7382137-(-613681)or 431762+6184236 else s=true s=s and 16122155-960186 or 23446+13712219 end end end end end end end s=#J return f(C)end,function(q,I)local f=v(I)local G=function(G)return s(q,{G},I,f)end return G end,function(q,I)local f=v(I)local G=function(...)return s(q,{...},I,f)end return G end,function(q,I)local f=v(I)local G=function(G,P,J,S)return s(q,{G;P,J;S},I,f)end return G end,{},function(q,I)local f=v(I)local G=function()return s(q,{},I,f)end return G end,function(q,I)local f=v(I)local G=function(G,P,J,S,C,D)return s(q,{G;P,J,S,C,D},I,f)end return G end,function(q)local I,s=199055-199054,q[1019929+-1019928]while s do Q[s],I=Q[s]-(817962-817961),I+(-710986-(-710987))if-620117-(-620117)==Q[s]then Q[s],D[s]=nil,nil end s=q[I]end end,function(q,I)local f=v(I)local G=function(G,P)return s(q,{G;P},I,f)end return G end return(T(3053429-680486,{}))(f(C))end)(getfenv and getfenv()or _ENV,unpack or table[I(-632052-(-633133))],newproxy,setmetatable,getmetatable,select,{...})end)(...)
+-- Об'єднане мод-меню (AIM + ESP + Noclip + BunnyHop + Fly + FOV + Sky) | Для KRNL
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+-- Налаштування
+local AimPart = "Head"
+local FieldOfView = 60
+local Holding = false
+local WallCheckEnabled = false
+local fovCircleEnabled = true
+local espEnabled = false
+local espObjects = {}
+local bunnyHopEnabled = false
+local speedHackEnabled = false
+local currentSpeed = 16
+local flyEnabled = false
+local flySpeed = 50
+local fovChangerEnabled = false
+local currentFOV = 70
+local skyIndex = 1 -- 1=дефолт, 2=космос, 3=місяць, 4=сонце
+local charmsEnabled = false
+local infiniteJumpEnabled = false
+
+-- GUI
+local playerGui = LocalPlayer:WaitForChild("PlayerGui")
+local screenGui = Instance.new("ScreenGui", playerGui)
+screenGui.Name = "SmileModMenu"
+screenGui.ResetOnSpawn = false
+
+-- Основне меню
+local frame = Instance.new("Frame", screenGui)
+frame.Size = UDim2.new(0, 180, 0, 230)
+frame.Position = UDim2.new(0.5, -90, 0.3, 0)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = false
+
+local frameCorner = Instance.new("UICorner", frame)
+frameCorner.CornerRadius = UDim.new(0, 12)
+
+-- Бічне меню AIM налаштувань
+local aimSettingsFrame = Instance.new("Frame", screenGui)
+aimSettingsFrame.Size = UDim2.new(0, 200, 0, 280)
+aimSettingsFrame.Position = UDim2.new(0.5, 100, 0.3, 0)
+aimSettingsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+aimSettingsFrame.BorderSizePixel = 0
+aimSettingsFrame.Visible = false
+aimSettingsFrame.Active = true
+
+local aimSettingsCorner = Instance.new("UICorner", aimSettingsFrame)
+aimSettingsCorner.CornerRadius = UDim.new(0, 12)
+
+-- Заголовок AIM меню
+local aimSettingsTitle = Instance.new("TextLabel", aimSettingsFrame)
+aimSettingsTitle.Size = UDim2.new(1, 0, 0, 30)
+aimSettingsTitle.Position = UDim2.new(0, 0, 0, 0)
+aimSettingsTitle.BackgroundTransparency = 1
+aimSettingsTitle.Text = "AIM Settings"
+aimSettingsTitle.Font = Enum.Font.SourceSansBold
+aimSettingsTitle.TextSize = 16
+aimSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- Кнопка закриття AIM меню
+local aimCloseButton = Instance.new("TextButton", aimSettingsFrame)
+aimCloseButton.Size = UDim2.new(0.9, 0, 0, 25)
+aimCloseButton.Position = UDim2.new(0.05, 0, 1, -30)
+aimCloseButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+aimCloseButton.TextColor3 = Color3.new(1,1,1)
+aimCloseButton.Font = Enum.Font.SourceSansBold
+aimCloseButton.TextSize = 14
+aimCloseButton.Text = "Close Menu"
+
+local aimCloseButtonCorner = Instance.new("UICorner", aimCloseButton)
+aimCloseButtonCorner.CornerRadius = UDim.new(0, 6)
+
+-- Кнопка FOV Circle в AIM меню
+local fovCircleButton = Instance.new("TextButton", aimSettingsFrame)
+fovCircleButton.Size = UDim2.new(0.9, 0, 0, 30)
+fovCircleButton.Position = UDim2.new(0.05, 0, 0, 40)
+fovCircleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+fovCircleButton.TextColor3 = Color3.new(1,1,1)
+fovCircleButton.Font = Enum.Font.SourceSansBold
+fovCircleButton.TextSize = 16
+fovCircleButton.Text = "FOV Circle: ON"
+
+local fovCircleButtonCorner = Instance.new("UICorner", fovCircleButton)
+fovCircleButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Кнопка WallCheck в AIM меню
+local wallButton = Instance.new("TextButton", aimSettingsFrame)
+wallButton.Size = UDim2.new(0.9, 0, 0, 30)
+wallButton.Position = UDim2.new(0.05, 0, 0, 80)
+wallButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+wallButton.TextColor3 = Color3.new(1,1,1)
+wallButton.Font = Enum.Font.SourceSansBold
+wallButton.TextSize = 16
+wallButton.Text = "WallCheck: OFF"
+
+local wallButtonCorner = Instance.new("UICorner", wallButton)
+wallButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- FOV налаштування в AIM меню
+local aimFOVInputLabel = Instance.new("TextLabel", aimSettingsFrame)
+aimFOVInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
+aimFOVInputLabel.Position = UDim2.new(0.05, 0, 0, 120)
+aimFOVInputLabel.BackgroundTransparency = 1
+aimFOVInputLabel.Text = "Aim FOV:"
+aimFOVInputLabel.Font = Enum.Font.SourceSansBold
+aimFOVInputLabel.TextSize = 14
+aimFOVInputLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+aimFOVInputLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local aimFOVInput = Instance.new("TextBox", aimSettingsFrame)
+aimFOVInput.Size = UDim2.new(0.45, 0, 0, 25)
+aimFOVInput.Position = UDim2.new(0.5, 0, 0, 120)
+aimFOVInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+aimFOVInput.TextColor3 = Color3.new(1,1,1)
+aimFOVInput.Font = Enum.Font.SourceSans
+aimFOVInput.TextSize = 14
+aimFOVInput.Text = "60"
+aimFOVInput.PlaceholderText = "30-200"
+
+local aimFOVInputCorner = Instance.new("UICorner", aimFOVInput)
+aimFOVInputCorner.CornerRadius = UDim.new(0, 6)
+
+-- Слайдер для Aim FOV
+local aimFOVSliderFrame = Instance.new("Frame", aimSettingsFrame)
+aimFOVSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
+aimFOVSliderFrame.Position = UDim2.new(0.05, 0, 0, 150)
+aimFOVSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+aimFOVSliderFrame.BorderSizePixel = 0
+
+local aimFOVSliderCorner = Instance.new("UICorner", aimFOVSliderFrame)
+aimFOVSliderCorner.CornerRadius = UDim.new(0, 8)
+
+local aimFOVSliderButton = Instance.new("Frame", aimFOVSliderFrame)
+aimFOVSliderButton.Size = UDim2.new(0, 20, 0, 20)
+aimFOVSliderButton.Position = UDim2.new(0.18, -10, 0, -2.5)
+aimFOVSliderButton.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
+aimFOVSliderButton.BorderSizePixel = 0
+
+local aimFOVSliderButtonCorner = Instance.new("UICorner", aimFOVSliderButton)
+aimFOVSliderButtonCorner.CornerRadius = UDim.new(1, 0)
+
+-- Вікно телепорту
+local teleportFrame = Instance.new("Frame", screenGui)
+teleportFrame.Size = UDim2.new(0, 200, 0, 300)
+teleportFrame.Position = UDim2.new(0.5, -100, 0.5, -150)
+teleportFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+teleportFrame.BorderSizePixel = 0
+teleportFrame.Visible = false
+teleportFrame.Active = true
+
+local teleportFrameCorner = Instance.new("UICorner", teleportFrame)
+teleportFrameCorner.CornerRadius = UDim.new(0, 12)
+
+local teleportTitle = Instance.new("TextLabel", teleportFrame)
+teleportTitle.Size = UDim2.new(1, 0, 0, 30)
+teleportTitle.Position = UDim2.new(0, 0, 0, 0)
+teleportTitle.BackgroundTransparency = 1
+teleportTitle.Text = "Teleport to players"
+teleportTitle.Font = Enum.Font.SourceSansBold
+teleportTitle.TextSize = 16
+teleportTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local backButton = Instance.new("TextButton", teleportFrame)
+backButton.Size = UDim2.new(0.9, 0, 0, 25)
+backButton.Position = UDim2.new(0.05, 0, 1, -30)
+backButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+backButton.TextColor3 = Color3.new(1,1,1)
+backButton.Font = Enum.Font.SourceSansBold
+backButton.TextSize = 14
+backButton.Text = "← Back"
+
+local backButtonCorner = Instance.new("UICorner", backButton)
+backButtonCorner.CornerRadius = UDim.new(0, 6)
+
+local teleportScroll = Instance.new("ScrollingFrame", teleportFrame)
+teleportScroll.Size = UDim2.new(1, 0, 1, -65)
+teleportScroll.Position = UDim2.new(0, 0, 0, 35)
+teleportScroll.BackgroundTransparency = 1
+teleportScroll.ScrollBarThickness = 6
+teleportScroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+teleportScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+teleportScroll.ScrollingDirection = Enum.ScrollingDirection.Y
+
+-- ScrollingFrame для основного меню
+local scrollFrame = Instance.new("ScrollingFrame", frame)
+scrollFrame.Size = UDim2.new(1, 0, 1, -60)
+scrollFrame.Position = UDim2.new(0, 0, 0, 30)
+scrollFrame.BackgroundTransparency = 1
+scrollFrame.ScrollBarThickness = 6
+scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 700) -- Збільшено прокручування
+scrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
+
+local titleLabel = Instance.new("TextLabel", frame)
+titleLabel.Size = UDim2.new(1, 0, 0, 30)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Smile Mod Menu"
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextSize = 20
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- Кнопки основного меню
+local teleportButton = Instance.new("TextButton", scrollFrame)
+teleportButton.Size = UDim2.new(0.9, 0, 0, 30)
+teleportButton.Position = UDim2.new(0.05, 0, 0, 10)
+teleportButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+teleportButton.TextColor3 = Color3.new(1,1,1)
+teleportButton.Font = Enum.Font.SourceSansBold
+teleportButton.TextSize = 16
+teleportButton.Text = "Teleport"
+
+local teleportButtonCorner = Instance.new("UICorner", teleportButton)
+teleportButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- ВИПРАВЛЕНІ КНОПКИ AIM: розділені на велику кнопку AIM і маленьку кнопку "+"
+local aimButton = Instance.new("TextButton", scrollFrame)
+aimButton.Size = UDim2.new(0.75, -5, 0, 30) -- Зменшено ширину для великої кнопки
+aimButton.Position = UDim2.new(0.05, 0, 0, 50)
+aimButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+aimButton.TextColor3 = Color3.new(1,1,1)
+aimButton.Font = Enum.Font.SourceSansBold
+aimButton.TextSize = 16
+aimButton.Text = "AIM: OFF"
+
+local aimButtonCorner = Instance.new("UICorner", aimButton)
+aimButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Маленька кнопка "+" поруч з AIM
+local aimSettingsOpenButton = Instance.new("TextButton", scrollFrame)
+aimSettingsOpenButton.Size = UDim2.new(0.15, -5, 0, 30) -- Маленька кнопка
+aimSettingsOpenButton.Position = UDim2.new(0.8, 0, 0, 50) -- Поруч з великою кнопкою
+aimSettingsOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+aimSettingsOpenButton.TextColor3 = Color3.new(1,1,1)
+aimSettingsOpenButton.Font = Enum.Font.SourceSansBold
+aimSettingsOpenButton.TextSize = 18
+aimSettingsOpenButton.Text = "+"
+
+local aimSettingsOpenButtonCorner = Instance.new("UICorner", aimSettingsOpenButton)
+aimSettingsOpenButtonCorner.CornerRadius = UDim.new(0, 8)
+
+local espButton = Instance.new("TextButton", scrollFrame)
+espButton.Size = UDim2.new(0.9, 0, 0, 30)
+espButton.Position = UDim2.new(0.05, 0, 0, 90)
+espButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+espButton.TextColor3 = Color3.new(1,1,1)
+espButton.Font = Enum.Font.SourceSansBold
+espButton.TextSize = 16
+espButton.Text = "ESP: OFF"
+
+local espButtonCorner = Instance.new("UICorner", espButton)
+espButtonCorner.CornerRadius = UDim.new(0, 8)
+
+local charmsButton = Instance.new("TextButton", scrollFrame)
+charmsButton.Size = UDim2.new(0.9, 0, 0, 30)
+charmsButton.Position = UDim2.new(0.05, 0, 0, 130)
+charmsButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+charmsButton.TextColor3 = Color3.new(1,1,1)
+charmsButton.Font = Enum.Font.SourceSansBold
+charmsButton.TextSize = 16
+charmsButton.Text = "Charms: OFF"
+
+local charmsButtonCorner = Instance.new("UICorner", charmsButton)
+charmsButtonCorner.CornerRadius = UDim.new(0, 8)
+
+local infiniteJumpButton = Instance.new("TextButton", scrollFrame)
+infiniteJumpButton.Size = UDim2.new(0.9, 0, 0, 30)
+infiniteJumpButton.Position = UDim2.new(0.05, 0, 0, 170)
+infiniteJumpButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+infiniteJumpButton.TextColor3 = Color3.new(1,1,1)
+infiniteJumpButton.Font = Enum.Font.SourceSansBold
+infiniteJumpButton.TextSize = 16
+infiniteJumpButton.Text = "Infinite Jump: OFF"
+
+local infiniteJumpButtonCorner = Instance.new("UICorner", infiniteJumpButton)
+infiniteJumpButtonCorner.CornerRadius = UDim.new(0, 8)
+
+local noclipButton = Instance.new("TextButton", scrollFrame)
+noclipButton.Size = UDim2.new(0.9, 0, 0, 30)
+noclipButton.Position = UDim2.new(0.05, 0, 0, 210)
+noclipButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+noclipButton.TextColor3 = Color3.new(1,1,1)
+noclipButton.Font = Enum.Font.SourceSansBold
+noclipButton.TextSize = 16
+noclipButton.Text = "Noclip: OFF"
+
+local noclipButtonCorner = Instance.new("UICorner", noclipButton)
+noclipButtonCorner.CornerRadius = UDim.new(0, 8)
+
+local bunnyHopButton = Instance.new("TextButton", scrollFrame)
+bunnyHopButton.Size = UDim2.new(0.9, 0, 0, 30)
+bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 250)
+bunnyHopButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+bunnyHopButton.TextColor3 = Color3.new(1,1,1)
+bunnyHopButton.Font = Enum.Font.SourceSansBold
+bunnyHopButton.TextSize = 16
+bunnyHopButton.Text = "BunnyHop: OFF"
+
+local bunnyHopButtonCorner = Instance.new("UICorner", bunnyHopButton)
+bunnyHopButtonCorner.CornerRadius = UDim.new(0, 8)
+
+local skyButton = Instance.new("TextButton", scrollFrame)
+skyButton.Size = UDim2.new(0.9, 0, 0, 30)
+skyButton.Position = UDim2.new(0.05, 0, 0, 290)
+skyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+skyButton.TextColor3 = Color3.new(1,1,1)
+skyButton.Font = Enum.Font.SourceSansBold
+skyButton.TextSize = 16
+skyButton.Text = "Sky: Default"
+
+local skyButtonCorner = Instance.new("UICorner", skyButton)
+skyButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- FLY секція
+local flyInputLabel = Instance.new("TextLabel", scrollFrame)
+flyInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
+flyInputLabel.Position = UDim2.new(0.05, 0, 0, 330)
+flyInputLabel.BackgroundTransparency = 1
+flyInputLabel.Text = "Fly Speed:"
+flyInputLabel.Font = Enum.Font.SourceSansBold
+flyInputLabel.TextSize = 14
+flyInputLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+flyInputLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local flyInput = Instance.new("TextBox", scrollFrame)
+flyInput.Size = UDim2.new(0.45, 0, 0, 25)
+flyInput.Position = UDim2.new(0.5, 0, 0, 330)
+flyInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+flyInput.TextColor3 = Color3.new(1,1,1)
+flyInput.Font = Enum.Font.SourceSans
+flyInput.TextSize = 14
+flyInput.Text = "50"
+flyInput.PlaceholderText = "10-150"
+
+local flyInputCorner = Instance.new("UICorner", flyInput)
+flyInputCorner.CornerRadius = UDim.new(0, 6)
+
+local flyButton = Instance.new("TextButton", scrollFrame)
+flyButton.Size = UDim2.new(0.9, 0, 0, 30)
+flyButton.Position = UDim2.new(0.05, 0, 0, 360)
+flyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+flyButton.TextColor3 = Color3.new(1,1,1)
+flyButton.Font = Enum.Font.SourceSansBold
+flyButton.TextSize = 16
+flyButton.Text = "Fly: OFF"
+
+local flyButtonCorner = Instance.new("UICorner", flyButton)
+flyButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Speed Hack секція
+local speedInputLabel = Instance.new("TextLabel", scrollFrame)
+speedInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
+speedInputLabel.Position = UDim2.new(0.05, 0, 0, 400)
+speedInputLabel.BackgroundTransparency = 1
+speedInputLabel.Text = "Speed:"
+speedInputLabel.Font = Enum.Font.SourceSansBold
+speedInputLabel.TextSize = 14
+speedInputLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedInputLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local speedInput = Instance.new("TextBox", scrollFrame)
+speedInput.Size = UDim2.new(0.45, 0, 0, 25)
+speedInput.Position = UDim2.new(0.5, 0, 0, 400)
+speedInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+speedInput.TextColor3 = Color3.new(1,1,1)
+speedInput.Font = Enum.Font.SourceSans
+speedInput.TextSize = 14
+speedInput.Text = "16"
+speedInput.PlaceholderText = "16-400"
+
+local speedInputCorner = Instance.new("UICorner", speedInput)
+speedInputCorner.CornerRadius = UDim.new(0, 6)
+
+local sliderFrame = Instance.new("Frame", scrollFrame)
+sliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
+sliderFrame.Position = UDim2.new(0.05, 0, 0, 430)
+sliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+sliderFrame.BorderSizePixel = 0
+
+local sliderCorner = Instance.new("UICorner", sliderFrame)
+sliderCorner.CornerRadius = UDim.new(0, 8)
+
+local sliderButton = Instance.new("Frame", sliderFrame)
+sliderButton.Size = UDim2.new(0, 20, 0, 20)
+sliderButton.Position = UDim2.new(0, -2, 0, -2.5)
+sliderButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+sliderButton.BorderSizePixel = 0
+
+local sliderButtonCorner = Instance.new("UICorner", sliderButton)
+sliderButtonCorner.CornerRadius = UDim.new(1, 0)
+
+local speedButton = Instance.new("TextButton", scrollFrame)
+speedButton.Size = UDim2.new(0.9, 0, 0, 30)
+speedButton.Position = UDim2.new(0.05, 0, 0, 460)
+speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+speedButton.TextColor3 = Color3.new(1,1,1)
+speedButton.Font = Enum.Font.SourceSansBold
+speedButton.TextSize = 16
+speedButton.Text = "Speed: OFF"
+
+local speedButtonCorner = Instance.new("UICorner", speedButton)
+speedButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- FOV Changer секція
+local fovInputLabel = Instance.new("TextLabel", scrollFrame)
+fovInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
+fovInputLabel.Position = UDim2.new(0.05, 0, 0, 500)
+fovInputLabel.BackgroundTransparency = 1
+fovInputLabel.Text = "FOV:"
+fovInputLabel.Font = Enum.Font.SourceSansBold
+fovInputLabel.TextSize = 14
+fovInputLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+fovInputLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local fovInput = Instance.new("TextBox", scrollFrame)
+fovInput.Size = UDim2.new(0.45, 0, 0, 25)
+fovInput.Position = UDim2.new(0.5, 0, 0, 500)
+fovInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+fovInput.TextColor3 = Color3.new(1,1,1)
+fovInput.Font = Enum.Font.SourceSans
+fovInput.TextSize = 14
+fovInput.Text = "70"
+fovInput.PlaceholderText = "30-120"
+
+local fovInputCorner = Instance.new("UICorner", fovInput)
+fovInputCorner.CornerRadius = UDim.new(0, 6)
+
+local fovSliderFrame = Instance.new("Frame", scrollFrame)
+fovSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
+fovSliderFrame.Position = UDim2.new(0.05, 0, 0, 530)
+fovSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+fovSliderFrame.BorderSizePixel = 0
+
+local fovSliderCorner = Instance.new("UICorner", fovSliderFrame)
+fovSliderCorner.CornerRadius = UDim.new(0, 8)
+
+local fovSliderButton = Instance.new("Frame", fovSliderFrame)
+fovSliderButton.Size = UDim2.new(0, 20, 0, 20)
+fovSliderButton.Position = UDim2.new(0.44, -10, 0, -2.5)
+fovSliderButton.BackgroundColor3 = Color3.fromRGB(255, 100, 0)
+fovSliderButton.BorderSizePixel = 0
+
+local fovSliderButtonCorner = Instance.new("UICorner", fovSliderButton)
+fovSliderButtonCorner.CornerRadius = UDim.new(1, 0)
+
+local fovButton = Instance.new("TextButton", scrollFrame)
+fovButton.Size = UDim2.new(0.9, 0, 0, 30)
+fovButton.Position = UDim2.new(0.05, 0, 0, 560)
+fovButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+fovButton.TextColor3 = Color3.new(1,1,1)
+fovButton.Font = Enum.Font.SourceSansBold
+fovButton.TextSize = 16
+fovButton.Text = "FOV: OFF"
+
+local fovButtonCorner = Instance.new("UICorner", fovButton)
+fovButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Кнопка згортання
+local minimizeButton = Instance.new("TextButton", frame)
+minimizeButton.Size = UDim2.new(0.9, 0, 0, 25)
+minimizeButton.Position = UDim2.new(0.05, 0, 1, -30)
+minimizeButton.Text = "Minimize menu"
+minimizeButton.TextColor3 = Color3.new(1, 1, 1)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+minimizeButton.BorderSizePixel = 0
+minimizeButton.ZIndex = 10
+minimizeButton.Font = Enum.Font.SourceSansBold
+minimizeButton.TextSize = 14
+
+local minimizeButtonCorner = Instance.new("UICorner", minimizeButton)
+minimizeButtonCorner.CornerRadius = UDim.new(0, 8)
+
+-- Кнопка розгортання
+local minimizedCircle = Instance.new("TextButton", screenGui)
+minimizedCircle.Size = UDim2.new(0, 30, 0, 30)
+minimizedCircle.Position = UDim2.new(0, 300, 0, 200)
+minimizedCircle.Text = ""
+minimizedCircle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+minimizedCircle.BorderSizePixel = 0
+minimizedCircle.Visible = false
+minimizedCircle.AutoButtonColor = false
+minimizedCircle.ZIndex = 10
+minimizedCircle.AnchorPoint = Vector2.new(0.5, 0.5)
+
+local corner = Instance.new("UICorner", minimizedCircle)
+corner.CornerRadius = UDim.new(1, 0)
+
+-- Змінні для системи
+local flyConnection
+local speedHackConnection
+local fovChangerConnection
+local noclipConnection
+local bunnyHopConnection
+local infiniteJumpConnection
+local bodyVelocity
+local bodyAngularVelocity
+local flyUpPressed = false
+local flyDownPressed = false
+
+-- Змінні для запобігання мікро-кліків
+local lastClickTime = 0
+local clickDelay = 0.1 -- 100мс затримка між кліками
+
+-- Функція для перевірки дубльованих кліків
+local function canClick()
+    local currentTime = tick()
+    if currentTime - lastClickTime < clickDelay then
+        return false
+    end
+    lastClickTime = currentTime
+    return true
+end
+
+-- Анімація кольору заголовка
+local hue = 0
+RunService.RenderStepped:Connect(function(dt)
+	hue = (hue + dt * 0.5) % 1
+	titleLabel.TextColor3 = Color3.fromHSV(hue, 1, 1)
+end)
+
+-- Коло FOV
+local circle = Drawing.new("Circle")
+circle.Color = Color3.fromRGB(0, 255, 0)
+circle.Thickness = 1
+circle.Radius = FieldOfView
+circle.Filled = false
+circle.Visible = true
+
+local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+
+-- Функція телепорту до гравця
+local function teleportToPlayer(targetPlayer)
+	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and 
+	   targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+		LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
+	end
+end
+
+-- Функція оновлення списку гравців в телепорті
+local function updateTeleportList()
+	for _, child in pairs(teleportScroll:GetChildren()) do
+		if child:IsA("TextButton") then
+			child:Destroy()
+		end
+	end
+	
+	local yPos = 5
+	for _, player in pairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer then
+			local playerButton = Instance.new("TextButton", teleportScroll)
+			playerButton.Size = UDim2.new(0.9, 0, 0, 30)
+			playerButton.Position = UDim2.new(0.05, 0, 0, yPos)
+			playerButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+			playerButton.TextColor3 = Color3.new(1,1,1)
+			playerButton.Font = Enum.Font.SourceSans
+			playerButton.TextSize = 14
+			playerButton.Text = player.Name
+			
+			local playerButtonCorner = Instance.new("UICorner", playerButton)
+			playerButtonCorner.CornerRadius = UDim.new(0, 6)
+			
+			playerButton.MouseButton1Click:Connect(function()
+				if canClick() then
+					teleportToPlayer(player)
+				end
+			end)
+			
+			yPos = yPos + 35
+		end
+	end
+	
+	teleportScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
+end
+
+-- Sky Changer функція
+local function changeSky()
+	local sky = Lighting:FindFirstChildOfClass("Sky")
+	
+	if skyIndex == 1 then
+		if not sky then
+			sky = Instance.new("Sky", Lighting)
+		end
+		sky.SkyboxBk = "rbxassetid://159454299"
+		sky.SkyboxDn = "rbxassetid://159454296"
+		sky.SkyboxFt = "rbxassetid://159454293"
+		sky.SkyboxLf = "rbxassetid://159454286"
+		sky.SkyboxRt = "rbxassetid://159454300"
+		sky.SkyboxUp = "rbxassetid://159454288"
+		skyButton.Text = "Sky: Space"
+		skyIndex = 2
+	elseif skyIndex == 2 then
+		if sky then
+			sky:Destroy()
+		end
+		skyButton.Text = "Sky: Default"
+		skyIndex = 1
+	end
+end
+
+-- Перевірка на видимість
+local function IsVisible(part)
+	if not WallCheckEnabled then return true end
+	local rayParams = RaycastParams.new()
+	rayParams.FilterDescendantsInstances = {LocalPlayer.Character}
+	rayParams.FilterType = Enum.RaycastFilterType.Blacklist
+	local direction = (part.Position - Camera.CFrame.Position).Unit * 500
+	local result = workspace:Raycast(Camera.CFrame.Position, direction, rayParams)
+	return not (result and result.Instance and not result.Instance:IsDescendantOf(part.Parent))
+end
+
+-- Найближчий гравець
+local function GetClosestPlayer()
+	local closestPlayer, shortestDistance
+	shortestDistance = FieldOfView
+	for _, v in pairs(Players:GetPlayers()) do
+		if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild(AimPart) then
+			local part = v.Character[AimPart]
+			local vector, onScreen = Camera:WorldToViewportPoint(part.Position)
+			if onScreen and IsVisible(part) then
+				local dist = (Vector2.new(vector.X, vector.Y) - screenCenter).Magnitude
+				if dist < shortestDistance then
+					closestPlayer, shortestDistance = v, dist
+				end
+			end
+		end
+	end
+	return closestPlayer
+end
+
+-- AIM логіка
+RunService.RenderStepped:Connect(function()
+	if Holding then
+		local target = GetClosestPlayer()
+		if target and target.Character and target.Character:FindFirstChild(AimPart) then
+			local camPos = Camera.CFrame.Position
+			local headPos = target.Character[AimPart].Position
+			local lookVector = (headPos - camPos).Unit
+			Camera.CFrame = CFrame.new(camPos, camPos + lookVector)
+		end
+	end
+end)
+
+-- Коло оновлення
+RunService.RenderStepped:Connect(function()
+	local target = GetClosestPlayer()
+	if WallCheckEnabled and target and target.Character and target.Character:FindFirstChild(AimPart) then
+		local part = target.Character[AimPart]
+		circle.Color = IsVisible(part) and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+	else
+		circle.Color = Color3.fromRGB(0, 255, 0)
+	end
+	circle.Position = screenCenter
+	circle.Visible = fovCircleEnabled
+end)
+
+-- ESP логіка
+local function clearESP()
+	for _, esp in pairs(espObjects) do
+		for _, obj in pairs(esp) do
+			if obj and obj.Remove then obj:Remove() end
+		end
+	end
+	espObjects = {}
+end
+
+local function removePlayerESP(player)
+	if espObjects[player] then
+		for _, obj in pairs(espObjects[player]) do
+			if obj and obj.Remove then obj:Remove() end
+		end
+		espObjects[player] = nil
+	end
+end
+
+local function createESP(p)
+	if p == LocalPlayer then return end
+	local box = Drawing.new("Square")
+	box.Thickness = 1
+	box.Color = Color3.fromRGB(0, 255, 0)
+	box.Filled = false
+	box.Transparency = 1
+	box.Visible = false
+
+	local name = Drawing.new("Text")
+	name.Size = 14
+	name.Center = true
+	name.Outline = true
+	name.Color = Color3.fromRGB(0, 255, 255)
+	name.Visible = false
+
+	local health = Drawing.new("Text")
+	health.Size = 13
+	health.Center = true
+	health.Outline = true
+	health.Color = Color3.fromRGB(0, 255, 0)
+	health.Visible = false
+
+	local distance = Drawing.new("Text")
+	distance.Size = 13
+	distance.Center = true
+	distance.Outline = true
+	distance.Color = Color3.fromRGB(255, 255, 0)
+	distance.Visible = false
+
+	local tracer = Drawing.new("Line")
+	tracer.Thickness = 1
+	tracer.Color = Color3.fromRGB(255, 255, 255)
+	tracer.Transparency = 0.8
+	tracer.Visible = false
+
+	espObjects[p] = {Box = box, Name = name, Health = health, Distance = distance, Tracer = tracer}
+end
+
+-- Charms логіка
+local charmsObjects = {}
+
+local function clearCharms()
+	for _, charm in pairs(charmsObjects) do
+		if charm and charm.Destroy then charm:Destroy() end
+	end
+	charmsObjects = {}
+end
+
+local function removePlayerCharms(player)
+	if charmsObjects[player] then
+		if charmsObjects[player].Destroy then charmsObjects[player]:Destroy() end
+		charmsObjects[player] = nil
+	end
+end
+
+local function createCharms(p)
+	if p == LocalPlayer then return end
+	if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+		local highlight = Instance.new("Highlight")
+		highlight.Parent = p.Character
+		highlight.FillColor = Color3.fromRGB(0, 255, 0)
+		highlight.FillTransparency = 0.5
+		highlight.OutlineColor = Color3.fromRGB(0, 255, 0)
+		highlight.OutlineTransparency = 0
+		charmsObjects[p] = highlight
+	end
+end
+
+-- Створюємо ESP для всіх гравців
+for _, p in pairs(game.Players:GetPlayers()) do createESP(p) end
+
+game.Players.PlayerAdded:Connect(createESP)
+game.Players.PlayerRemoving:Connect(removePlayerESP)
+game.Players.PlayerRemoving:Connect(removePlayerCharms)
+
+RunService.RenderStepped:Connect(function()
+	if not espEnabled then 
+		for _, esp in pairs(espObjects) do
+			for _, obj in pairs(esp) do
+				if obj then obj.Visible = false end
+			end
+		end
+		return 
+	end
+	
+	for player, esp in pairs(espObjects) do
+		if not Players:FindFirstChild(player.Name) then
+			removePlayerESP(player)
+		end
+	end
+	
+	for _, p in pairs(Players:GetPlayers()) do
+		if p ~= LocalPlayer then
+			local esp = espObjects[p]
+			if not esp then 
+				createESP(p) 
+				esp = espObjects[p] 
+			end
+			
+			if p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChildOfClass("Humanoid") then
+				local root = p.Character.HumanoidRootPart
+				local hum = p.Character:FindFirstChildOfClass("Humanoid")
+				
+				if hum.Health > 0 then
+					local pos, visible = Camera:WorldToViewportPoint(root.Position)
+					if visible and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+						local dist = (LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude
+						local scale = math.clamp(3000 / dist, 100, 300)
+						local width, height = scale / 2, scale
+
+						esp.Box.Size = Vector2.new(width, height)
+						esp.Box.Position = Vector2.new(pos.X - width / 2, pos.Y - height / 1.5)
+						esp.Box.Visible = true
+
+						esp.Name.Position = Vector2.new(pos.X, pos.Y - height / 1.5 - 15)
+						esp.Name.Text = p.Name
+						esp.Name.Visible = true
+
+						esp.Health.Position = Vector2.new(pos.X, pos.Y - height / 1.5)
+						esp.Health.Text = "HP: " .. math.floor(hum.Health)
+						esp.Health.Visible = true
+
+						esp.Distance.Position = Vector2.new(pos.X, pos.Y + height / 2 + 5)
+						esp.Distance.Text = "Dist: " .. math.floor(dist)
+						esp.Distance.Visible = true
+
+						local screenBottom = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+						esp.Tracer.From = screenBottom
+						esp.Tracer.To = Vector2.new(pos.X, pos.Y)
+						esp.Tracer.Visible = true
+					else
+						for _, v in pairs(esp) do v.Visible = false end
+					end
+				else
+					for _, v in pairs(esp) do v.Visible = false end
+				end
+			else
+				for _, v in pairs(esp) do v.Visible = false end
+			end
+		end
+	end
+end)
+
+-- Charms оновлення
+RunService.RenderStepped:Connect(function()
+	if charmsEnabled then
+		for _, p in pairs(Players:GetPlayers()) do
+			if p ~= LocalPlayer and not charmsObjects[p] then
+				createCharms(p)
+			end
+		end
+	else
+		clearCharms()
+	end
+end)
+
+-- Функції оновлення
+local function updateSpeed()
+	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+		LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = currentSpeed
+	end
+end
+
+local function updateSlider()
+	local percentage = (currentSpeed - 16) / (400 - 16)
+	sliderButton.Position = UDim2.new(percentage, -10, 0, -2.5)
+	speedInput.Text = tostring(currentSpeed)
+end
+
+local function updateFOV()
+	if LocalPlayer.Character and Camera then
+		Camera.FieldOfView = currentFOV
+	end
+end
+
+local function updateFOVSlider()
+	local percentage = (currentFOV - 30) / (120 - 30)
+	fovSliderButton.Position = UDim2.new(percentage, -10, 0, -2.5)
+	fovInput.Text = tostring(currentFOV)
+end
+
+-- ВИПРАВЛЕНА функція оновлення AIM FOV слайдера
+local function updateAimFOVSlider()
+	local percentage = (FieldOfView - 30) / (200 - 30)
+	aimFOVSliderButton.Position = UDim2.new(percentage, -10, 0, -2.5)
+	aimFOVInput.Text = tostring(FieldOfView)
+	circle.Radius = FieldOfView
+end
+
+-- Fly функції
+local function startFly()
+	local char = LocalPlayer.Character
+	if char and char:FindFirstChild("HumanoidRootPart") then
+		local root = char.HumanoidRootPart
+		
+		bodyVelocity = Instance.new("BodyVelocity")
+		bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+		bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+		bodyVelocity.Parent = root
+		
+		bodyAngularVelocity = Instance.new("BodyAngularVelocity")
+		bodyAngularVelocity.MaxTorque = Vector3.new(4000, 4000, 4000)
+		bodyAngularVelocity.AngularVelocity = Vector3.new(0, 0, 0)
+		bodyAngularVelocity.Parent = root
+		
+		flyConnection = RunService.RenderStepped:Connect(function()
+			local char = LocalPlayer.Character
+			if char and char:FindFirstChild("HumanoidRootPart") and bodyVelocity then
+				local root = char.HumanoidRootPart
+				local camera = workspace.CurrentCamera
+				local moveVector = Vector3.new(0, 0, 0)
+				
+				if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+					moveVector = moveVector + camera.CFrame.LookVector
+				end
+				if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+					moveVector = moveVector - camera.CFrame.LookVector
+				end
+				if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+					moveVector = moveVector - camera.CFrame.RightVector
+				end
+				if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+					moveVector = moveVector + camera.CFrame.RightVector
+				end
+				if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+					moveVector = moveVector + Vector3.new(0, 1, 0)
+				end
+				if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then
+					moveVector = moveVector + Vector3.new(0, -1, 0)
+				end
+				
+				if moveVector.Magnitude == 0 and UserInputService.TouchEnabled then
+					moveVector = camera.CFrame.LookVector
+				end
+				
+				if moveVector.Magnitude > 0 then
+					bodyVelocity.Velocity = moveVector.Unit * flySpeed
+				else
+					bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+				end
+			end
+		end)
+	end
+end
+
+local function stopFly()
+	if flyConnection then
+		flyConnection:Disconnect()
+		flyConnection = nil
+	end
+	if bodyVelocity then
+		bodyVelocity:Destroy()
+		bodyVelocity = nil
+	end
+	if bodyAngularVelocity then
+		bodyAngularVelocity:Destroy()
+		bodyAngularVelocity = nil
+	end
+end
+
+-- ВИПРАВЛЕНА логіка слайдерів з захистом від переміщення меню
+local function handleSliderInput()
+	local mouse = UserInputService:GetMouseLocation()
+	local sliderPos = sliderFrame.AbsolutePosition
+	local sliderSize = sliderFrame.AbsoluteSize
+	
+	if mouse.X >= sliderPos.X and mouse.X <= sliderPos.X + sliderSize.X then
+		local relativeX = math.clamp(mouse.X - sliderPos.X, 0, sliderSize.X)
+		local percentage = relativeX / sliderSize.X
+		currentSpeed = math.floor(16 + (400 - 16) * percentage + 0.5)
+		currentSpeed = math.clamp(currentSpeed, 16, 400)
+		updateSlider()
+		if speedHackEnabled then updateSpeed() end
+	end
+end
+
+local function handleFOVSliderInput()
+	local mouse = UserInputService:GetMouseLocation()
+	local sliderPos = fovSliderFrame.AbsolutePosition
+	local sliderSize = fovSliderFrame.AbsoluteSize
+	
+	if mouse.X >= sliderPos.X and mouse.X <= sliderPos.X + sliderSize.X then
+		local relativeX = math.clamp(mouse.X - sliderPos.X, 0, sliderSize.X)
+		local percentage = relativeX / sliderSize.X
+		currentFOV = math.floor(30 + (120 - 30) * percentage + 0.5)
+		currentFOV = math.clamp(currentFOV, 30, 120)
+		updateFOVSlider()
+		if fovChangerEnabled then updateFOV() end
+	end
+end
+
+-- ВИПРАВЛЕНА функція для AIM FOV слайдера
+local function handleAimFOVSliderInput()
+	local mouse = UserInputService:GetMouseLocation()
+	local sliderPos = aimFOVSliderFrame.AbsolutePosition
+	local sliderSize = aimFOVSliderFrame.AbsoluteSize
+	
+	if mouse.X >= sliderPos.X and mouse.X <= sliderPos.X + sliderSize.X then
+		local relativeX = math.clamp(mouse.X - sliderPos.X, 0, sliderSize.X)
+		local percentage = relativeX / sliderSize.X
+		FieldOfView = math.floor(30 + (200 - 30) * percentage + 0.5)
+		FieldOfView = math.clamp(FieldOfView, 30, 200)
+		updateAimFOVSlider()
+	end
+end
+
+-- ВИПРАВЛЕНА обробка слайдерів з запобіганням переміщення меню
+local draggingSlider = false
+local draggingFOVSlider = false
+local draggingAimFOVSlider = false
+
+-- Обробка слайдерів з блокуванням драгу
+local function preventDragWhileSliding(inputObject, sliderFrame)
+	-- Зупиняємо поширення події, щоб меню не переміщалось
+	inputObject.Changed:Connect(function()
+		if inputObject.UserInputState == Enum.UserInputState.End then
+			-- Дозволяємо знову перетягувати після відпускання
+		end
+	end)
+end
+
+sliderFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingSlider = true
+		handleSliderInput()
+		-- Блокуємо драг меню
+		preventDragWhileSliding(input, sliderFrame)
+	end
+end)
+
+fovSliderFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingFOVSlider = true
+		handleFOVSliderInput()
+		preventDragWhileSliding(input, fovSliderFrame)
+	end
+end)
+
+-- ВИПРАВЛЕНА обробка AIM FOV слайдера
+aimFOVSliderFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingAimFOVSlider = true
+		handleAimFOVSliderInput()
+		preventDragWhileSliding(input, aimFOVSliderFrame)
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingSlider = false
+		draggingFOVSlider = false
+		draggingAimFOVSlider = false
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if draggingSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		handleSliderInput()
+	elseif draggingFOVSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		handleFOVSliderInput()
+	elseif draggingAimFOVSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		handleAimFOVSliderInput()
+	end
+end)
+
+-- Обробка текстових полів
+speedInput.FocusLost:Connect(function()
+	local inputSpeed = tonumber(speedInput.Text)
+	if inputSpeed and inputSpeed >= 16 and inputSpeed <= 400 then
+		currentSpeed = inputSpeed
+		updateSlider()
+		if speedHackEnabled then updateSpeed() end
+	else
+		speedInput.Text = tostring(currentSpeed)
+	end
+end)
+
+flyInput.FocusLost:Connect(function()
+	local inputSpeed = tonumber(flyInput.Text)
+	if inputSpeed and inputSpeed >= 10 and inputSpeed <= 150 then
+		flySpeed = inputSpeed
+	else
+		flyInput.Text = tostring(flySpeed)
+	end
+end)
+
+fovInput.FocusLost:Connect(function()
+	local inputFOV = tonumber(fovInput.Text)
+	if inputFOV and inputFOV >= 30 and inputFOV <= 120 then
+		currentFOV = inputFOV
+		updateFOVSlider()
+		if fovChangerEnabled then updateFOV() end
+	else
+		fovInput.Text = tostring(currentFOV)
+	end
+end)
+
+aimFOVInput.FocusLost:Connect(function()
+	local inputFOV = tonumber(aimFOVInput.Text)
+	if inputFOV and inputFOV >= 30 and inputFOV <= 200 then
+		FieldOfView = inputFOV
+		updateAimFOVSlider()
+	else
+		aimFOVInput.Text = tostring(FieldOfView)
+	end
+end)
+
+-- Кнопки обробка з захистом від мікро-кліків
+teleportButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		frame.Visible = false
+		aimSettingsFrame.Visible = false
+		teleportFrame.Visible = true
+		updateTeleportList()
+	end
+end)
+
+backButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		teleportFrame.Visible = false
+		frame.Visible = true
+	end
+end)
+
+aimSettingsOpenButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		aimSettingsFrame.Visible = not aimSettingsFrame.Visible
+	end
+end)
+
+aimCloseButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		aimSettingsFrame.Visible = false
+	end
+end)
+
+aimButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		Holding = not Holding
+		aimButton.Text = Holding and "AIM: ON" or "AIM: OFF"
+	end
+end)
+
+fovCircleButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		fovCircleEnabled = not fovCircleEnabled
+		fovCircleButton.Text = fovCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
+	end
+end)
+
+wallButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		WallCheckEnabled = not WallCheckEnabled
+		wallButton.Text = WallCheckEnabled and "WallCheck: ON" or "WallCheck: OFF"
+	end
+end)
+
+espButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		espEnabled = not espEnabled
+		espButton.Text = espEnabled and "ESP: ON" or "ESP: OFF"
+		if not espEnabled then clearESP() end
+	end
+end)
+
+-- ВИПРАВЛЕНА кнопка Charms
+charmsButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		charmsEnabled = not charmsEnabled
+		charmsButton.Text = charmsEnabled and "Charms: ON" or "Charms: OFF"
+		if not charmsEnabled then 
+			clearCharms() 
+		end
+	end
+end)
+
+infiniteJumpButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		infiniteJumpEnabled = not infiniteJumpEnabled
+		infiniteJumpButton.Text = infiniteJumpEnabled and "Infinite Jump: ON" or "Infinite Jump: OFF"
+
+		if infiniteJumpEnabled then
+			infiniteJumpConnection = UserInputService.JumpRequest:Connect(function()
+				if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+					LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+				end
+			end)
+		else
+			if infiniteJumpConnection then
+				infiniteJumpConnection:Disconnect()
+				infiniteJumpConnection = nil
+			end
+		end
+	end
+end)
+
+noclipButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		local noclipEnabled = not (noclipConnection ~= nil)
+		noclipButton.Text = noclipEnabled and "Noclip: ON" or "Noclip: OFF"
+
+		if noclipEnabled then
+			noclipConnection = RunService.Stepped:Connect(function()
+				if LocalPlayer.Character then
+					for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+						if part:IsA("BasePart") then
+							part.CanCollide = false
+						end
+					end
+				end
+			end)
+		else
+			if noclipConnection then
+				noclipConnection:Disconnect()
+				noclipConnection = nil
+			end
+			if LocalPlayer.Character then
+				for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+					if part:IsA("BasePart") then
+						part.CanCollide = true
+					end
+				end
+			end
+		end
+	end
+end)
+
+bunnyHopButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		bunnyHopEnabled = not bunnyHopEnabled
+		bunnyHopButton.Text = bunnyHopEnabled and "BunnyHop: ON" or "BunnyHop: OFF"
+
+		if bunnyHopEnabled then
+			bunnyHopConnection = RunService.RenderStepped:Connect(function()
+				local char = LocalPlayer.Character
+				if char and char:FindFirstChildOfClass("Humanoid") then
+					local hum = char:FindFirstChildOfClass("Humanoid")
+					hum.WalkSpeed = 100
+					hum.JumpPower = 35
+					if hum.FloorMaterial ~= Enum.Material.Air then
+						hum:ChangeState("Jumping")
+					end
+				end
+			end)
+		else
+			if bunnyHopConnection then
+				bunnyHopConnection:Disconnect()
+				bunnyHopConnection = nil
+			end
+			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+				LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = speedHackEnabled and currentSpeed or 16
+				LocalPlayer.Character:FindFirstChildOfClass("Humanoid").JumpPower = 50
+			end
+		end
+	end
+end)
+
+skyButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		changeSky()
+	end
+end)
+
+flyButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		flyEnabled = not flyEnabled
+		flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
+
+		if flyEnabled then
+			startFly()
+		else
+			stopFly()
+		end
+	end
+end)
+
+speedButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		speedHackEnabled = not speedHackEnabled
+		speedButton.Text = speedHackEnabled and "Speed: ON" or "Speed: OFF"
+
+		if speedHackEnabled then
+			speedHackConnection = RunService.RenderStepped:Connect(function()
+				updateSpeed()
+			end)
+		else
+			if speedHackConnection then
+				speedHackConnection:Disconnect()
+				speedHackConnection = nil
+			end
+			if not bunnyHopEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+				LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+			end
+		end
+	end
+end)
+
+fovButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		fovChangerEnabled = not fovChangerEnabled
+		fovButton.Text = fovChangerEnabled and "FOV: ON" or "FOV: OFF"
+
+		if fovChangerEnabled then
+			fovChangerConnection = RunService.RenderStepped:Connect(function()
+				updateFOV()
+			end)
+		else
+			if fovChangerConnection then
+				fovChangerConnection:Disconnect()
+				fovChangerConnection = nil
+			end
+			if Camera then
+				Camera.FieldOfView = 70
+			end
+		end
+	end
+end)
+
+-- Ініціалізація
+updateSlider()
+updateFOVSlider()
+updateAimFOVSlider()
+
+-- Анімація кружка
+task.spawn(function()
+	while true do
+		if minimizedCircle.Visible then
+			local t = tick()
+			local r = 0.5 + 0.5 * math.sin(t)
+			local g = 0.5 + 0.5 * math.sin(t + 2)
+			local b = 0.5 + 0.5 * math.sin(t + 4)
+			minimizedCircle.BackgroundColor3 = Color3.new(r, g, b)
+		end
+		task.wait(0.05)
+	end
+end)
+
+-- Згортання/розгортання
+minimizeButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		frame.Visible = false
+		teleportFrame.Visible = false
+		aimSettingsFrame.Visible = false
+		minimizedCircle.Visible = true
+	end
+end)
+
+minimizedCircle.MouseButton1Click:Connect(function()
+	if canClick() then
+		frame.Visible = true
+		minimizedCircle.Visible = false
+	end
+end)
+
+-- ВИПРАВЛЕНА драг функція (тільки для заголовка, щоб уникнути конфліктів зі слайдерами)
+local function makeDraggable(frame, dragHandle)
+	local dragging = false
+	local dragStart = nil
+	local startPos = nil
+	local dragConnection = nil
+
+	local function endDragging()
+		dragging = false
+		if dragConnection then
+			dragConnection:Disconnect()
+			dragConnection = nil
+		end
+	end
+
+	-- Використовуємо тільки заголовок для драгу
+	local handle = dragHandle or frame
+	handle.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			-- Перевіряємо, чи не клікнули по слайдеру
+			if not draggingSlider and not draggingFOVSlider and not draggingAimFOVSlider then
+				dragging = true
+				dragStart = input.Position
+				startPos = frame.Position
+				
+				dragConnection = input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						endDragging()
+					end
+				end)
+			end
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+		if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+			local delta = input.Position - dragStart
+			frame.Position = UDim2.new(
+				startPos.X.Scale,
+				startPos.X.Offset + delta.X,
+				startPos.Y.Scale,
+				startPos.Y.Offset + delta.Y
+			)
+		end
+	end)
+	
+	UserInputService.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			endDragging()
+		end
+	end)
+end
+
+-- Робимо перетягування тільки через заголовки
+makeDraggable(frame, titleLabel)
+makeDraggable(teleportFrame, teleportTitle)
+makeDraggable(minimizedCircle)
+makeDraggable(aimSettingsFrame, aimSettingsTitle)
