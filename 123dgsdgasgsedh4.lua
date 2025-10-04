@@ -1,4 +1,5 @@
--- Об'єднане мод-меню (AIM + ESP + Noclip + BunnyHop + Fly + FOV + Sky) | Для KRNL
+-- Об'єднане мод-меню (AIM + ESP + Noclip + BunnyHop + Fly + FOV + Sky + Chaos) | Для KRNL
+-- Додано: Team Check для AIM, ESP Team Check, Chaos Mode, Fly до 450, автооновлення Charms для нових гравців
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -23,9 +24,35 @@ local flyEnabled = false
 local flySpeed = 50
 local fovChangerEnabled = false
 local currentFOV = 70
-local skyIndex = 1 -- 1=дефолт, 2=космос, 3=місяць, 4=сонце
+local skyIndex = 1
 local charmsEnabled = false
 local infiniteJumpEnabled = false
+local teamCheckEnabled = false
+local espTeamCheckEnabled = false
+local chaosEnabled = false
+local originalSkySettings = {}
+local originalLightingSettings = {}
+local chaosConnection = nil
+
+-- Функція для визначення команди гравця (універсальна для різних ігор)
+local function getPlayerTeam(player)
+	if player.Team then return player.Team end
+	if player.TeamColor then return player.TeamColor end
+	if player.Character then
+		local teamValue = player.Character:FindFirstChild("Team") or player.Character:FindFirstChild("TeamValue")
+		if teamValue then return teamValue.Value end
+	end
+	if player.Neutral ~= nil then return player.Neutral end
+	return nil
+end
+
+local function isSameTeam(player1, player2)
+	if not player1 or not player2 then return false end
+	local team1 = getPlayerTeam(player1)
+	local team2 = getPlayerTeam(player2)
+	if team1 and team2 then return team1 == team2 end
+	return false
+end
 
 -- GUI
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -47,7 +74,7 @@ frameCorner.CornerRadius = UDim.new(0, 12)
 
 -- Бічне меню AIM налаштувань
 local aimSettingsFrame = Instance.new("Frame", screenGui)
-aimSettingsFrame.Size = UDim2.new(0, 200, 0, 280)
+aimSettingsFrame.Size = UDim2.new(0, 200, 0, 340)
 aimSettingsFrame.Position = UDim2.new(0.5, 100, 0.3, 0)
 aimSettingsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 aimSettingsFrame.BorderSizePixel = 0
@@ -106,10 +133,23 @@ wallButton.Text = "WallCheck: OFF"
 local wallButtonCorner = Instance.new("UICorner", wallButton)
 wallButtonCorner.CornerRadius = UDim.new(0, 8)
 
+-- Кнопка Team Check в AIM меню
+local teamCheckButton = Instance.new("TextButton", aimSettingsFrame)
+teamCheckButton.Size = UDim2.new(0.9, 0, 0, 30)
+teamCheckButton.Position = UDim2.new(0.05, 0, 0, 120)
+teamCheckButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+teamCheckButton.TextColor3 = Color3.new(1,1,1)
+teamCheckButton.Font = Enum.Font.SourceSansBold
+teamCheckButton.TextSize = 16
+teamCheckButton.Text = "Team Check: OFF"
+
+local teamCheckButtonCorner = Instance.new("UICorner", teamCheckButton)
+teamCheckButtonCorner.CornerRadius = UDim.new(0, 8)
+
 -- FOV налаштування в AIM меню
 local aimFOVInputLabel = Instance.new("TextLabel", aimSettingsFrame)
 aimFOVInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-aimFOVInputLabel.Position = UDim2.new(0.05, 0, 0, 120)
+aimFOVInputLabel.Position = UDim2.new(0.05, 0, 0, 160)
 aimFOVInputLabel.BackgroundTransparency = 1
 aimFOVInputLabel.Text = "Aim FOV:"
 aimFOVInputLabel.Font = Enum.Font.SourceSansBold
@@ -119,7 +159,7 @@ aimFOVInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local aimFOVInput = Instance.new("TextBox", aimSettingsFrame)
 aimFOVInput.Size = UDim2.new(0.45, 0, 0, 25)
-aimFOVInput.Position = UDim2.new(0.5, 0, 0, 120)
+aimFOVInput.Position = UDim2.new(0.5, 0, 0, 160)
 aimFOVInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 aimFOVInput.TextColor3 = Color3.new(1,1,1)
 aimFOVInput.Font = Enum.Font.SourceSans
@@ -133,7 +173,7 @@ aimFOVInputCorner.CornerRadius = UDim.new(0, 6)
 -- Слайдер для Aim FOV
 local aimFOVSliderFrame = Instance.new("Frame", aimSettingsFrame)
 aimFOVSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
-aimFOVSliderFrame.Position = UDim2.new(0.05, 0, 0, 150)
+aimFOVSliderFrame.Position = UDim2.new(0.05, 0, 0, 190)
 aimFOVSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 aimFOVSliderFrame.BorderSizePixel = 0
 
@@ -198,7 +238,7 @@ scrollFrame.Position = UDim2.new(0, 0, 0, 30)
 scrollFrame.BackgroundTransparency = 1
 scrollFrame.ScrollBarThickness = 6
 scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
-scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 700) -- Збільшено прокручування
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 750)
 scrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
 
 local titleLabel = Instance.new("TextLabel", frame)
@@ -210,20 +250,7 @@ titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- Кнопка AIM Settings (права сторона)
-local aimSettingsOpenButton = Instance.new("TextButton", frame)
-aimSettingsOpenButton.Size = UDim2.new(0, 25, 0, 25)
-aimSettingsOpenButton.Position = UDim2.new(1, -30, 0, 5)
-aimSettingsOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-aimSettingsOpenButton.TextColor3 = Color3.new(1,1,1)
-aimSettingsOpenButton.Font = Enum.Font.SourceSansBold
-aimSettingsOpenButton.TextSize = 16
-aimSettingsOpenButton.Text = "+"
-
-local aimSettingsOpenButtonCorner = Instance.new("UICorner", aimSettingsOpenButton)
-aimSettingsOpenButtonCorner.CornerRadius = UDim.new(1, 0)
-
--- Кнопки основного меню (БЕЗ FOV Circle та WallCheck - вони перенесені в AIM меню)
+-- Кнопки основного меню
 local teleportButton = Instance.new("TextButton", scrollFrame)
 teleportButton.Size = UDim2.new(0.9, 0, 0, 30)
 teleportButton.Position = UDim2.new(0.05, 0, 0, 10)
@@ -237,7 +264,7 @@ local teleportButtonCorner = Instance.new("UICorner", teleportButton)
 teleportButtonCorner.CornerRadius = UDim.new(0, 8)
 
 local aimButton = Instance.new("TextButton", scrollFrame)
-aimButton.Size = UDim2.new(0.9, 0, 0, 30)
+aimButton.Size = UDim2.new(0.75, -5, 0, 30)
 aimButton.Position = UDim2.new(0.05, 0, 0, 50)
 aimButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 aimButton.TextColor3 = Color3.new(1,1,1)
@@ -247,6 +274,18 @@ aimButton.Text = "AIM: OFF"
 
 local aimButtonCorner = Instance.new("UICorner", aimButton)
 aimButtonCorner.CornerRadius = UDim.new(0, 8)
+
+local aimSettingsOpenButton = Instance.new("TextButton", scrollFrame)
+aimSettingsOpenButton.Size = UDim2.new(0.15, -5, 0, 30)
+aimSettingsOpenButton.Position = UDim2.new(0.8, 0, 0, 50)
+aimSettingsOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+aimSettingsOpenButton.TextColor3 = Color3.new(1,1,1)
+aimSettingsOpenButton.Font = Enum.Font.SourceSansBold
+aimSettingsOpenButton.TextSize = 18
+aimSettingsOpenButton.Text = "+"
+
+local aimSettingsOpenButtonCorner = Instance.new("UICorner", aimSettingsOpenButton)
+aimSettingsOpenButtonCorner.CornerRadius = UDim.new(0, 8)
 
 local espButton = Instance.new("TextButton", scrollFrame)
 espButton.Size = UDim2.new(0.9, 0, 0, 30)
@@ -260,9 +299,22 @@ espButton.Text = "ESP: OFF"
 local espButtonCorner = Instance.new("UICorner", espButton)
 espButtonCorner.CornerRadius = UDim.new(0, 8)
 
+-- Кнопка ESP Team Check
+local espTeamButton = Instance.new("TextButton", scrollFrame)
+espTeamButton.Size = UDim2.new(0.9, 0, 0, 30)
+espTeamButton.Position = UDim2.new(0.05, 0, 0, 130)
+espTeamButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+espTeamButton.TextColor3 = Color3.new(1,1,1)
+espTeamButton.Font = Enum.Font.SourceSansBold
+espTeamButton.TextSize = 16
+espTeamButton.Text = "ESP Team: OFF"
+
+local espTeamButtonCorner = Instance.new("UICorner", espTeamButton)
+espTeamButtonCorner.CornerRadius = UDim.new(0, 8)
+
 local charmsButton = Instance.new("TextButton", scrollFrame)
 charmsButton.Size = UDim2.new(0.9, 0, 0, 30)
-charmsButton.Position = UDim2.new(0.05, 0, 0, 130)
+charmsButton.Position = UDim2.new(0.05, 0, 0, 170)
 charmsButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 charmsButton.TextColor3 = Color3.new(1,1,1)
 charmsButton.Font = Enum.Font.SourceSansBold
@@ -274,7 +326,7 @@ charmsButtonCorner.CornerRadius = UDim.new(0, 8)
 
 local infiniteJumpButton = Instance.new("TextButton", scrollFrame)
 infiniteJumpButton.Size = UDim2.new(0.9, 0, 0, 30)
-infiniteJumpButton.Position = UDim2.new(0.05, 0, 0, 170)
+infiniteJumpButton.Position = UDim2.new(0.05, 0, 0, 210)
 infiniteJumpButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 infiniteJumpButton.TextColor3 = Color3.new(1,1,1)
 infiniteJumpButton.Font = Enum.Font.SourceSansBold
@@ -286,7 +338,7 @@ infiniteJumpButtonCorner.CornerRadius = UDim.new(0, 8)
 
 local noclipButton = Instance.new("TextButton", scrollFrame)
 noclipButton.Size = UDim2.new(0.9, 0, 0, 30)
-noclipButton.Position = UDim2.new(0.05, 0, 0, 210)
+noclipButton.Position = UDim2.new(0.05, 0, 0, 250)
 noclipButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 noclipButton.TextColor3 = Color3.new(1,1,1)
 noclipButton.Font = Enum.Font.SourceSansBold
@@ -298,7 +350,7 @@ noclipButtonCorner.CornerRadius = UDim.new(0, 8)
 
 local bunnyHopButton = Instance.new("TextButton", scrollFrame)
 bunnyHopButton.Size = UDim2.new(0.9, 0, 0, 30)
-bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 250)
+bunnyHopButton.Position = UDim2.new(0.05, 0, 0, 290)
 bunnyHopButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bunnyHopButton.TextColor3 = Color3.new(1,1,1)
 bunnyHopButton.Font = Enum.Font.SourceSansBold
@@ -310,7 +362,7 @@ bunnyHopButtonCorner.CornerRadius = UDim.new(0, 8)
 
 local skyButton = Instance.new("TextButton", scrollFrame)
 skyButton.Size = UDim2.new(0.9, 0, 0, 30)
-skyButton.Position = UDim2.new(0.05, 0, 0, 290)
+skyButton.Position = UDim2.new(0.05, 0, 0, 330)
 skyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 skyButton.TextColor3 = Color3.new(1,1,1)
 skyButton.Font = Enum.Font.SourceSansBold
@@ -320,10 +372,23 @@ skyButton.Text = "Sky: Default"
 local skyButtonCorner = Instance.new("UICorner", skyButton)
 skyButtonCorner.CornerRadius = UDim.new(0, 8)
 
+-- Кнопка Chaos
+local chaosButton = Instance.new("TextButton", scrollFrame)
+chaosButton.Size = UDim2.new(0.9, 0, 0, 30)
+chaosButton.Position = UDim2.new(0.05, 0, 0, 370)
+chaosButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+chaosButton.TextColor3 = Color3.new(1,1,1)
+chaosButton.Font = Enum.Font.SourceSansBold
+chaosButton.TextSize = 16
+chaosButton.Text = "Chaos: OFF"
+
+local chaosButtonCorner = Instance.new("UICorner", chaosButton)
+chaosButtonCorner.CornerRadius = UDim.new(0, 8)
+
 -- FLY секція
 local flyInputLabel = Instance.new("TextLabel", scrollFrame)
 flyInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-flyInputLabel.Position = UDim2.new(0.05, 0, 0, 330)
+flyInputLabel.Position = UDim2.new(0.05, 0, 0, 410)
 flyInputLabel.BackgroundTransparency = 1
 flyInputLabel.Text = "Fly Speed:"
 flyInputLabel.Font = Enum.Font.SourceSansBold
@@ -333,20 +398,20 @@ flyInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local flyInput = Instance.new("TextBox", scrollFrame)
 flyInput.Size = UDim2.new(0.45, 0, 0, 25)
-flyInput.Position = UDim2.new(0.5, 0, 0, 330)
+flyInput.Position = UDim2.new(0.5, 0, 0, 410)
 flyInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyInput.TextColor3 = Color3.new(1,1,1)
 flyInput.Font = Enum.Font.SourceSans
 flyInput.TextSize = 14
 flyInput.Text = "50"
-flyInput.PlaceholderText = "10-150"
+flyInput.PlaceholderText = "10-450"
 
 local flyInputCorner = Instance.new("UICorner", flyInput)
 flyInputCorner.CornerRadius = UDim.new(0, 6)
 
 local flyButton = Instance.new("TextButton", scrollFrame)
 flyButton.Size = UDim2.new(0.9, 0, 0, 30)
-flyButton.Position = UDim2.new(0.05, 0, 0, 360)
+flyButton.Position = UDim2.new(0.05, 0, 0, 440)
 flyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 flyButton.TextColor3 = Color3.new(1,1,1)
 flyButton.Font = Enum.Font.SourceSansBold
@@ -359,7 +424,7 @@ flyButtonCorner.CornerRadius = UDim.new(0, 8)
 -- Speed Hack секція
 local speedInputLabel = Instance.new("TextLabel", scrollFrame)
 speedInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-speedInputLabel.Position = UDim2.new(0.05, 0, 0, 400)
+speedInputLabel.Position = UDim2.new(0.05, 0, 0, 480)
 speedInputLabel.BackgroundTransparency = 1
 speedInputLabel.Text = "Speed:"
 speedInputLabel.Font = Enum.Font.SourceSansBold
@@ -369,7 +434,7 @@ speedInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local speedInput = Instance.new("TextBox", scrollFrame)
 speedInput.Size = UDim2.new(0.45, 0, 0, 25)
-speedInput.Position = UDim2.new(0.5, 0, 0, 400)
+speedInput.Position = UDim2.new(0.5, 0, 0, 480)
 speedInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 speedInput.TextColor3 = Color3.new(1,1,1)
 speedInput.Font = Enum.Font.SourceSans
@@ -382,7 +447,7 @@ speedInputCorner.CornerRadius = UDim.new(0, 6)
 
 local sliderFrame = Instance.new("Frame", scrollFrame)
 sliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
-sliderFrame.Position = UDim2.new(0.05, 0, 0, 430)
+sliderFrame.Position = UDim2.new(0.05, 0, 0, 510)
 sliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 sliderFrame.BorderSizePixel = 0
 
@@ -400,7 +465,7 @@ sliderButtonCorner.CornerRadius = UDim.new(1, 0)
 
 local speedButton = Instance.new("TextButton", scrollFrame)
 speedButton.Size = UDim2.new(0.9, 0, 0, 30)
-speedButton.Position = UDim2.new(0.05, 0, 0, 460)
+speedButton.Position = UDim2.new(0.05, 0, 0, 540)
 speedButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 speedButton.TextColor3 = Color3.new(1,1,1)
 speedButton.Font = Enum.Font.SourceSansBold
@@ -413,7 +478,7 @@ speedButtonCorner.CornerRadius = UDim.new(0, 8)
 -- FOV Changer секція
 local fovInputLabel = Instance.new("TextLabel", scrollFrame)
 fovInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-fovInputLabel.Position = UDim2.new(0.05, 0, 0, 500)
+fovInputLabel.Position = UDim2.new(0.05, 0, 0, 580)
 fovInputLabel.BackgroundTransparency = 1
 fovInputLabel.Text = "FOV:"
 fovInputLabel.Font = Enum.Font.SourceSansBold
@@ -423,7 +488,7 @@ fovInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local fovInput = Instance.new("TextBox", scrollFrame)
 fovInput.Size = UDim2.new(0.45, 0, 0, 25)
-fovInput.Position = UDim2.new(0.5, 0, 0, 500)
+fovInput.Position = UDim2.new(0.5, 0, 0, 580)
 fovInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 fovInput.TextColor3 = Color3.new(1,1,1)
 fovInput.Font = Enum.Font.SourceSans
@@ -436,7 +501,7 @@ fovInputCorner.CornerRadius = UDim.new(0, 6)
 
 local fovSliderFrame = Instance.new("Frame", scrollFrame)
 fovSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
-fovSliderFrame.Position = UDim2.new(0.05, 0, 0, 530)
+fovSliderFrame.Position = UDim2.new(0.05, 0, 0, 610)
 fovSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 fovSliderFrame.BorderSizePixel = 0
 
@@ -454,7 +519,7 @@ fovSliderButtonCorner.CornerRadius = UDim.new(1, 0)
 
 local fovButton = Instance.new("TextButton", scrollFrame)
 fovButton.Size = UDim2.new(0.9, 0, 0, 30)
-fovButton.Position = UDim2.new(0.05, 0, 0, 560)
+fovButton.Position = UDim2.new(0.05, 0, 0, 640)
 fovButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 fovButton.TextColor3 = Color3.new(1,1,1)
 fovButton.Font = Enum.Font.SourceSansBold
@@ -479,9 +544,9 @@ minimizeButton.TextSize = 14
 local minimizeButtonCorner = Instance.new("UICorner", minimizeButton)
 minimizeButtonCorner.CornerRadius = UDim.new(0, 8)
 
--- Кнопка розгортання
+-- Кнопка розгортання з Smile текстом
 local minimizedCircle = Instance.new("TextButton", screenGui)
-minimizedCircle.Size = UDim2.new(0, 30, 0, 30)
+minimizedCircle.Size = UDim2.new(0, 40, 0, 40)
 minimizedCircle.Position = UDim2.new(0, 300, 0, 200)
 minimizedCircle.Text = ""
 minimizedCircle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
@@ -494,6 +559,14 @@ minimizedCircle.AnchorPoint = Vector2.new(0.5, 0.5)
 local corner = Instance.new("UICorner", minimizedCircle)
 corner.CornerRadius = UDim.new(1, 0)
 
+local smileText = Instance.new("TextLabel", minimizedCircle)
+smileText.Size = UDim2.new(1, 0, 1, 0)
+smileText.BackgroundTransparency = 1
+smileText.Text = "smile:)"
+smileText.Font = Enum.Font.SourceSansBold
+smileText.TextSize = 10
+smileText.TextColor3 = Color3.new(1, 1, 1)
+
 -- Змінні для системи
 local flyConnection
 local speedHackConnection
@@ -503,21 +576,17 @@ local bunnyHopConnection
 local infiniteJumpConnection
 local bodyVelocity
 local bodyAngularVelocity
-local flyUpPressed = false
-local flyDownPressed = false
 
--- Змінні для запобігання мікро-кліків
 local lastClickTime = 0
-local clickDelay = 0.1 -- 100мс затримка між кліками
+local clickDelay = 0.1
 
--- Функція для перевірки дубльованих кліків
 local function canClick()
-    local currentTime = tick()
-    if currentTime - lastClickTime < clickDelay then
-        return false
-    end
-    lastClickTime = currentTime
-    return true
+	local currentTime = tick()
+	if currentTime - lastClickTime < clickDelay then
+		return false
+	end
+	lastClickTime = currentTime
+	return true
 end
 
 -- Анімація кольору заголовка
@@ -537,7 +606,7 @@ circle.Visible = true
 
 local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
 
--- Функція телепорту до гравця
+-- Функція телепорту
 local function teleportToPlayer(targetPlayer)
 	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and 
 	   targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
@@ -545,7 +614,7 @@ local function teleportToPlayer(targetPlayer)
 	end
 end
 
--- Функція оновлення списку гравців в телепорті
+-- Оновлення списку телепорту
 local function updateTeleportList()
 	for _, child in pairs(teleportScroll:GetChildren()) do
 		if child:IsA("TextButton") then
@@ -581,7 +650,7 @@ local function updateTeleportList()
 	teleportScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
 end
 
--- Sky Changer функція
+-- Sky Changer
 local function changeSky()
 	local sky = Lighting:FindFirstChildOfClass("Sky")
 	
@@ -606,7 +675,75 @@ local function changeSky()
 	end
 end
 
--- Перевірка на видимість
+-- Chaos Mode функції
+local function saveLightingSettings()
+	originalLightingSettings = {
+		Ambient = Lighting.Ambient,
+		Brightness = Lighting.Brightness,
+		ColorShift_Bottom = Lighting.ColorShift_Bottom,
+		ColorShift_Top = Lighting.ColorShift_Top,
+		OutdoorAmbient = Lighting.OutdoorAmbient,
+		FogColor = Lighting.FogColor,
+		FogEnd = Lighting.FogEnd,
+		FogStart = Lighting.FogStart
+	}
+end
+
+local function restoreLightingSettings()
+	if originalLightingSettings.Ambient then
+		Lighting.Ambient = originalLightingSettings.Ambient
+		Lighting.Brightness = originalLightingSettings.Brightness
+		Lighting.ColorShift_Bottom = originalLightingSettings.ColorShift_Bottom
+		Lighting.ColorShift_Top = originalLightingSettings.ColorShift_Top
+		Lighting.OutdoorAmbient = originalLightingSettings.OutdoorAmbient
+		Lighting.FogColor = originalLightingSettings.FogColor
+		Lighting.FogEnd = originalLightingSettings.FogEnd
+		Lighting.FogStart = originalLightingSettings.FogStart
+	end
+end
+
+local function startChaos()
+	saveLightingSettings()
+	
+	chaosConnection = RunService.RenderStepped:Connect(function()
+		local t = tick() * 2
+		local r = math.abs(math.sin(t))
+		local g = math.abs(math.sin(t + 2))
+		local b = math.abs(math.sin(t + 4))
+		
+		Lighting.Ambient = Color3.new(r, g, b)
+		Lighting.OutdoorAmbient = Color3.new(g, b, r)
+		Lighting.ColorShift_Top = Color3.new(b, r, g)
+		Lighting.ColorShift_Bottom = Color3.new(r, b, g)
+		Lighting.FogColor = Color3.new(g, r, b)
+		
+		for _, part in pairs(workspace:GetDescendants()) do
+			if part:IsA("BasePart") and not part:IsDescendantOf(LocalPlayer.Character or workspace) then
+				pcall(function()
+					part.Color = Color3.new(r, g, b)
+				end)
+			end
+		end
+	end)
+end
+
+local function stopChaos()
+	if chaosConnection then
+		chaosConnection:Disconnect()
+		chaosConnection = nil
+	end
+	restoreLightingSettings()
+	
+	for _, part in pairs(workspace:GetDescendants()) do
+		if part:IsA("BasePart") then
+			pcall(function()
+				part.Color = Color3.fromRGB(163, 162, 165)
+			end)
+		end
+	end
+end
+
+-- Перевірка видимості
 local function IsVisible(part)
 	if not WallCheckEnabled then return true end
 	local rayParams = RaycastParams.new()
@@ -617,12 +754,16 @@ local function IsVisible(part)
 	return not (result and result.Instance and not result.Instance:IsDescendantOf(part.Parent))
 end
 
--- Найближчий гравець
+-- Найближчий гравець з Team Check
 local function GetClosestPlayer()
 	local closestPlayer, shortestDistance
 	shortestDistance = FieldOfView
 	for _, v in pairs(Players:GetPlayers()) do
 		if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild(AimPart) then
+			if teamCheckEnabled and isSameTeam(LocalPlayer, v) then
+				continue
+			end
+			
 			local part = v.Character[AimPart]
 			local vector, onScreen = Camera:WorldToViewportPoint(part.Position)
 			if onScreen and IsVisible(part) then
@@ -750,13 +891,22 @@ local function createCharms(p)
 	end
 end
 
--- Створюємо ESP для всіх гравців
+-- Ініціалізація ESP для всіх гравців
 for _, p in pairs(game.Players:GetPlayers()) do createESP(p) end
 
-game.Players.PlayerAdded:Connect(createESP)
+-- Автооновлення при заході нових гравців
+game.Players.PlayerAdded:Connect(function(player)
+	createESP(player)
+	if charmsEnabled then
+		task.wait(0.5)
+		createCharms(player)
+	end
+end)
+
 game.Players.PlayerRemoving:Connect(removePlayerESP)
 game.Players.PlayerRemoving:Connect(removePlayerCharms)
 
+-- ESP рендер з Team Check (показує тільки ворогів червоним)
 RunService.RenderStepped:Connect(function()
 	if not espEnabled then 
 		for _, esp in pairs(espObjects) do
@@ -785,7 +935,9 @@ RunService.RenderStepped:Connect(function()
 				local root = p.Character.HumanoidRootPart
 				local hum = p.Character:FindFirstChildOfClass("Humanoid")
 				
-				if hum.Health > 0 then
+				local isTeammate = espTeamCheckEnabled and isSameTeam(LocalPlayer, p)
+				
+				if hum.Health > 0 and not isTeammate then
 					local pos, visible = Camera:WorldToViewportPoint(root.Position)
 					if visible and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 						local dist = (LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude
@@ -794,6 +946,7 @@ RunService.RenderStepped:Connect(function()
 
 						esp.Box.Size = Vector2.new(width, height)
 						esp.Box.Position = Vector2.new(pos.X - width / 2, pos.Y - height / 1.5)
+						esp.Box.Color = Color3.fromRGB(255, 0, 0)
 						esp.Box.Visible = true
 
 						esp.Name.Position = Vector2.new(pos.X, pos.Y - height / 1.5 - 15)
@@ -811,6 +964,7 @@ RunService.RenderStepped:Connect(function()
 						local screenBottom = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
 						esp.Tracer.From = screenBottom
 						esp.Tracer.To = Vector2.new(pos.X, pos.Y)
+						esp.Tracer.Color = Color3.fromRGB(255, 0, 0)
 						esp.Tracer.Visible = true
 					else
 						for _, v in pairs(esp) do v.Visible = false end
@@ -825,7 +979,7 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
--- Charms оновлення
+-- Charms автооновлення для нових гравців
 RunService.RenderStepped:Connect(function()
 	if charmsEnabled then
 		for _, p in pairs(Players:GetPlayers()) do
@@ -863,7 +1017,6 @@ local function updateFOVSlider()
 	fovInput.Text = tostring(currentFOV)
 end
 
--- Оновлення AIM FOV слайдера
 local function updateAimFOVSlider()
 	local percentage = (FieldOfView - 30) / (200 - 30)
 	aimFOVSliderButton.Position = UDim2.new(percentage, -10, 0, -2.5)
@@ -942,7 +1095,11 @@ local function stopFly()
 	end
 end
 
--- Логіка слайдерів
+-- Слайдери
+local draggingSlider = false
+local draggingFOVSlider = false
+local draggingAimFOVSlider = false
+
 local function handleSliderInput()
 	local mouse = UserInputService:GetMouseLocation()
 	local sliderPos = sliderFrame.AbsolutePosition
@@ -987,11 +1144,6 @@ local function handleAimFOVSliderInput()
 	end
 end
 
--- Слайдери обробка
-local draggingSlider = false
-local draggingFOVSlider = false
-local draggingAimFOVSlider = false
-
 sliderFrame.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		draggingSlider = true
@@ -1031,7 +1183,7 @@ UserInputService.InputChanged:Connect(function(input)
 	end
 end)
 
--- Обробка текстових полів
+-- Текстові поля
 speedInput.FocusLost:Connect(function()
 	local inputSpeed = tonumber(speedInput.Text)
 	if inputSpeed and inputSpeed >= 16 and inputSpeed <= 400 then
@@ -1045,7 +1197,7 @@ end)
 
 flyInput.FocusLost:Connect(function()
 	local inputSpeed = tonumber(flyInput.Text)
-	if inputSpeed and inputSpeed >= 10 and inputSpeed <= 150 then
+	if inputSpeed and inputSpeed >= 10 and inputSpeed <= 450 then
 		flySpeed = inputSpeed
 	else
 		flyInput.Text = tostring(flySpeed)
@@ -1073,7 +1225,7 @@ aimFOVInput.FocusLost:Connect(function()
 	end
 end)
 
--- Кнопки обробка з захистом від мікро-кліків
+-- Кнопки обробка
 teleportButton.MouseButton1Click:Connect(function()
 	if canClick() then
 		frame.Visible = false
@@ -1123,6 +1275,13 @@ wallButton.MouseButton1Click:Connect(function()
 	end
 end)
 
+teamCheckButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		teamCheckEnabled = not teamCheckEnabled
+		teamCheckButton.Text = teamCheckEnabled and "Team Check: ON" or "Team Check: OFF"
+	end
+end)
+
 espButton.MouseButton1Click:Connect(function()
 	if canClick() then
 		espEnabled = not espEnabled
@@ -1131,7 +1290,13 @@ espButton.MouseButton1Click:Connect(function()
 	end
 end)
 
--- ВИПРАВЛЕНА кнопка Charms
+espTeamButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		espTeamCheckEnabled = not espTeamCheckEnabled
+		espTeamButton.Text = espTeamCheckEnabled and "ESP Team: ON" or "ESP Team: OFF"
+	end
+end)
+
 charmsButton.MouseButton1Click:Connect(function()
 	if canClick() then
 		charmsEnabled = not charmsEnabled
@@ -1229,6 +1394,19 @@ skyButton.MouseButton1Click:Connect(function()
 	end
 end)
 
+chaosButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		chaosEnabled = not chaosEnabled
+		chaosButton.Text = chaosEnabled and "Chaos: ON" or "Chaos: OFF"
+
+		if chaosEnabled then
+			startChaos()
+		else
+			stopChaos()
+		end
+	end
+end)
+
 flyButton.MouseButton1Click:Connect(function()
 	if canClick() then
 		flyEnabled = not flyEnabled
@@ -1320,8 +1498,8 @@ minimizedCircle.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Драг функція (виправлена для запобігання конфліктів)
-local function makeDraggable(frame)
+-- Драг функція
+local function makeDraggable(frame, dragHandle)
 	local dragging = false
 	local dragStart = nil
 	local startPos = nil
@@ -1335,18 +1513,20 @@ local function makeDraggable(frame)
 		end
 	end
 
-	frame.InputBegan:Connect(function(input)
+	local handle = dragHandle or frame
+	handle.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			dragging = true
-			dragStart = input.Position
-			startPos = frame.Position
-			
-			-- Створюємо окреме з'єднання для відстеження закінчення
-			dragConnection = input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
-					endDragging()
-				end
-			end)
+			if not draggingSlider and not draggingFOVSlider and not draggingAimFOVSlider then
+				dragging = true
+				dragStart = input.Position
+				startPos = frame.Position
+				
+				dragConnection = input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						endDragging()
+					end
+				end)
+			end
 		end
 	end)
 
@@ -1362,7 +1542,6 @@ local function makeDraggable(frame)
 		end
 	end)
 	
-	-- Додаткова перевірка для завершення перетягування
 	UserInputService.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			endDragging()
@@ -1370,7 +1549,7 @@ local function makeDraggable(frame)
 	end)
 end
 
-makeDraggable(frame)
-makeDraggable(teleportFrame)
+makeDraggable(frame, titleLabel)
+makeDraggable(teleportFrame, teleportTitle)
 makeDraggable(minimizedCircle)
-makeDraggable(aimSettingsFrame)
+makeDraggable(aimSettingsFrame, aimSettingsTitle)
