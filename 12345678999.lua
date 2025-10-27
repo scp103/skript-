@@ -45,14 +45,72 @@ local originalTextureQuality = nil
 local antiAfkEnabled = false
 local antiAfkConnection = nil
 
+-- ========== РАНДОМАЙЗЕР (АНТИ-ДЕТЕКТ) ==========
+local function genrandstr(length)
+    local charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    local result = ""
+    
+    for i = 1, length do
+        local randIndex = math.random(1, #charset)
+        result = result .. charset:sub(randIndex, randIndex)
+    end
+    
+    return result
+end
+
+-- Рекурсивно змінює імена всіх елементів
+local function encryptNames(parent)
+    for _, child in ipairs(parent:GetChildren()) do
+        if child:IsA("GuiObject") or child:IsA("UIBase") then
+            child.Name = genrandstr(15)
+            encryptNames(child)  -- Для всіх дітей теж
+        end
+    end
+end
+
+-- Система безпеки (запускається кожну секунду)
+local function startSecurity()
+    while wait(1) do
+        if screenGui then
+            screenGui.Name = genrandstr(20)
+        end
+        
+        if frame then
+            frame.Name = genrandstr(18)
+            encryptNames(frame)
+        end
+        
+        if teleportFrame then
+            teleportFrame.Name = genrandstr(18)
+            encryptNames(teleportFrame)
+        end
+        
+        if aimSettingsFrame then
+            aimSettingsFrame.Name = genrandstr(18)
+            encryptNames(aimSettingsFrame)
+        end
+        
+        if hitboxSettingsFrame then
+            hitboxSettingsFrame.Name = genrandstr(18)
+            encryptNames(hitboxSettingsFrame)
+        end
+        
+        if minimizedCircle then
+            minimizedCircle.Name = genrandstr(15)
+        end
+    end
+end
+
 -- Таблиця для збереження оригінальних розмірів хітбоксів
 local originalHitboxSizes = {}
 
 -- GUI
-local playerGui = LocalPlayer:WaitForChild("PlayerGui")
-local screenGui = Instance.new("ScreenGui", playerGui)
+local CoreGui = game:GetService("CoreGui")
+local screenGui = Instance.new("ScreenGui", CoreGui)
 screenGui.Name = "SmileModMenu"
 screenGui.ResetOnSpawn = false
+screenGui.DisplayOrder = 99999
+screenGui.IgnoreGuiInset = true
 
 -- Основне меню
 local frame = Instance.new("Frame", screenGui)
@@ -1691,6 +1749,114 @@ antiAfkButton.MouseButton1Click:Connect(function()
 	end
 end)
 
+-- ========== БІНДИ КЛАВІШ ==========
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	if gameProcessed then return end
+	
+	-- INSERT - Закрити/Відкрити меню
+	if input.KeyCode == Enum.KeyCode.Insert then
+		if frame.Visible or teleportFrame.Visible or aimSettingsFrame.Visible or hitboxSettingsFrame.Visible then
+			frame.Visible = false
+			teleportFrame.Visible = false
+			aimSettingsFrame.Visible = false
+			hitboxSettingsFrame.Visible = false
+			minimizedCircle.Visible = true
+		else
+			frame.Visible = true
+			minimizedCircle.Visible = false
+		end
+	end
+	
+	-- END - Hitbox ON/OFF
+	if input.KeyCode == Enum.KeyCode.End then
+		hitboxEnabled = not hitboxEnabled
+		hitboxButton.Text = hitboxEnabled and "Hitbox: ON" or "Hitbox: OFF"
+		updateHitboxes()
+		
+		game:GetService("StarterGui"):SetCore("SendNotification", {
+			Title = "Hitbox";
+			Text = hitboxEnabled and "✅ Enabled" or "❌ Disabled";
+			Duration = 2;
+		})
+	end
+	
+	-- DELETE - AIM ON/OFF
+	if input.KeyCode == Enum.KeyCode.Delete then
+		Holding = not Holding
+		aimButton.Text = Holding and "AIM: ON" or "AIM: OFF"
+		
+		game:GetService("StarterGui"):SetCore("SendNotification", {
+			Title = "AIM";
+			Text = Holding and "✅ Enabled" or "❌ Disabled";
+			Duration = 2;
+		})
+	end
+	
+	-- F5 - ESP ON/OFF
+	if input.KeyCode == Enum.KeyCode.F5 then
+		espEnabled = not espEnabled
+		espButton.Text = espEnabled and "ESP: ON" or "ESP: OFF"
+		if not espEnabled then clearESP() end
+		
+		game:GetService("StarterGui"):SetCore("SendNotification", {
+			Title = "ESP";
+			Text = espEnabled and "✅ Enabled" or "❌ Disabled";
+			Duration = 2;
+		})
+	end
+	
+	-- F6 - Third Person ON/OFF
+	if input.KeyCode == Enum.KeyCode.F6 then
+		thirdPersonEnabled = not thirdPersonEnabled
+		thirdPersonButton.Text = thirdPersonEnabled and "Third Person: ON" or "Third Person: OFF"
+		
+		if thirdPersonEnabled then
+			startThirdPerson()
+		else
+			stopThirdPerson()
+		end
+		
+		game:GetService("StarterGui"):SetCore("SendNotification", {
+			Title = "Third Person";
+			Text = thirdPersonEnabled and "✅ Enabled" or "❌ Disabled";
+			Duration = 2;
+		})
+	end
+	
+	-- F7 - Chaos + Sky
+	if input.KeyCode == Enum.KeyCode.F7 then
+		-- Chaos
+		chaosEnabled = not chaosEnabled
+		chaosButton.Text = chaosEnabled and "Chaos: ON" or "Chaos: OFF"
+		if chaosEnabled then startChaos() else stopChaos() end
+		
+		-- Sky (завжди Space коли Chaos ON)
+		if chaosEnabled then
+			local sky = Lighting:FindFirstChildOfClass("Sky")
+			if not sky then sky = Instance.new("Sky", Lighting) end
+			sky.SkyboxBk = "rbxassetid://159454299"
+			sky.SkyboxDn = "rbxassetid://159454296"
+			sky.SkyboxFt = "rbxassetid://159454293"
+			sky.SkyboxLf = "rbxassetid://159454286"
+			sky.SkyboxRt = "rbxassetid://159454300"
+			sky.SkyboxUp = "rbxassetid://159454288"
+			skyButton.Text = "Sky: Space"
+			skyIndex = 2
+		else
+			local sky = Lighting:FindFirstChildOfClass("Sky")
+			if sky then sky:Destroy() end
+			skyButton.Text = "Sky: Default"
+			skyIndex = 1
+		end
+		
+		game:GetService("StarterGui"):SetCore("SendNotification", {
+			Title = "Chaos Mode";
+			Text = chaosEnabled and "✅ Enabled + Space Sky" or "❌ Disabled";
+			Duration = 2;
+		})
+	end
+end)
+
 -- Init
 updateSlider()
 updateFOVSlider()
@@ -1763,6 +1929,18 @@ makeDraggable(teleportFrame, teleportTitle)
 makeDraggable(minimizedCircle)
 makeDraggable(aimSettingsFrame, aimSettingsTitle)
 makeDraggable(hitboxSettingsFrame, hitboxSettingsTitle)
+
+-- ========== ЗАПУСК АНТИ-ДЕТЕКТ СИСТЕМИ ==========
+spawn(startSecurity)
+
+game:GetService("StarterGui"):SetCore("SendNotification", {
+	Title = "🛡️ Security";
+	Text = "Anti-detect enabled!";
+	Duration = 2;
+	Icon = "rbxassetid://6031094678";
+})
+
+task.wait(1)
 
 -- ✅ ПОВІДОМЛЕННЯ З DISCORD ЛОГО
 game:GetService("StarterGui"):SetCore("SendNotification", {
