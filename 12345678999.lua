@@ -978,18 +978,44 @@ local function updateHitboxPartButtons()
 	end
 end
 
--- God Mode
+-- ========== GOD MODE (CanTouch метод) ==========
+local function updateGodMode()
+	local char = LocalPlayer.Character
+	if not char then return end
+	
+	for _, v in pairs(char:GetDescendants()) do
+		if v:IsA("BasePart") then
+			v.CanTouch = not godModeEnabled
+		end
+	end
+end
+
 local function startGodMode()
-	godModeConnection = RunService.Heartbeat:Connect(function()
-		if LocalPlayer.Character then
-			local hum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-			if hum then hum.Health = hum.MaxHealth end
+	updateGodMode()
+	
+	-- Автоматично оновлює CanTouch для нових частин персонажа
+	godModeConnection = LocalPlayer.Character.DescendantAdded:Connect(function(descendant)
+		if godModeEnabled and descendant:IsA("BasePart") then
+			descendant.CanTouch = false
 		end
 	end)
 end
 
 local function stopGodMode()
-	if godModeConnection then godModeConnection:Disconnect(); godModeConnection = nil end
+	if godModeConnection then 
+		godModeConnection:Disconnect()
+		godModeConnection = nil
+	end
+	
+	-- Повертаємо CanTouch = true для всіх частин
+	local char = LocalPlayer.Character
+	if char then
+		for _, v in pairs(char:GetDescendants()) do
+			if v:IsA("BasePart") then
+				v.CanTouch = true
+			end
+		end
+	end
 end
 
 -- AIM
@@ -1063,8 +1089,9 @@ end
 
 local function createESP(p)
 	if p == LocalPlayer then return end
+	
 	local box = Drawing.new("Square")
-	box.Thickness = 1
+	box.Thickness = 2
 	box.Color = Color3.fromRGB(0, 255, 0)
 	box.Filled = false
 	box.Transparency = 1
@@ -1172,6 +1199,26 @@ RunService.RenderStepped:Connect(function()
 						local scale = math.clamp(3000 / dist, 100, 300)
 						local width, height = scale / 2, scale
 
+						-- ========== ПЕРЕВІРКА СТІН ==========
+						local canSee = true
+						local rayParams = RaycastParams.new()
+						rayParams.FilterDescendantsInstances = {LocalPlayer.Character, p.Character}
+						rayParams.FilterType = Enum.RaycastFilterType.Exclude
+						
+						local direction = (root.Position - Camera.CFrame.Position)
+						local rayResult = workspace:Raycast(Camera.CFrame.Position, direction, rayParams)
+						
+						if rayResult and rayResult.Instance then
+							canSee = false
+						end
+						
+						-- ========== ЗМІНА КОЛЬОРУ ==========
+						local boxColor = canSee and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+						local tracerColor = canSee and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+						
+						esp.Box.Color = boxColor
+						esp.Tracer.Color = tracerColor
+
 						esp.Box.Size = Vector2.new(width, height)
 						esp.Box.Position = Vector2.new(pos.X - width / 2, pos.Y - height / 1.5)
 						esp.Box.Visible = true
@@ -1202,16 +1249,6 @@ RunService.RenderStepped:Connect(function()
 				for _, v in pairs(esp) do v.Visible = false end
 			end
 		end
-	end
-end)
-
-RunService.RenderStepped:Connect(function()
-	if charmsEnabled then
-		for _, p in pairs(Players:GetPlayers()) do
-			if p ~= LocalPlayer and not charmsObjects[p] then createCharms(p) end
-		end
-	else
-		clearCharms()
 	end
 end)
 
