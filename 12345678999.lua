@@ -1119,7 +1119,7 @@ local function createESP(p)
 	distance.Visible = false
 
 	local tracer = Drawing.new("Line")
-	tracer.Thickness = 1
+	tracer.Thickness = 2
 	tracer.Color = Color3.fromRGB(255, 255, 255)
 	tracer.Transparency = 0.8
 	tracer.Visible = false
