@@ -1119,9 +1119,9 @@ local function createESP(p)
 	distance.Visible = false
 
 	local tracer = Drawing.new("Line")
-	tracer.Thickness = 2
+	tracer.Thickness = 3.5
 	tracer.Color = Color3.fromRGB(255, 255, 255)
-	tracer.Transparency = 0.8
+	tracer.Transparency = 1
 	tracer.Visible = false
 
 	espObjects[p] = {Box = box, Name = name, Health = health, Distance = distance, Tracer = tracer}
