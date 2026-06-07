@@ -11,6 +11,10 @@ local function init(G, V)
 local HttpService = game:GetService("HttpService")
 local CONFIG_FOLDER = "SmileConfigs"
 
+-- ДОДАЙ ЦЕЙ РЯДОК СЮДИ  (перед усіма функціями!)
+local savedConfigs = {}
+local selectedConfig = nil
+
 -- Створюємо папку якщо немає
 if not isfolder(CONFIG_FOLDER) then
 	makefolder(CONFIG_FOLDER)
@@ -130,8 +134,6 @@ local clickDelay = 0.5
 local savedObjects = {}
 local wallHopConnection = nil
 local canWallJump = true
-local savedConfigs = {}
-local selectedConfig = nil
 
 local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
 
