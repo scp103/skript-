@@ -978,40 +978,6 @@ G.saveConfigButton.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Зберігаємо на диск
-local function saveConfigToFile(name, config)
-	local data = HttpService:JSONEncode(config)
-	writefile("SmileMenu_"..name..".json", data)
-end
-
--- Читаємо з диску
-local function loadConfigFromFile(name)
-	local filename = "SmileMenu_"..name..".json"
-	if isfile(filename) then
-		local data = readfile(filename)
-		return HttpService:JSONDecode(data)
-	end
-	return nil
-end
-
--- Завантажуємо всі збережені конфіги при старті
-local function loadAllConfigs()
-	if listfiles then
-		for _, file in pairs(listfiles("")) do
-			if file:match("SmileMenu_(.+)%.json") then
-				local name = file:match("SmileMenu_(.+)%.json")
-				local config = loadConfigFromFile(name)
-				if config then
-					savedConfigs[name] = config
-				end
-			end
-		end
-		updateConfigList()
-	end
-end
-
-loadAllConfigs()
-
 G.loadConfigButton.MouseButton1Click:Connect(function()
 	if canClick() then
 		local name = G.configNameInput.Text ~= "" and G.configNameInput.Text or selectedConfig
@@ -1076,7 +1042,7 @@ updateAimFOVSlider()
 
 -- Завантажуємо конфіги при старті 
 loadAllConfigs()
-updateConfigList(
+updateConfigList()
 
 -- Повертаємо всі функції для buttons.lua
 return {
