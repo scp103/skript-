@@ -8,6 +8,40 @@ local Camera = workspace.CurrentCamera
 
 local function init(G, V)
 
+-- ========== АНТИ-ДЕТЕКТ ==========
+local function genrandstr(length)
+	local charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	local result = ""
+	for i = 1, length do
+		local randIndex = math.random(1, #charset)
+		result = result .. charset:sub(randIndex, randIndex)
+	end
+	return result
+end
+
+local function encryptNames(parent)
+	for _, child in ipairs(parent:GetChildren()) do
+		if child:IsA("GuiObject") or child:IsA("UIBase") then
+			child.Name = genrandstr(15)
+			encryptNames(child)
+		end
+	end
+end
+
+local function startSecurity()
+	while task.wait(1) do
+		if G.screenGui then G.screenGui.Name = genrandstr(20) end
+		if G.frame then G.frame.Name = genrandstr(18); encryptNames(G.frame) end
+		if G.teleportFrame then G.teleportFrame.Name = genrandstr(18) end
+		if G.aimSettingsFrame then G.aimSettingsFrame.Name = genrandstr(18) end
+		if G.hitboxSettingsFrame then G.hitboxSettingsFrame.Name = genrandstr(18) end
+		if G.configFrame then G.configFrame.Name = genrandstr(18) end
+		if G.minimizedCircle then G.minimizedCircle.Name = genrandstr(15) end
+	end
+end
+
+spawn(startSecurity)
+
 -- ============ ЗМІННІ ============
 local AimPart = "Head"
 local FieldOfView = 60
