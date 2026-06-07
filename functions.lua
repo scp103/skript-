@@ -5,6 +5,7 @@ local UserInputService = game:GetService("UserInputService")
 local Lighting = game:GetService("Lighting")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
+local HttpService = game:GetService("HttpService")
 
 local function init(G, V)
 
@@ -874,9 +875,11 @@ local function applyConfig(config)
 	G.hitboxSizeInput.Text = tostring(hitboxSize)
 	updateHitboxPartButtons()
 	-- Fullbright
+	if config.fullbright ~= fullbrightEnabled then
 	fullbrightEnabled = config.fullbright
 	G.fullbrightButton.Text = fullbrightEnabled and "Fullbright: ON" or "Fullbright: OFF"
 	if fullbrightEnabled then enableFullbright() else disableFullbright() end
+end
 	-- Speed/FOV
 	currentSpeed = config.speed
 	updateSlider()
@@ -909,12 +912,48 @@ G.saveConfigButton.MouseButton1Click:Connect(function()
 	if canClick() then
 		local name = G.configNameInput.Text
 		if name ~= "" then
-			savedConfigs[name] = getCurrentConfig()
+			local config = getCurrentConfig()
+			savedConfigs[name] = config
+			saveConfigToFile(name, config) -- ДОДАЙ ЦЕЙ РЯДОК
 			updateConfigList()
 			showNotif("💾 Config", "Saved: "..name, 2)
 		end
 	end
 end)
+
+-- Зберігаємо на диск
+local function saveConfigToFile(name, config)
+	local data = HttpService:JSONEncode(config)
+	writefile("SmileMenu_"..name..".json", data)
+end
+
+-- Читаємо з диску
+local function loadConfigFromFile(name)
+	local filename = "SmileMenu_"..name..".json"
+	if isfile(filename) then
+		local data = readfile(filename)
+		return HttpService:JSONDecode(data)
+	end
+	return nil
+end
+
+-- Завантажуємо всі збережені конфіги при старті
+local function loadAllConfigs()
+	if listfiles then
+		for _, file in pairs(listfiles("")) do
+			if file:match("SmileMenu_(.+)%.json") then
+				local name = file:match("SmileMenu_(.+)%.json")
+				local config = loadConfigFromFile(name)
+				if config then
+					savedConfigs[name] = config
+				end
+			end
+		end
+		updateConfigList()
+	end
+end
+
+loadAllConfigs()
 
 G.loadConfigButton.MouseButton1Click:Connect(function()
 	if canClick() then
@@ -930,6 +969,9 @@ G.deleteConfigButton.MouseButton1Click:Connect(function()
 	if canClick() then
 		if selectedConfig and savedConfigs[selectedConfig] then
 			savedConfigs[selectedConfig] = nil
+			-- ДОДАЙ ЦЕЙ РЯДОК
+			local filename = "SmileMenu_"..selectedConfig..".json"
+			if isfile(filename) then delfile(filename) end
 			selectedConfig = nil
 			G.configNameInput.Text = ""
 			updateConfigList()
