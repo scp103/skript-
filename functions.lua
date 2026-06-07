@@ -5,9 +5,50 @@ local UserInputService = game:GetService("UserInputService")
 local Lighting = game:GetService("Lighting")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
-local HttpService = game:GetService("HttpService")
 
 local function init(G, V)
+
+local HttpService = game:GetService("HttpService")
+local CONFIG_FOLDER = "SmileConfigs"
+
+-- Створюємо папку якщо немає
+if not isfolder(CONFIG_FOLDER) then
+	makefolder(CONFIG_FOLDER)
+end
+
+local function saveConfigToFile(name, config)
+	local ok, data = pcall(function()
+		return HttpService:JSONEncode(config)
+	end)
+	if ok then
+		writefile(CONFIG_FOLDER.."/"..name..".json", data)
+	end
+end
+
+local function loadConfigFromFile(name)
+	local path = CONFIG_FOLDER.."/"..name..".json"
+	if isfile(path) then
+		local ok, data = pcall(function()
+			return HttpService:JSONDecode(readfile(path))
+		end)
+		if ok then return data end
+	end
+	return nil
+end
+
+local function loadAllConfigs()
+	if isfolder(CONFIG_FOLDER) then
+		for _, file in pairs(listfiles(CONFIG_FOLDER)) do
+			local name = file:match("([^/\\]+)%.json$")
+			if name then
+				local config = loadConfigFromFile(name)
+				if config then
+					savedConfigs[name] = config
+				end
+			end
+		end
+	end
+end
 
 -- ========== АНТИ-ДЕТЕКТ ==========
 local function genrandstr(length)
@@ -818,8 +859,12 @@ local function updateConfigList()
 	for _, child in pairs(G.configScroll:GetChildren()) do
 		if child:IsA("TextButton") then child:Destroy() end
 	end
+	
 	local yPos = 5
+	local count = 0
+	
 	for name, _ in pairs(savedConfigs) do
+		count = count + 1
 		local btn = Instance.new("TextButton", G.configScroll)
 		btn.Size = UDim2.new(0.95, 0, 0, 35)
 		btn.Position = UDim2.new(0.025, 0, 0, yPos)
@@ -829,17 +874,28 @@ local function updateConfigList()
 		btn.TextSize = 14
 		btn.Text = name
 		local c = Instance.new("UICorner", btn)
+		c.CornerRadius = UDim.new(0, 6)
+		
+		-- Якщо це вибраний - підсвічуємо
+		if name == selectedConfig then
+			btn.BackgroundColor3 = Color3.fromRGB(0, 130, 255)
+		end
+		
 		btn.MouseButton1Click:Connect(function()
 			for _, b in pairs(G.configScroll:GetChildren()) do
-				if b:IsA("TextButton") then b.BackgroundColor3 = Color3.fromRGB(50, 50, 50) end
+				if b:IsA("TextButton") then
+					b.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+				end
 			end
 			btn.BackgroundColor3 = Color3.fromRGB(0, 130, 255)
 			selectedConfig = name
 			G.configNameInput.Text = name
 		end)
+		
 		yPos = yPos + 40
 	end
-	G.configScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
+	
+	G.configScroll.CanvasSize = UDim2.new(0, 0, 0, yPos + 5)
 end
 
 local function applyConfig(config)
@@ -914,8 +970,9 @@ G.saveConfigButton.MouseButton1Click:Connect(function()
 		if name ~= "" then
 			local config = getCurrentConfig()
 			savedConfigs[name] = config
-			saveConfigToFile(name, config) -- ДОДАЙ ЦЕЙ РЯДОК
-			updateConfigList()
+			saveConfigToFile(name, config)
+			selectedConfig = name
+			updateConfigList() -- оновлює список зразу
 			showNotif("💾 Config", "Saved: "..name, 2)
 		end
 	end
@@ -968,10 +1025,11 @@ end)
 G.deleteConfigButton.MouseButton1Click:Connect(function()
 	if canClick() then
 		if selectedConfig and savedConfigs[selectedConfig] then
+			local path = CONFIG_FOLDER.."/"..selectedConfig..".json"
+			if isfile(path) then
+				delfile(path)
+			end
 			savedConfigs[selectedConfig] = nil
-			-- ДОДАЙ ЦЕЙ РЯДОК
-			local filename = "SmileMenu_"..selectedConfig..".json"
-			if isfile(filename) then delfile(filename) end
 			selectedConfig = nil
 			G.configNameInput.Text = ""
 			updateConfigList()
@@ -1015,6 +1073,10 @@ makeDraggable(G.configFrame, G.configTitle)
 updateSlider()
 updateFOVSlider()
 updateAimFOVSlider()
+
+-- Завантажуємо конфіги при старті 
+loadAllConfigs()
+updateConfigList(
 
 -- Повертаємо всі функції для buttons.lua
 return {
