@@ -423,8 +423,8 @@ corner.CornerRadius = UDim.new(1, 0)
 
 -- Config вікно
 local configFrame = Instance.new("Frame", screenGui)
-configFrame.Size = UDim2.new(0, 250, 0, 420)
-configFrame.Position = UDim2.new(0.5, -125, 0.5, -210)
+configFrame.Size = UDim2.new(0, 230, 0, 340)
+configFrame.Position = UDim2.new(0.5, -115, 0.5, -170)
 configFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 configFrame.BorderSizePixel = 0
 configFrame.Visible = false
@@ -501,8 +501,8 @@ configListLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 configListLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local configScroll = Instance.new("ScrollingFrame", configFrame)
-configScroll.Size = UDim2.new(0.9, 0, 0, 175)
-configScroll.Position = UDim2.new(0.05, 0, 0, 175)
+configScroll.Size = UDim2.new(0.9, 0, 0, 120)
+configScroll.Position = UDim2.new(0.05, 0, 0, 165)
 configScroll.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 configScroll.BorderSizePixel = 0
 configScroll.ScrollBarThickness = 5
@@ -511,7 +511,7 @@ local configScrollCorner = Instance.new("UICorner", configScroll)
 
 local deleteConfigButton = Instance.new("TextButton", configFrame)
 deleteConfigButton.Size = UDim2.new(0.9, 0, 0, 35)
-deleteConfigButton.Position = UDim2.new(0.05, 0, 0, 358)
+deleteConfigButton.Position = UDim2.new(0.05, 0, 0, 295)
 deleteConfigButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
 deleteConfigButton.TextColor3 = Color3.new(1,1,1)
 deleteConfigButton.Font = Enum.Font.SourceSansBold
