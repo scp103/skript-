@@ -423,7 +423,7 @@ corner.CornerRadius = UDim.new(1, 0)
 
 -- Config вікно
 local configFrame = Instance.new("Frame", screenGui)
-configFrame.Size = UDim2.new(0, 230, 0, 340)
+configFrame.Size = UDim2.new(0, 230, 0, 370)
 configFrame.Position = UDim2.new(0.5, -115, 0.5, -170)
 configFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 configFrame.BorderSizePixel = 0
