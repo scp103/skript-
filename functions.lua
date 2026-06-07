@@ -938,13 +938,50 @@ local function applyConfig(config)
 	G.fullbrightButton.Text = fullbrightEnabled and "Fullbright: ON" or "Fullbright: OFF"
 	if fullbrightEnabled then enableFullbright() else disableFullbright() end
 end
-	-- Speed/FOV
+
+currentSpeed = config.speed
+updateSlider()
+if speedHackEnabled then updateSpeed() end
+
+currentFOV = config.fov
+updateFOVSlider()
+if fovChangerEnabled then updateFOV() end
+
+flySpeed = config.flySpeed
+G.flyInput.Text = tostring(flySpeed)
+
+-- Speed
 	currentSpeed = config.speed
 	updateSlider()
+	if config.speed ~= 16 then
+		speedHackEnabled = true
+		G.speedButton.Text = "Speed: ON"
+		if speedHackConnection then speedHackConnection:Disconnect() end
+		speedHackConnection = RunService.RenderStepped:Connect(updateSpeed)
+	else
+		speedHackEnabled = false
+		G.speedButton.Text = "Speed: OFF"
+		if speedHackConnection then speedHackConnection:Disconnect(); speedHackConnection = nil end
+	end
+
+	-- FOV
 	currentFOV = config.fov
 	updateFOVSlider()
+	if config.fov ~= 70 then
+		fovChangerEnabled = true
+		G.fovButton.Text = "FOV: ON"
+		if fovChangerConnection then fovChangerConnection:Disconnect() end
+		fovChangerConnection = RunService.RenderStepped:Connect(updateFOV)
+	else
+		fovChangerEnabled = false
+		G.fovButton.Text = "FOV: OFF"
+		if fovChangerConnection then fovChangerConnection:Disconnect(); fovChangerConnection = nil end
+	end
+
+	-- Fly
 	flySpeed = config.flySpeed
 	G.flyInput.Text = tostring(flySpeed)
+
 	showNotif("✅ Config", "Loaded: "..selectedConfig, 2)
 end
 
