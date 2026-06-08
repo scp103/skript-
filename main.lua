@@ -3,6 +3,7 @@
 local GUI_URL = "https://raw.githubusercontent.com/scp103/skript-/main/gui.lua"
 local FUNC_URL = "https://raw.githubusercontent.com/scp103/skript-/main/functions.lua"
 local BTN_URL = "https://raw.githubusercontent.com/scp103/skript-/main/buttons.lua"
+local KEYS_URL = "https://raw.githubusercontent.com/scp103/skript-/refs/heads/main/keybinds.lua"
 
 -- Завантажуємо GUI
 local G = loadstring(game:HttpGet(GUI_URL))()
@@ -14,6 +15,9 @@ local F = funcLoader(G)
 -- Завантажуємо Buttons
 local btnLoader = loadstring(game:HttpGet(BTN_URL))()
 btnLoader(G, F)
+
+local keysLoader = loadstring(game:HttpGet(KEYS_URL))()
+keysLoader(G, F)
 
 -- ПОВІДОМЛЕННЯ (додай оці 3 блоки)
 task.wait(0.5)
