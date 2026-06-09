@@ -20,7 +20,7 @@ local frameCorner = Instance.new("UICorner", frame)
 frameCorner.CornerRadius = UDim.new(0, 12)
 
 local aimSettingsFrame = Instance.new("Frame", screenGui)
-aimSettingsFrame.Size = UDim2.new(0, 200, 0, 280)
+aimSettingsFrame.Size = UDim2.new(0, 200, 0, 320)
 aimSettingsFrame.Position = UDim2.new(0.5, 100, 0.3, 0)
 aimSettingsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 aimSettingsFrame.BorderSizePixel = 0
@@ -36,6 +36,48 @@ aimSettingsTitle.Text = "AIM Settings"
 aimSettingsTitle.Font = Enum.Font.SourceSansBold
 aimSettingsTitle.TextSize = 16
 aimSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- PC / Mobile Trigger кнопки
+local pcTriggerButton = Instance.new("TextButton", aimSettingsFrame)
+pcTriggerButton.Size = UDim2.new(0.44, 0, 0, 30)
+pcTriggerButton.Position = UDim2.new(0.05, 0, 0, 120)
+pcTriggerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+pcTriggerButton.TextColor3 = Color3.new(1,1,1)
+pcTriggerButton.Font = Enum.Font.SourceSansBold
+pcTriggerButton.TextSize = 13
+pcTriggerButton.Text = "PC Trigger: OFF"
+Instance.new("UICorner", pcTriggerButton)
+
+local mobileTriggerButton = Instance.new("TextButton", aimSettingsFrame)
+mobileTriggerButton.Size = UDim2.new(0.44, 0, 0, 30)
+mobileTriggerButton.Position = UDim2.new(0.51, 0, 0, 120)
+mobileTriggerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mobileTriggerButton.TextColor3 = Color3.new(1,1,1)
+mobileTriggerButton.Font = Enum.Font.SourceSansBold
+mobileTriggerButton.TextSize = 13
+mobileTriggerButton.Text = "Mobile Trigger: OFF"
+Instance.new("UICorner", mobileTriggerButton)
+
+-- Val Check кнопка + відкрити список гравців
+local valCheckButton = Instance.new("TextButton", aimSettingsFrame)
+valCheckButton.Size = UDim2.new(0.75, -5, 0, 30)
+valCheckButton.Position = UDim2.new(0.05, 0, 0, 160)
+valCheckButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+valCheckButton.TextColor3 = Color3.new(1,1,1)
+valCheckButton.Font = Enum.Font.SourceSansBold
+valCheckButton.TextSize = 14
+valCheckButton.Text = "Val Check: OFF"
+Instance.new("UICorner", valCheckButton)
+
+local valCheckOpenButton = Instance.new("TextButton", aimSettingsFrame)
+valCheckOpenButton.Size = UDim2.new(0.15, -5, 0, 30)
+valCheckOpenButton.Position = UDim2.new(0.8, 0, 0, 160)
+valCheckOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+valCheckOpenButton.TextColor3 = Color3.new(1,1,1)
+valCheckOpenButton.Font = Enum.Font.SourceSansBold
+valCheckOpenButton.TextSize = 18
+valCheckOpenButton.Text = "+"
+Instance.new("UICorner", valCheckOpenButton)
 
 local aimCloseButton = Instance.new("TextButton", aimSettingsFrame)
 aimCloseButton.Size = UDim2.new(0.9, 0, 0, 25)
@@ -431,6 +473,41 @@ configFrame.Visible = false
 configFrame.Active = true
 local configFrameCorner = Instance.new("UICorner", configFrame)
 
+-- Панель вибору гравців для Val Check
+local playerSelectFrame = Instance.new("Frame", screenGui)
+playerSelectFrame.Size = UDim2.new(0, 180, 0, 280)
+playerSelectFrame.Position = UDim2.new(0.5, 110, 0.3, 0)
+playerSelectFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+playerSelectFrame.BorderSizePixel = 0
+playerSelectFrame.Visible = false
+playerSelectFrame.Active = true
+Instance.new("UICorner", playerSelectFrame)
+
+local playerSelectTitle = Instance.new("TextLabel", playerSelectFrame)
+playerSelectTitle.Size = UDim2.new(1, 0, 0, 30)
+playerSelectTitle.BackgroundTransparency = 1
+playerSelectTitle.Text = "Val Check Players"
+playerSelectTitle.Font = Enum.Font.SourceSansBold
+playerSelectTitle.TextSize = 15
+playerSelectTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local playerSelectScroll = Instance.new("ScrollingFrame", playerSelectFrame)
+playerSelectScroll.Size = UDim2.new(1, 0, 1, -65)
+playerSelectScroll.Position = UDim2.new(0, 0, 0, 35)
+playerSelectScroll.BackgroundTransparency = 1
+playerSelectScroll.ScrollBarThickness = 5
+playerSelectScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+
+local playerSelectClose = Instance.new("TextButton", playerSelectFrame)
+playerSelectClose.Size = UDim2.new(0.9, 0, 0, 25)
+playerSelectClose.Position = UDim2.new(0.05, 0, 1, -30)
+playerSelectClose.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+playerSelectClose.TextColor3 = Color3.new(1,1,1)
+playerSelectClose.Font = Enum.Font.SourceSansBold
+playerSelectClose.TextSize = 14
+playerSelectClose.Text = "Close"
+Instance.new("UICorner", playerSelectClose)
+
 local configTitle = Instance.new("TextLabel", configFrame)
 configTitle.Size = UDim2.new(1, 0, 0, 30)
 configTitle.BackgroundTransparency = 1
@@ -584,4 +661,12 @@ return {
 	loadConfigButton = loadConfigButton,
 	configScroll = configScroll,
 	deleteConfigButton = deleteConfigButton,
+	pcTriggerButton = pcTriggerButton,
+	mobileTriggerButton = mobileTriggerButton,
+	valCheckButton = valCheckButton,
+	valCheckOpenButton = valCheckOpenButton,
+	playerSelectFrame = playerSelectFrame,
+	playerSelectTitle = playerSelectTitle,
+	playerSelectScroll = playerSelectScroll,
+	playerSelectClose = playerSelectClose,
 }
