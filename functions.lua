@@ -124,6 +124,7 @@ local valCheckEnabled = false
 local valCheckTargets = {}
 local mobileTriggerLoop = nil
 local pcTriggerLoop = nil
+local triggerWallCheckEnabled = false
 local fullbrightEnabled = false
 local godModeEnabled = false
 local godModeConnection = nil
@@ -375,6 +376,19 @@ local function updatePlayerSelectList()
 end
 
 local function isValidTarget(player)
+    if not player.Character then return false end
+    if triggerWallCheckEnabled then
+        local head = player.Character:FindFirstChild("Head")
+        if not head then return false end
+        local rayParams = RaycastParams.new()
+        rayParams.FilterDescendantsInstances = {LocalPlayer.Character}
+        rayParams.FilterType = Enum.RaycastFilterType.Exclude
+        local dir = (head.Position - Camera.CFrame.Position)
+        local result = workspace:Raycast(Camera.CFrame.Position, dir, rayParams)
+        if result and not result.Instance:IsDescendantOf(player.Character) then
+            return false
+        end
+    end
     if valCheckEnabled then
         return valCheckTargets[player.Name] == true
     end
@@ -1326,6 +1340,8 @@ return {
 	getValCheck = function() return valCheckEnabled end,
 	setValCheck = function(v) valCheckEnabled = v end,
 	updatePlayerSelectList = updatePlayerSelectList,
+	getTriggerWallCheck = function() return triggerWallCheckEnabled end,
+	setTriggerWallCheck = function(v) triggerWallCheckEnabled = v end,
 }
 
 end
