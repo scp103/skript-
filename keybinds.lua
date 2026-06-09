@@ -6,21 +6,6 @@ local function init(G, F)
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		if gameProcessed then return end
 
-			-- ` (під Escape) - відкрити Config систему
-if input.KeyCode == Enum.KeyCode.BackQuote then
-	if G.configFrame.Visible then
-		G.configFrame.Visible = false
-		G.frame.Visible = true
-	else
-		G.frame.Visible = false
-		G.teleportFrame.Visible = false
-		G.aimSettingsFrame.Visible = false
-		G.hitboxSettingsFrame.Visible = false
-		G.minimizedCircle.Visible = false
-		G.configFrame.Visible = true
-	end
-end
-
 		-- INSERT - Закрити/Відкрити меню
 		if input.KeyCode == Enum.KeyCode.Insert then
 			if G.frame.Visible or G.teleportFrame.Visible or G.aimSettingsFrame.Visible or G.hitboxSettingsFrame.Visible then
@@ -49,6 +34,21 @@ end
 			F.setHolding(not F.getHolding())
 			G.aimButton.Text = F.getHolding() and "AIM: ON" or "AIM: OFF"
 			F.showNotif("AIM", F.getHolding() and "✅ Enabled" or "❌ Disabled", 2)
+		end
+
+		-- F1 - Config система
+		if input.KeyCode == Enum.KeyCode.F1 then
+			if G.configFrame.Visible then
+				G.configFrame.Visible = false
+				G.frame.Visible = true
+			else
+				G.frame.Visible = false
+				G.teleportFrame.Visible = false
+				G.aimSettingsFrame.Visible = false
+				G.hitboxSettingsFrame.Visible = false
+				G.minimizedCircle.Visible = false
+				G.configFrame.Visible = true
+			end
 		end
 
 		-- F5 - ESP ON/OFF
@@ -112,10 +112,8 @@ end
 			F.showNotif("BunnyHop", F.getBunnyHop() and "✅ Enabled" or "❌ Disabled", 2)
 		end
 
-			
 		-- PageDown - Infinite Jump ON/OFF
 		if input.KeyCode == Enum.KeyCode.PageDown then
-			local ijs = game:GetService("UserInputService")
 			F.setInfiniteJump(not F.getInfiniteJump())
 			G.infiniteJumpButton.Text = F.getInfiniteJump() and "Infinite Jump: ON" or "Infinite Jump: OFF"
 			if F.getInfiniteJump() then
