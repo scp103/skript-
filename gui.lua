@@ -79,6 +79,16 @@ valCheckOpenButton.TextSize = 18
 valCheckOpenButton.Text = "+"
 Instance.new("UICorner", valCheckOpenButton)
 
+local triggerWallCheckButton = Instance.new("TextButton", aimSettingsFrame)
+triggerWallCheckButton.Size = UDim2.new(0.9, 0, 0, 30)
+triggerWallCheckButton.Position = UDim2.new(0.05, 0, 0, 280)
+triggerWallCheckButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+triggerWallCheckButton.TextColor3 = Color3.new(1,1,1)
+triggerWallCheckButton.Font = Enum.Font.SourceSansBold
+triggerWallCheckButton.TextSize = 14
+triggerWallCheckButton.Text = "Trigger WallCheck: OFF"
+Instance.new("UICorner", triggerWallCheckButton)
+
 local aimCloseButton = Instance.new("TextButton", aimSettingsFrame)
 aimCloseButton.Size = UDim2.new(0.9, 0, 0, 25)
 aimCloseButton.Position = UDim2.new(0.05, 0, 1, -30)
@@ -665,6 +675,7 @@ return {
 	mobileTriggerButton = mobileTriggerButton,
 	valCheckButton = valCheckButton,
 	valCheckOpenButton = valCheckOpenButton,
+	triggerWallCheckButton = triggerWallCheckButton,
 	playerSelectFrame = playerSelectFrame,
 	playerSelectTitle = playerSelectTitle,
 	playerSelectScroll = playerSelectScroll,
