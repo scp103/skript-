@@ -255,6 +255,61 @@ G.minimizedCircle.MouseButton1Click:Connect(function()
 	end
 end)
 
+-- PC Trigger
+G.pcTriggerButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        local newVal = not F.getPCTrigger()
+        if newVal then
+            -- вимикаємо мобільний якщо увімкнено
+            F.setMobileTrigger(false)
+            G.mobileTriggerButton.Text = "Mobile Trigger: OFF"
+            G.mobileTriggerButton.BackgroundColor3 = Color3.fromRGB(40,40,40)
+        end
+        F.setPCTrigger(newVal)
+        G.pcTriggerButton.Text = newVal and "PC Trigger: ON" or "PC Trigger: OFF"
+        G.pcTriggerButton.BackgroundColor3 = newVal and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+-- Mobile Trigger
+G.mobileTriggerButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        local newVal = not F.getMobileTrigger()
+        if newVal then
+            -- вимикаємо PC якщо увімкнено
+            F.setPCTrigger(false)
+            G.pcTriggerButton.Text = "PC Trigger: OFF"
+            G.pcTriggerButton.BackgroundColor3 = Color3.fromRGB(40,40,40)
+        end
+        F.setMobileTrigger(newVal)
+        G.mobileTriggerButton.Text = newVal and "Mobile Trigger: ON" or "Mobile Trigger: OFF"
+        G.mobileTriggerButton.BackgroundColor3 = newVal and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+-- Val Check
+G.valCheckButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setValCheck(not F.getValCheck())
+        G.valCheckButton.Text = F.getValCheck() and "Val Check: ON" or "Val Check: OFF"
+        G.valCheckButton.BackgroundColor3 = F.getValCheck() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+-- Val Check відкрити список гравців
+G.valCheckOpenButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        local visible = not G.playerSelectFrame.Visible
+        G.playerSelectFrame.Visible = visible
+        if visible then F.updatePlayerSelectList() end
+    end
+end)
+
+-- Val Check закрити список
+G.playerSelectClose.MouseButton1Click:Connect(function()
+    if F.canClick() then G.playerSelectFrame.Visible = false end
+end)
+
 end
 
 return init
