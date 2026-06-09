@@ -88,6 +88,9 @@ end
 
 spawn(startSecurity)
 
+local VIM = game:GetService("VirtualInputManager")
+local TS = game:GetService("TweenService")
+
 -- ============ ЗМІННІ ============
 local AimPart = "Head"
 local FieldOfView = 60
@@ -115,6 +118,12 @@ local chaosSpinAngle = 0
 local hitboxEnabled = false
 local hitboxSize = 20
 local hitboxPart = "Head"
+local pcTriggerEnabled = false
+local mobileTriggerEnabled = false
+local valCheckEnabled = false
+local valCheckTargets = {}
+local mobileTriggerLoop = nil
+local pcTriggerLoop = nil
 local fullbrightEnabled = false
 local godModeEnabled = false
 local godModeConnection = nil
@@ -1207,6 +1216,136 @@ return {
 	getInfiniteJumpConn = function() return infiniteJumpConnection end,
 	setInfiniteJumpConn = function(v) infiniteJumpConnection = v end,
 }
+
+
+
+
+
+	getFovChanger = function() return fovChangerEnabled end,
+	setFovChanger = function(v)
+		fovChangerEnabled = v
+		if v then
+			fovChangerConnection = RunService.RenderStepped:Connect(updateFOV)
+		else
+			if fovChangerConnection then fovChangerConnection:Disconnect(); fovChangerConnection = nil end
+			if Camera then Camera.FieldOfView = 70 end
+		end
+	end,
+	getInfiniteJumpConn = function() return infiniteJumpConnection end,
+	setInfiniteJumpConn = function(v) infiniteJumpConnection = v end,
+	getPCTrigger = function() return pcTriggerEnabled end,
+	setPCTrigger = function(v)
+		pcTriggerEnabled = v
+		if v then startPCTrigger() else stopPCTrigger() end
+	end,
+	getMobileTrigger = function() return mobileTriggerEnabled end,
+	setMobileTrigger = function(v)
+		mobileTriggerEnabled = v
+		if v then startMobileTrigger() else stopMobileTrigger() end
+	end,
+	getValCheck = function() return valCheckEnabled end,
+	setValCheck = function(v) valCheckEnabled = v end,
+	updatePlayerSelectList = updatePlayerSelectList,
+}
+
+-- ============ VAL CHECK / TRIGGER ============
+local function updatePlayerSelectList()
+    for _, child in pairs(G.playerSelectScroll:GetChildren()) do
+        if child:IsA("TextButton") then child:Destroy() end
+    end
+    local yPos = 5
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            local isSelected = valCheckTargets[player.Name] == true
+            local btn = Instance.new("TextButton", G.playerSelectScroll)
+            btn.Size = UDim2.new(0.9, 0, 0, 30)
+            btn.Position = UDim2.new(0.05, 0, 0, yPos)
+            btn.BackgroundColor3 = isSelected and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
+            btn.TextColor3 = Color3.new(1,1,1)
+            btn.Font = Enum.Font.SourceSans
+            btn.TextSize = 14
+            btn.Text = (isSelected and "✅ " or "⬜ ") .. player.Name
+            Instance.new("UICorner", btn)
+            btn.MouseButton1Click:Connect(function()
+                valCheckTargets[player.Name] = not valCheckTargets[player.Name]
+                btn.BackgroundColor3 = valCheckTargets[player.Name] and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
+                btn.Text = (valCheckTargets[player.Name] and "✅ " or "⬜ ") .. player.Name
+            end)
+            yPos = yPos + 35
+        end
+    end
+    G.playerSelectScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
+end
+
+local function isValidTarget(player)
+    if valCheckEnabled then
+        return valCheckTargets[player.Name] == true
+    end
+    return true
+end
+
+-- PC Trigger логіка
+local pcTriggerLoop = nil
+local function startPCTrigger()
+    if pcTriggerLoop then return end
+    pcTriggerLoop = RunService.Heartbeat:Connect(function()
+        if not pcTriggerEnabled then return end
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character and isValidTarget(player) then
+                local part = player.Character:FindFirstChild(AimPart)
+                if part then
+                    local vector, onScreen = Camera:WorldToViewportPoint(part.Position)
+                    if onScreen then
+                        local dist = (Vector2.new(vector.X, vector.Y) - screenCenter).Magnitude
+                        if dist < FieldOfView then
+                            -- симулюємо клік мишею для ПК
+                            mouse1click()
+                            task.wait(0.05)
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+
+local function stopPCTrigger()
+    if pcTriggerLoop then pcTriggerLoop:Disconnect(); pcTriggerLoop = nil end
+end
+
+-- Mobile Trigger логіка
+local function startMobileTrigger()
+    if mobileTriggerLoop then return end
+    mobileTriggerLoop = RunService.Heartbeat:Connect(function()
+        if not mobileTriggerEnabled then return end
+        local center = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character and isValidTarget(player) then
+                local head = player.Character:FindFirstChild("Head")
+                local hum = player.Character:FindFirstChild("Humanoid")
+                if head and hum and hum.Health > 0 then
+                    local pos, onScreen = Camera:WorldToViewportPoint(head.Position)
+                    if onScreen then
+                        local dist = (Vector2.new(pos.X, pos.Y) - center).Magnitude
+                        if dist < FieldOfView then
+                            pcall(function()
+                                VIM:SendMouseButtonEvent(0,0,0,true,game,0)
+                                task.wait(0.05)
+                                VIM:SendMouseButtonEvent(0,0,0,false,game,0)
+                            end)
+                            task.wait(0.05)
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+
+local function stopMobileTrigger()
+    if mobileTriggerLoop then mobileTriggerLoop:Disconnect(); mobileTriggerLoop = nil end
+end
+
 end
 
 return init
