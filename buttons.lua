@@ -310,6 +310,14 @@ G.playerSelectClose.MouseButton1Click:Connect(function()
     if F.canClick() then G.playerSelectFrame.Visible = false end
 end)
 
+G.triggerWallCheckButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setTriggerWallCheck(not F.getTriggerWallCheck())
+        G.triggerWallCheckButton.Text = F.getTriggerWallCheck() and "Trigger WallCheck: ON" or "Trigger WallCheck: OFF"
+        G.triggerWallCheckButton.BackgroundColor3 = F.getTriggerWallCheck() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
 end
 
 return init
