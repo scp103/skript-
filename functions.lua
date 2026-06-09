@@ -1194,6 +1194,7 @@ makeDraggable(G.minimizedCircle)
 makeDraggable(G.aimSettingsFrame, G.aimSettingsTitle)
 makeDraggable(G.hitboxSettingsFrame, G.hitboxSettingsTitle)
 makeDraggable(G.configFrame, G.configTitle)
+makeDraggable(G.playerSelectFrame, G.playerSelectTitle)
 
 -- Init sliders
 updateSlider()
