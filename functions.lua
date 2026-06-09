@@ -975,6 +975,12 @@ local function getCurrentConfig()
 		flySpeed = flySpeed,
 		speed = currentSpeed,
 		fov = currentFOV,
+		pcTrigger = pcTriggerEnabled,
+		mobileTrigger = mobileTriggerEnabled,
+		valCheck = valCheckEnabled,
+		valCheckTargets = valCheckTargets,
+		triggerWallCheck = triggerWallCheckEnabled,
+		skyIndex = skyIndex,
 	}
 end
 
@@ -1058,6 +1064,46 @@ local function applyConfig(config)
 	fullbrightEnabled = config.fullbright
 	G.fullbrightButton.Text = fullbrightEnabled and "Fullbright: ON" or "Fullbright: OFF"
 	if fullbrightEnabled then enableFullbright() else disableFullbright() end
+end
+
+-- PC Trigger
+if config.pcTrigger then
+	pcTriggerEnabled = true
+	G.pcTriggerButton.Text = "PC Trigger: ON"
+	G.pcTriggerButton.BackgroundColor3 = Color3.fromRGB(0,180,0)
+	startPCTrigger()
+end
+
+-- Mobile Trigger
+if config.mobileTrigger then
+	mobileTriggerEnabled = true
+	G.mobileTriggerButton.Text = "Mobile Trigger: ON"
+	G.mobileTriggerButton.BackgroundColor3 = Color3.fromRGB(0,180,0)
+	startMobileTrigger()
+end
+
+-- Val Check
+valCheckEnabled = config.valCheck or false
+G.valCheckButton.Text = valCheckEnabled and "Val Check: ON" or "Val Check: OFF"
+G.valCheckButton.BackgroundColor3 = valCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+
+-- Val Check Targets
+if config.valCheckTargets then
+	valCheckTargets = config.valCheckTargets
+end
+
+-- Trigger WallCheck
+triggerWallCheckEnabled = config.triggerWallCheck or false
+G.triggerWallCheckButton.Text = triggerWallCheckEnabled and "Trigger WallCheck: ON" or "Trigger WallCheck: OFF"
+G.triggerWallCheckButton.BackgroundColor3 = triggerWallCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+
+-- Sky
+if config.skyIndex then
+	skyIndex = config.skyIndex
+	if skyIndex == 2 then
+		skyIndex = 1
+		changeSky()
+	end
 end
 
 currentSpeed = config.speed
