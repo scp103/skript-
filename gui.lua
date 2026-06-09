@@ -20,7 +20,7 @@ local frameCorner = Instance.new("UICorner", frame)
 frameCorner.CornerRadius = UDim.new(0, 12)
 
 local aimSettingsFrame = Instance.new("Frame", screenGui)
-aimSettingsFrame.Size = UDim2.new(0, 200, 0, 320)
+aimSettingsFrame.Size = UDim2.new(0, 200, 0, 360)
 aimSettingsFrame.Position = UDim2.new(0.5, 100, 0.3, 0)
 aimSettingsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 aimSettingsFrame.BorderSizePixel = 0
@@ -40,7 +40,7 @@ aimSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 -- PC / Mobile Trigger кнопки
 local pcTriggerButton = Instance.new("TextButton", aimSettingsFrame)
 pcTriggerButton.Size = UDim2.new(0.44, 0, 0, 30)
-pcTriggerButton.Position = UDim2.new(0.05, 0, 0, 120)
+pcTriggerButton.Position = UDim2.new(0.05, 0, 0, 200)
 pcTriggerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 pcTriggerButton.TextColor3 = Color3.new(1,1,1)
 pcTriggerButton.Font = Enum.Font.SourceSansBold
@@ -50,7 +50,7 @@ Instance.new("UICorner", pcTriggerButton)
 
 local mobileTriggerButton = Instance.new("TextButton", aimSettingsFrame)
 mobileTriggerButton.Size = UDim2.new(0.44, 0, 0, 30)
-mobileTriggerButton.Position = UDim2.new(0.51, 0, 0, 120)
+mobileTriggerButton.Position = UDim2.new(0.51, 0, 0, 200)
 mobileTriggerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mobileTriggerButton.TextColor3 = Color3.new(1,1,1)
 mobileTriggerButton.Font = Enum.Font.SourceSansBold
@@ -61,7 +61,7 @@ Instance.new("UICorner", mobileTriggerButton)
 -- Val Check кнопка + відкрити список гравців
 local valCheckButton = Instance.new("TextButton", aimSettingsFrame)
 valCheckButton.Size = UDim2.new(0.75, -5, 0, 30)
-valCheckButton.Position = UDim2.new(0.05, 0, 0, 160)
+valCheckButton.Position = UDim2.new(0.05, 0, 0, 240)
 valCheckButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 valCheckButton.TextColor3 = Color3.new(1,1,1)
 valCheckButton.Font = Enum.Font.SourceSansBold
@@ -71,7 +71,7 @@ Instance.new("UICorner", valCheckButton)
 
 local valCheckOpenButton = Instance.new("TextButton", aimSettingsFrame)
 valCheckOpenButton.Size = UDim2.new(0.15, -5, 0, 30)
-valCheckOpenButton.Position = UDim2.new(0.8, 0, 0, 160)
+valCheckOpenButton.Position = UDim2.new(0.8, 0, 0, 240)
 valCheckOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
 valCheckOpenButton.TextColor3 = Color3.new(1,1,1)
 valCheckOpenButton.Font = Enum.Font.SourceSansBold
