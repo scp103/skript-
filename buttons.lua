@@ -284,6 +284,7 @@ G.mobileTriggerButton.MouseButton1Click:Connect(function()
         F.setMobileTrigger(newVal)
         G.mobileTriggerButton.Text = newVal and "Mobile Trigger: ON" or "Mobile Trigger: OFF"
         G.mobileTriggerButton.BackgroundColor3 = newVal and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+		G.mobileGui.Visible = newVal
     end
 end)
 
