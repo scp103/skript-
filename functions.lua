@@ -122,6 +122,17 @@ local pcTriggerEnabled = false
 local mobileTriggerEnabled = false
 local valCheckEnabled = false
 local valCheckTargets = {}
+local espVisColor = Color3.fromRGB(0, 255, 0)
+local espUnvisColor = Color3.fromRGB(255, 0, 0)
+local espShowTracer = true
+local espShowBox = true
+local espShowName = true
+local espShowHealth = true
+local espShowDist = true
+local espValCheckEnabled = false
+local espValCheckTargets = {}
+local espColorPickerTarget = nil -- "vis" або "unvis"
+local espRVal, espGVal, espBVal = 255, 0, 0
 local mobileTriggerLoop = nil
 local pcTriggerLoop = nil
 local triggerWallCheckEnabled = false
@@ -762,22 +773,24 @@ RunService.RenderStepped:Connect(function()
 						rayParams.FilterType = Enum.RaycastFilterType.Exclude
 						local rayResult = workspace:Raycast(Camera.CFrame.Position, root.Position - Camera.CFrame.Position, rayParams)
 						local canSee = not (rayResult and rayResult.Instance)
-						local col = canSee and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)
-						esp.Box.Color = col; esp.Tracer.Color = col
-						esp.Box.Size = Vector2.new(width, height)
-						esp.Box.Position = Vector2.new(pos.X-width/2, pos.Y-height/1.5)
-						esp.Box.Visible = true
-						esp.Name.Position = Vector2.new(pos.X, pos.Y-height/1.5-15)
-						esp.Name.Text = p.Name; esp.Name.Visible = true
-						esp.Health.Position = Vector2.new(pos.X, pos.Y-height/1.5)
-						esp.Health.Text = "HP: "..math.floor(hum.Health); esp.Health.Visible = true
-						esp.Distance.Position = Vector2.new(pos.X, pos.Y+height/2+5)
-						esp.Distance.Text = "Dist: "..math.floor(dist); esp.Distance.Visible = true
-						esp.Tracer.From = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
-						esp.Tracer.To = Vector2.new(pos.X, pos.Y); esp.Tracer.Visible = true
-					else
-						for _, v in pairs(esp) do v.Visible = false end
-					end
+local shouldShow = not espValCheckEnabled or espValCheckTargets[p.Name] == true
+if shouldShow then
+    local col = canSee and espVisColor or espUnvisColor
+    esp.Box.Color = col; esp.Tracer.Color = col
+    esp.Box.Size = Vector2.new(width, height)
+    esp.Box.Position = Vector2.new(pos.X-width/2, pos.Y-height/1.5)
+    esp.Box.Visible = espShowBox
+    esp.Name.Position = Vector2.new(pos.X, pos.Y-height/1.5-15)
+    esp.Name.Text = p.Name; esp.Name.Visible = espShowName
+    esp.Health.Position = Vector2.new(pos.X, pos.Y-height/1.5)
+    esp.Health.Text = "HP: "..math.floor(hum.Health); esp.Health.Visible = espShowHealth
+    esp.Distance.Position = Vector2.new(pos.X, pos.Y+height/2+5)
+    esp.Distance.Text = "Dist: "..math.floor(dist); esp.Distance.Visible = espShowDist
+    esp.Tracer.From = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
+    esp.Tracer.To = Vector2.new(pos.X, pos.Y); esp.Tracer.Visible = espShowTracer
+else
+    for _, v in pairs(esp) do v.Visible = false end
+end
 				else
 					for _, v in pairs(esp) do v.Visible = false end
 				end
@@ -1242,6 +1255,9 @@ makeDraggable(G.hitboxSettingsFrame, G.hitboxSettingsTitle)
 makeDraggable(G.configFrame, G.configTitle)
 makeDraggable(G.playerSelectFrame, G.playerSelectTitle)
 makeDraggable(G.mobileGui)
+makeDraggable(G.espSettingsFrame, G.espSettingsTitle)
+makeDraggable(G.espColorPickerFrame, G.espColorPickerTitle)
+makeDraggable(G.espValCheckFrame, G.espValCheckTitle)
 
 local function setupMobileKey(btn, key1, key2)
     local press = false
@@ -1278,6 +1294,110 @@ setupMobileKey(G.mobileDBtn, Enum.KeyCode.D)
 setupMobileKey(G.mobileSpaceBtn, Enum.KeyCode.Space)
 setupMobileKey(G.mobileWABtn, Enum.KeyCode.W, Enum.KeyCode.A)
 setupMobileKey(G.mobileWDBtn, Enum.KeyCode.W, Enum.KeyCode.D)
+
+-- ESP ValCheck список
+local function updateEspValCheckList()
+    for _, child in pairs(G.espValCheckScroll:GetChildren()) do
+        if child:IsA("TextButton") then child:Destroy() end
+    end
+    local yPos = 5
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            local isSel = espValCheckTargets[player.Name] == true
+            local btn = Instance.new("TextButton", G.espValCheckScroll)
+            btn.Size = UDim2.new(0.9, 0, 0, 30)
+            btn.Position = UDim2.new(0.05, 0, 0, yPos)
+            btn.BackgroundColor3 = isSel and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
+            btn.TextColor3 = Color3.new(1,1,1)
+            btn.Font = Enum.Font.SourceSans
+            btn.TextSize = 14
+            btn.Text = (isSel and "✅ " or "⬜ ") .. player.Name
+            Instance.new("UICorner", btn)
+            btn.MouseButton1Click:Connect(function()
+                espValCheckTargets[player.Name] = not espValCheckTargets[player.Name]
+                btn.BackgroundColor3 = espValCheckTargets[player.Name] and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
+                btn.Text = (espValCheckTargets[player.Name] and "✅ " or "⬜ ") .. player.Name
+            end)
+            yPos = yPos + 35
+        end
+    end
+    G.espValCheckScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
+end
+
+-- Color picker слайдери
+local draggingR, draggingG, draggingB = false, false, false
+
+local function updateColorPreview()
+    local c = Color3.fromRGB(espRVal, espGVal, espBVal)
+    G.espColorPreview.BackgroundColor3 = c
+    if espColorPickerTarget == "vis" then
+        espVisColor = c
+        G.espVisColorBtn.BackgroundColor3 = c
+    elseif espColorPickerTarget == "unvis" then
+        espUnvisColor = c
+        G.espUnvisColorBtn.BackgroundColor3 = c
+    end
+end
+
+local function handleRSlider()
+    local mouse = UserInputService:GetMouseLocation()
+    local sp = G.espRSlider.AbsolutePosition
+    local ss = G.espRSlider.AbsoluteSize
+    local pct = math.clamp((mouse.X - sp.X) / ss.X, 0, 1)
+    espRVal = math.floor(pct * 255)
+    G.espRHandle.Position = UDim2.new(pct, -9, 0, -1.5)
+    updateColorPreview()
+end
+
+local function handleGSlider()
+    local mouse = UserInputService:GetMouseLocation()
+    local sp = G.espGSlider.AbsolutePosition
+    local ss = G.espGSlider.AbsoluteSize
+    local pct = math.clamp((mouse.X - sp.X) / ss.X, 0, 1)
+    espGVal = math.floor(pct * 255)
+    G.espGHandle.Position = UDim2.new(pct, -9, 0, -1.5)
+    updateColorPreview()
+end
+
+local function handleBSlider()
+    local mouse = UserInputService:GetMouseLocation()
+    local sp = G.espBSlider.AbsolutePosition
+    local ss = G.espBSlider.AbsoluteSize
+    local pct = math.clamp((mouse.X - sp.X) / ss.X, 0, 1)
+    espBVal = math.floor(pct * 255)
+    G.espBHandle.Position = UDim2.new(pct, -9, 0, -1.5)
+    updateColorPreview()
+end
+
+G.espRSlider.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+        draggingR = true; handleRSlider()
+    end
+end)
+G.espGSlider.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+        draggingG = true; handleGSlider()
+    end
+end)
+G.espBSlider.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+        draggingB = true; handleBSlider()
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+        draggingR = false; draggingG = false; draggingB = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
+        if draggingR then handleRSlider()
+        elseif draggingG then handleGSlider()
+        elseif draggingB then handleBSlider() end
+    end
+end)
 
 -- Init sliders
 updateSlider()
@@ -1426,6 +1546,9 @@ return {
 	updatePlayerSelectList = updatePlayerSelectList,
 	getTriggerWallCheck = function() return triggerWallCheckEnabled end,
 	setTriggerWallCheck = function(v) triggerWallCheckEnabled = v end,
+	updatePlayerSelectList = updatePlayerSelectList,
+	updateEspValCheckList = updateEspValCheckList,
+	setEspColorTarget = function(v) espColorPickerTarget = v end,
 }
 
 end
