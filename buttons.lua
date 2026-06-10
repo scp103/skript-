@@ -414,6 +414,10 @@ G.espValCheckClose.MouseButton1Click:Connect(function()
     if F.canClick() then G.espValCheckFrame.Visible = false end
 end)
 
+G.espColorPickerClose.MouseButton1Click:Connect(function()
+    if F.canClick() then G.espColorPickerFrame.Visible = false end
+end)
+
 end
 
 return init
