@@ -20,7 +20,7 @@ local frameCorner = Instance.new("UICorner", frame)
 frameCorner.CornerRadius = UDim.new(0, 12)
 
 local aimSettingsFrame = Instance.new("Frame", screenGui)
-aimSettingsFrame.Size = UDim2.new(0, 200, 0, 360)
+aimSettingsFrame.Size = UDim2.new(0, 200, 0, 340)
 aimSettingsFrame.Position = UDim2.new(0.5, 100, 0.3, 0)
 aimSettingsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 aimSettingsFrame.BorderSizePixel = 0
