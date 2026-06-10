@@ -590,10 +590,19 @@ mobileWDBtn.TextSize = 20
 mobileWDBtn.Font = Enum.Font.GothamBold
 Instance.new("UICorner", mobileWDBtn)
 
--- Space
-local mobileSpaceBtn = Instance.new("TextButton", mobileGui)
-mobileSpaceBtn.Size = UDim2.new(0,130,0,35)
-mobileSpaceBtn.Position = UDim2.new(0,15,0,95)
+-- Space окремо справа
+local mobileSpaceFrame = Instance.new("Frame", screenGui)
+mobileSpaceFrame.Size = UDim2.new(0, 80, 0, 60)
+mobileSpaceFrame.Position = UDim2.new(1, -100, 1, -80)
+mobileSpaceFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+mobileSpaceFrame.BorderSizePixel = 0
+mobileSpaceFrame.Visible = false
+mobileSpaceFrame.Active = true
+Instance.new("UICorner", mobileSpaceFrame)
+
+local mobileSpaceBtn = Instance.new("TextButton", mobileSpaceFrame)
+mobileSpaceBtn.Size = UDim2.new(1,-10,1,-10)
+mobileSpaceBtn.Position = UDim2.new(0,5,0,5)
 mobileSpaceBtn.BackgroundColor3 = Color3.fromRGB(40,40,60)
 mobileSpaceBtn.Text = "SPACE"
 mobileSpaceBtn.TextColor3 = Color3.new(1,1,1)
@@ -771,4 +780,5 @@ return {
 	mobileWABtn = mobileWABtn,
 	mobileWDBtn = mobileWDBtn,
 	mobileSpaceBtn = mobileSpaceBtn,
+	mobileSpaceFrame = mobileSpaceFrame,
 }
