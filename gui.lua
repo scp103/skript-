@@ -47,7 +47,7 @@ espSettingsFrame.Active = true
 Instance.new("UICorner", espSettingsFrame)
 
 local espColorPickerFrame = Instance.new("Frame", screenGui)
-espColorPickerFrame.Size = UDim2.new(0, 200, 0, 160)
+espColorPickerFrame.Size = UDim2.new(0, 200, 0, 200)
 espColorPickerFrame.Position = UDim2.new(0.5, 320, 0.3, 0)
 espColorPickerFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 espColorPickerFrame.BorderSizePixel = 0
@@ -112,6 +112,16 @@ espColorPreview.Position = UDim2.new(0.05, 0, 0, 120)
 espColorPreview.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 espColorPreview.BorderSizePixel = 0
 Instance.new("UICorner", espColorPreview)
+
+local espColorPickerClose = Instance.new("TextButton", espColorPickerFrame)
+espColorPickerClose.Size = UDim2.new(0.9, 0, 0, 25)
+espColorPickerClose.Position = UDim2.new(0.05, 0, 1, -30)
+espColorPickerClose.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+espColorPickerClose.TextColor3 = Color3.new(1,1,1)
+espColorPickerClose.Font = Enum.Font.SourceSansBold
+espColorPickerClose.TextSize = 14
+espColorPickerClose.Text = "← Back"
+Instance.new("UICorner", espColorPickerClose)
 
 local espValCheckFrame = Instance.new("Frame", screenGui)
 espValCheckFrame.Size = UDim2.new(0, 180, 0, 280)
@@ -1068,4 +1078,5 @@ return {
 	espValCheckClose = espValCheckClose,
 	espSettingsOpenButton = espSettingsOpenButton,
 	espValCheckTitle = espValCheckTitle,
+	espColorPickerClose = espColorPickerClose,
 }
