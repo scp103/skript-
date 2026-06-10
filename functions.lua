@@ -773,24 +773,27 @@ RunService.RenderStepped:Connect(function()
 						rayParams.FilterType = Enum.RaycastFilterType.Exclude
 						local rayResult = workspace:Raycast(Camera.CFrame.Position, root.Position - Camera.CFrame.Position, rayParams)
 						local canSee = not (rayResult and rayResult.Instance)
-local shouldShow = not espValCheckEnabled or espValCheckTargets[p.Name] == true
-if shouldShow then
-    local col = canSee and espVisColor or espUnvisColor
-    esp.Box.Color = col; esp.Tracer.Color = col
-    esp.Box.Size = Vector2.new(width, height)
-    esp.Box.Position = Vector2.new(pos.X-width/2, pos.Y-height/1.5)
-    esp.Box.Visible = espShowBox
-    esp.Name.Position = Vector2.new(pos.X, pos.Y-height/1.5-15)
-    esp.Name.Text = p.Name; esp.Name.Visible = espShowName
-    esp.Health.Position = Vector2.new(pos.X, pos.Y-height/1.5)
-    esp.Health.Text = "HP: "..math.floor(hum.Health); esp.Health.Visible = espShowHealth
-    esp.Distance.Position = Vector2.new(pos.X, pos.Y+height/2+5)
-    esp.Distance.Text = "Dist: "..math.floor(dist); esp.Distance.Visible = espShowDist
-    esp.Tracer.From = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
-    esp.Tracer.To = Vector2.new(pos.X, pos.Y); esp.Tracer.Visible = espShowTracer
-else
-    for _, v in pairs(esp) do v.Visible = false end
-end
+						local shouldShow = not espValCheckEnabled or espValCheckTargets[p.Name] == true
+						if shouldShow then
+							local col = canSee and espVisColor or espUnvisColor
+							esp.Box.Color = col; esp.Tracer.Color = col
+							esp.Box.Size = Vector2.new(width, height)
+							esp.Box.Position = Vector2.new(pos.X-width/2, pos.Y-height/1.5)
+							esp.Box.Visible = espShowBox
+							esp.Name.Position = Vector2.new(pos.X, pos.Y-height/1.5-15)
+							esp.Name.Text = p.Name; esp.Name.Visible = espShowName
+							esp.Health.Position = Vector2.new(pos.X, pos.Y-height/1.5)
+							esp.Health.Text = "HP: "..math.floor(hum.Health); esp.Health.Visible = espShowHealth
+							esp.Distance.Position = Vector2.new(pos.X, pos.Y+height/2+5)
+							esp.Distance.Text = "Dist: "..math.floor(dist); esp.Distance.Visible = espShowDist
+							esp.Tracer.From = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
+							esp.Tracer.To = Vector2.new(pos.X, pos.Y); esp.Tracer.Visible = espShowTracer
+						else
+							for _, v in pairs(esp) do v.Visible = false end
+						end
+					else
+						for _, v in pairs(esp) do v.Visible = false end
+					end
 				else
 					for _, v in pairs(esp) do v.Visible = false end
 				end
