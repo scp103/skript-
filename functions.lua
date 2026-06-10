@@ -1241,6 +1241,43 @@ makeDraggable(G.aimSettingsFrame, G.aimSettingsTitle)
 makeDraggable(G.hitboxSettingsFrame, G.hitboxSettingsTitle)
 makeDraggable(G.configFrame, G.configTitle)
 makeDraggable(G.playerSelectFrame, G.playerSelectTitle)
+makeDraggable(G.mobileGui)
+
+local function setupMobileKey(btn, key1, key2)
+    local press = false
+    local function pressDown()
+        if not press then
+            press = true
+            btn.BackgroundColor3 = Color3.fromRGB(80,150,255)
+            pcall(function() VIM:SendKeyEvent(true, key1, false, game) end)
+            if key2 then pcall(function() VIM:SendKeyEvent(true, key2, false, game) end) end
+        end
+    end
+    local function pressUp()
+        if press then
+            press = false
+            btn.BackgroundColor3 = key2 and Color3.fromRGB(60,30,30) or Color3.fromRGB(40,40,60)
+            pcall(function() VIM:SendKeyEvent(false, key1, false, game) end)
+            if key2 then pcall(function() VIM:SendKeyEvent(false, key2, false, game) end) end
+        end
+    end
+    btn.MouseButton1Down:Connect(pressDown)
+    btn.MouseButton1Up:Connect(pressUp)
+    btn.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.Touch then pressDown() end
+    end)
+    btn.InputEnded:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.Touch then pressUp() end
+    end)
+end
+
+setupMobileKey(G.mobileWBtn, Enum.KeyCode.W)
+setupMobileKey(G.mobileABtn, Enum.KeyCode.A)
+setupMobileKey(G.mobileSBtn, Enum.KeyCode.S)
+setupMobileKey(G.mobileDBtn, Enum.KeyCode.D)
+setupMobileKey(G.mobileSpaceBtn, Enum.KeyCode.Space)
+setupMobileKey(G.mobileWABtn, Enum.KeyCode.W, Enum.KeyCode.A)
+setupMobileKey(G.mobileWDBtn, Enum.KeyCode.W, Enum.KeyCode.D)
 
 -- Init sliders
 updateSlider()
