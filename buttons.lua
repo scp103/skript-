@@ -320,6 +320,100 @@ G.triggerWallCheckButton.MouseButton1Click:Connect(function()
     end
 end)
 
+G.espVisColorOpenBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setEspColorTarget("vis")
+        G.espColorPickerTitle.Text = "Visible Color"
+        G.espColorPickerFrame.Visible = true
+        G.espValCheckFrame.Visible = false
+    end
+end)
+
+G.espUnvisColorOpenBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setEspColorTarget("unvis")
+        G.espColorPickerTitle.Text = "Unvisible Color"
+        G.espColorPickerFrame.Visible = true
+        G.espValCheckFrame.Visible = false
+    end
+end)
+
+G.espSettingsOpenButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        G.espSettingsFrame.Visible = not G.espSettingsFrame.Visible
+        G.espColorPickerFrame.Visible = false
+        G.espValCheckFrame.Visible = false
+    end
+end)
+
+G.espSettingsCloseBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        G.espSettingsFrame.Visible = false
+        G.espColorPickerFrame.Visible = false
+        G.espValCheckFrame.Visible = false
+    end
+end)
+
+G.espTracerBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setEspShowTracer(not F.getEspShowTracer())
+        G.espTracerBtn.Text = F.getEspShowTracer() and "Tracer: ON" or "Tracer: OFF"
+        G.espTracerBtn.BackgroundColor3 = F.getEspShowTracer() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+G.espBoxBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setEspShowBox(not F.getEspShowBox())
+        G.espBoxBtn.Text = F.getEspShowBox() and "Box: ON" or "Box: OFF"
+        G.espBoxBtn.BackgroundColor3 = F.getEspShowBox() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+G.espNameBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setEspShowName(not F.getEspShowName())
+        G.espNameBtn.Text = F.getEspShowName() and "Name: ON" or "Name: OFF"
+        G.espNameBtn.BackgroundColor3 = F.getEspShowName() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+G.espHealthBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setEspShowHealth(not F.getEspShowHealth())
+        G.espHealthBtn.Text = F.getEspShowHealth() and "Health: ON" or "Health: OFF"
+        G.espHealthBtn.BackgroundColor3 = F.getEspShowHealth() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+G.espDistBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setEspShowDist(not F.getEspShowDist())
+        G.espDistBtn.Text = F.getEspShowDist() and "Distance: ON" or "Distance: OFF"
+        G.espDistBtn.BackgroundColor3 = F.getEspShowDist() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+G.espValCheckBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setEspValCheck(not F.getEspValCheck())
+        G.espValCheckBtn.Text = F.getEspValCheck() and "ESP ValCheck: ON" or "ESP ValCheck: OFF"
+        G.espValCheckBtn.BackgroundColor3 = F.getEspValCheck() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+G.espValCheckOpenBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        G.espValCheckFrame.Visible = not G.espValCheckFrame.Visible
+        G.espColorPickerFrame.Visible = false
+        if G.espValCheckFrame.Visible then F.updateEspValCheckList() end
+    end
+end)
+
+G.espValCheckClose.MouseButton1Click:Connect(function()
+    if F.canClick() then G.espValCheckFrame.Visible = false end
+end)
+
 end
 
 return init
