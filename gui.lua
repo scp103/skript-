@@ -518,6 +518,89 @@ playerSelectClose.TextSize = 14
 playerSelectClose.Text = "Close"
 Instance.new("UICorner", playerSelectClose)
 
+-- Mobile Trigger GUI
+local mobileGui = Instance.new("Frame", screenGui)
+mobileGui.Size = UDim2.new(0, 160, 0, 140)
+mobileGui.Position = UDim2.new(0, 20, 1, -160)
+mobileGui.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+mobileGui.BorderSizePixel = 0
+mobileGui.Visible = false
+mobileGui.Active = true
+Instance.new("UICorner", mobileGui)
+
+-- WASD + діагональні кнопки
+local mobileWBtn = Instance.new("TextButton", mobileGui)
+mobileWBtn.Size = UDim2.new(0,40,0,40)
+mobileWBtn.Position = UDim2.new(0,60,0,5)
+mobileWBtn.BackgroundColor3 = Color3.fromRGB(40,40,60)
+mobileWBtn.Text = "W"
+mobileWBtn.TextColor3 = Color3.new(1,1,1)
+mobileWBtn.TextSize = 16
+mobileWBtn.Font = Enum.Font.GothamBold
+Instance.new("UICorner", mobileWBtn)
+
+local mobileABtn = Instance.new("TextButton", mobileGui)
+mobileABtn.Size = UDim2.new(0,40,0,40)
+mobileABtn.Position = UDim2.new(0,10,0,50)
+mobileABtn.BackgroundColor3 = Color3.fromRGB(40,40,60)
+mobileABtn.Text = "A"
+mobileABtn.TextColor3 = Color3.new(1,1,1)
+mobileABtn.TextSize = 16
+mobileABtn.Font = Enum.Font.GothamBold
+Instance.new("UICorner", mobileABtn)
+
+local mobileSBtn = Instance.new("TextButton", mobileGui)
+mobileSBtn.Size = UDim2.new(0,40,0,40)
+mobileSBtn.Position = UDim2.new(0,60,0,50)
+mobileSBtn.BackgroundColor3 = Color3.fromRGB(40,40,60)
+mobileSBtn.Text = "S"
+mobileSBtn.TextColor3 = Color3.new(1,1,1)
+mobileSBtn.TextSize = 16
+mobileSBtn.Font = Enum.Font.GothamBold
+Instance.new("UICorner", mobileSBtn)
+
+local mobileDBtn = Instance.new("TextButton", mobileGui)
+mobileDBtn.Size = UDim2.new(0,40,0,40)
+mobileDBtn.Position = UDim2.new(0,110,0,50)
+mobileDBtn.BackgroundColor3 = Color3.fromRGB(40,40,60)
+mobileDBtn.Text = "D"
+mobileDBtn.TextColor3 = Color3.new(1,1,1)
+mobileDBtn.TextSize = 16
+mobileDBtn.Font = Enum.Font.GothamBold
+Instance.new("UICorner", mobileDBtn)
+
+-- Діагональні
+local mobileWABtn = Instance.new("TextButton", mobileGui)
+mobileWABtn.Size = UDim2.new(0,40,0,40)
+mobileWABtn.Position = UDim2.new(0,10,0,5)
+mobileWABtn.BackgroundColor3 = Color3.fromRGB(60,30,30)
+mobileWABtn.Text = "↙"
+mobileWABtn.TextColor3 = Color3.fromRGB(255,80,80)
+mobileWABtn.TextSize = 20
+mobileWABtn.Font = Enum.Font.GothamBold
+Instance.new("UICorner", mobileWABtn)
+
+local mobileWDBtn = Instance.new("TextButton", mobileGui)
+mobileWDBtn.Size = UDim2.new(0,40,0,40)
+mobileWDBtn.Position = UDim2.new(0,110,0,5)
+mobileWDBtn.BackgroundColor3 = Color3.fromRGB(60,30,30)
+mobileWDBtn.Text = "↘"
+mobileWDBtn.TextColor3 = Color3.fromRGB(255,80,80)
+mobileWDBtn.TextSize = 20
+mobileWDBtn.Font = Enum.Font.GothamBold
+Instance.new("UICorner", mobileWDBtn)
+
+-- Space
+local mobileSpaceBtn = Instance.new("TextButton", mobileGui)
+mobileSpaceBtn.Size = UDim2.new(0,130,0,35)
+mobileSpaceBtn.Position = UDim2.new(0,15,0,95)
+mobileSpaceBtn.BackgroundColor3 = Color3.fromRGB(40,40,60)
+mobileSpaceBtn.Text = "SPACE"
+mobileSpaceBtn.TextColor3 = Color3.new(1,1,1)
+mobileSpaceBtn.TextSize = 14
+mobileSpaceBtn.Font = Enum.Font.GothamBold
+Instance.new("UICorner", mobileSpaceBtn)
+
 local configTitle = Instance.new("TextLabel", configFrame)
 configTitle.Size = UDim2.new(1, 0, 0, 30)
 configTitle.BackgroundTransparency = 1
@@ -680,4 +763,12 @@ return {
 	playerSelectTitle = playerSelectTitle,
 	playerSelectScroll = playerSelectScroll,
 	playerSelectClose = playerSelectClose,
+	mobileGui = mobileGui,
+	mobileWBtn = mobileWBtn,
+	mobileABtn = mobileABtn,
+	mobileSBtn = mobileSBtn,
+	mobileDBtn = mobileDBtn,
+	mobileWABtn = mobileWABtn,
+	mobileWDBtn = mobileWDBtn,
+	mobileSpaceBtn = mobileSpaceBtn,
 }
