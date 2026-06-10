@@ -37,6 +37,253 @@ aimSettingsTitle.Font = Enum.Font.SourceSansBold
 aimSettingsTitle.TextSize = 16
 aimSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
+local espSettingsFrame = Instance.new("Frame", screenGui)
+espSettingsFrame.Size = UDim2.new(0, 210, 0, 420)
+espSettingsFrame.Position = UDim2.new(0.5, 100, 0.3, 0)
+espSettingsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+espSettingsFrame.BorderSizePixel = 0
+espSettingsFrame.Visible = false
+espSettingsFrame.Active = true
+Instance.new("UICorner", espSettingsFrame)
+
+local espColorPickerFrame = Instance.new("Frame", screenGui)
+espColorPickerFrame.Size = UDim2.new(0, 200, 0, 160)
+espColorPickerFrame.Position = UDim2.new(0.5, 320, 0.3, 0)
+espColorPickerFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+espColorPickerFrame.BorderSizePixel = 0
+espColorPickerFrame.Visible = false
+espColorPickerFrame.Active = true
+Instance.new("UICorner", espColorPickerFrame)
+
+local espColorPickerTitle = Instance.new("TextLabel", espColorPickerFrame)
+espColorPickerTitle.Size = UDim2.new(1, 0, 0, 25)
+espColorPickerTitle.BackgroundTransparency = 1
+espColorPickerTitle.Text = "Pick Color"
+espColorPickerTitle.Font = Enum.Font.SourceSansBold
+espColorPickerTitle.TextSize = 14
+espColorPickerTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- R slider
+local espRSlider = Instance.new("Frame", espColorPickerFrame)
+espRSlider.Size = UDim2.new(0.9, 0, 0, 15)
+espRSlider.Position = UDim2.new(0.05, 0, 0, 35)
+espRSlider.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+espRSlider.BorderSizePixel = 0
+Instance.new("UICorner", espRSlider)
+local espRHandle = Instance.new("Frame", espRSlider)
+espRHandle.Size = UDim2.new(0, 18, 0, 18)
+espRHandle.Position = UDim2.new(1, -9, 0, -1.5)
+espRHandle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+espRHandle.BorderSizePixel = 0
+Instance.new("UICorner", espRHandle).CornerRadius = UDim.new(1, 0)
+
+-- G slider
+local espGSlider = Instance.new("Frame", espColorPickerFrame)
+espGSlider.Size = UDim2.new(0.9, 0, 0, 15)
+espGSlider.Position = UDim2.new(0.05, 0, 0, 65)
+espGSlider.BackgroundColor3 = Color3.fromRGB(50, 255, 50)
+espGSlider.BorderSizePixel = 0
+Instance.new("UICorner", espGSlider)
+local espGHandle = Instance.new("Frame", espGSlider)
+espGHandle.Size = UDim2.new(0, 18, 0, 18)
+espGHandle.Position = UDim2.new(0, -9, 0, -1.5)
+espGHandle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+espGHandle.BorderSizePixel = 0
+Instance.new("UICorner", espGHandle).CornerRadius = UDim.new(1, 0)
+
+-- B slider
+local espBSlider = Instance.new("Frame", espColorPickerFrame)
+espBSlider.Size = UDim2.new(0.9, 0, 0, 15)
+espBSlider.Position = UDim2.new(0.05, 0, 0, 95)
+espBSlider.BackgroundColor3 = Color3.fromRGB(50, 50, 255)
+espBSlider.BorderSizePixel = 0
+Instance.new("UICorner", espBSlider)
+local espBHandle = Instance.new("Frame", espBSlider)
+espBHandle.Size = UDim2.new(0, 18, 0, 18)
+espBHandle.Position = UDim2.new(0, -9, 0, -1.5)
+espBHandle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+espBHandle.BorderSizePixel = 0
+Instance.new("UICorner", espBHandle).CornerRadius = UDim.new(1, 0)
+
+-- Preview
+local espColorPreview = Instance.new("Frame", espColorPickerFrame)
+espColorPreview.Size = UDim2.new(0.9, 0, 0, 25)
+espColorPreview.Position = UDim2.new(0.05, 0, 0, 120)
+espColorPreview.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+espColorPreview.BorderSizePixel = 0
+Instance.new("UICorner", espColorPreview)
+
+local espValCheckFrame = Instance.new("Frame", screenGui)
+espValCheckFrame.Size = UDim2.new(0, 180, 0, 280)
+espValCheckFrame.Position = UDim2.new(0.5, 320, 0.3, 0)
+espValCheckFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+espValCheckFrame.BorderSizePixel = 0
+espValCheckFrame.Visible = false
+espValCheckFrame.Active = true
+Instance.new("UICorner", espValCheckFrame)
+
+local espValCheckTitle = Instance.new("TextLabel", espValCheckFrame)
+espValCheckTitle.Size = UDim2.new(1, 0, 0, 30)
+espValCheckTitle.BackgroundTransparency = 1
+espValCheckTitle.Text = "ESP Players"
+espValCheckTitle.Font = Enum.Font.SourceSansBold
+espValCheckTitle.TextSize = 15
+espValCheckTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local espValCheckScroll = Instance.new("ScrollingFrame", espValCheckFrame)
+espValCheckScroll.Size = UDim2.new(1, 0, 1, -65)
+espValCheckScroll.Position = UDim2.new(0, 0, 0, 35)
+espValCheckScroll.BackgroundTransparency = 1
+espValCheckScroll.ScrollBarThickness = 5
+espValCheckScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+
+local espValCheckClose = Instance.new("TextButton", espValCheckFrame)
+espValCheckClose.Size = UDim2.new(0.9, 0, 0, 25)
+espValCheckClose.Position = UDim2.new(0.05, 0, 1, -30)
+espValCheckClose.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+espValCheckClose.TextColor3 = Color3.new(1,1,1)
+espValCheckClose.Font = Enum.Font.SourceSansBold
+espValCheckClose.TextSize = 14
+espValCheckClose.Text = "Close"
+Instance.new("UICorner", espValCheckClose)
+
+local espSettingsTitle = Instance.new("TextLabel", espSettingsFrame)
+espSettingsTitle.Size = UDim2.new(1, 0, 0, 30)
+espSettingsTitle.BackgroundTransparency = 1
+espSettingsTitle.Text = "ESP Settings"
+espSettingsTitle.Font = Enum.Font.SourceSansBold
+espSettingsTitle.TextSize = 16
+espSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- Visible Color
+local espVisColorBtn = Instance.new("TextButton", espSettingsFrame)
+espVisColorBtn.Size = UDim2.new(0.75, -5, 0, 30)
+espVisColorBtn.Position = UDim2.new(0.05, 0, 0, 35)
+espVisColorBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+espVisColorBtn.TextColor3 = Color3.new(0,0,0)
+espVisColorBtn.Font = Enum.Font.SourceSansBold
+espVisColorBtn.TextSize = 13
+espVisColorBtn.Text = "Visible Color"
+Instance.new("UICorner", espVisColorBtn)
+
+local espVisColorOpenBtn = Instance.new("TextButton", espSettingsFrame)
+espVisColorOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
+espVisColorOpenBtn.Position = UDim2.new(0.8, 0, 0, 35)
+espVisColorOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+espVisColorOpenBtn.TextColor3 = Color3.new(1,1,1)
+espVisColorOpenBtn.Font = Enum.Font.SourceSansBold
+espVisColorOpenBtn.TextSize = 18
+espVisColorOpenBtn.Text = "+"
+Instance.new("UICorner", espVisColorOpenBtn)
+
+-- Unvisible Color
+local espUnvisColorBtn = Instance.new("TextButton", espSettingsFrame)
+espUnvisColorBtn.Size = UDim2.new(0.75, -5, 0, 30)
+espUnvisColorBtn.Position = UDim2.new(0.05, 0, 0, 75)
+espUnvisColorBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+espUnvisColorBtn.TextColor3 = Color3.new(1,1,1)
+espUnvisColorBtn.Font = Enum.Font.SourceSansBold
+espUnvisColorBtn.TextSize = 13
+espUnvisColorBtn.Text = "Unvisible Color"
+Instance.new("UICorner", espUnvisColorBtn)
+
+local espUnvisColorOpenBtn = Instance.new("TextButton", espSettingsFrame)
+espUnvisColorOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
+espUnvisColorOpenBtn.Position = UDim2.new(0.8, 0, 0, 75)
+espUnvisColorOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+espUnvisColorOpenBtn.TextColor3 = Color3.new(1,1,1)
+espUnvisColorOpenBtn.Font = Enum.Font.SourceSansBold
+espUnvisColorOpenBtn.TextSize = 18
+espUnvisColorOpenBtn.Text = "+"
+Instance.new("UICorner", espUnvisColorOpenBtn)
+
+-- Tracer
+local espTracerBtn = Instance.new("TextButton", espSettingsFrame)
+espTracerBtn.Size = UDim2.new(0.9, 0, 0, 30)
+espTracerBtn.Position = UDim2.new(0.05, 0, 0, 115)
+espTracerBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+espTracerBtn.TextColor3 = Color3.new(1,1,1)
+espTracerBtn.Font = Enum.Font.SourceSansBold
+espTracerBtn.TextSize = 14
+espTracerBtn.Text = "Tracer: ON"
+Instance.new("UICorner", espTracerBtn)
+
+-- Box
+local espBoxBtn = Instance.new("TextButton", espSettingsFrame)
+espBoxBtn.Size = UDim2.new(0.9, 0, 0, 30)
+espBoxBtn.Position = UDim2.new(0.05, 0, 0, 155)
+espBoxBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+espBoxBtn.TextColor3 = Color3.new(1,1,1)
+espBoxBtn.Font = Enum.Font.SourceSansBold
+espBoxBtn.TextSize = 14
+espBoxBtn.Text = "Box: ON"
+Instance.new("UICorner", espBoxBtn)
+
+-- Name
+local espNameBtn = Instance.new("TextButton", espSettingsFrame)
+espNameBtn.Size = UDim2.new(0.9, 0, 0, 30)
+espNameBtn.Position = UDim2.new(0.05, 0, 0, 195)
+espNameBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+espNameBtn.TextColor3 = Color3.new(1,1,1)
+espNameBtn.Font = Enum.Font.SourceSansBold
+espNameBtn.TextSize = 14
+espNameBtn.Text = "Name: ON"
+Instance.new("UICorner", espNameBtn)
+
+-- Health
+local espHealthBtn = Instance.new("TextButton", espSettingsFrame)
+espHealthBtn.Size = UDim2.new(0.9, 0, 0, 30)
+espHealthBtn.Position = UDim2.new(0.05, 0, 0, 235)
+espHealthBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+espHealthBtn.TextColor3 = Color3.new(1,1,1)
+espHealthBtn.Font = Enum.Font.SourceSansBold
+espHealthBtn.TextSize = 14
+espHealthBtn.Text = "Health: ON"
+Instance.new("UICorner", espHealthBtn)
+
+-- Distance
+local espDistBtn = Instance.new("TextButton", espSettingsFrame)
+espDistBtn.Size = UDim2.new(0.9, 0, 0, 30)
+espDistBtn.Position = UDim2.new(0.05, 0, 0, 275)
+espDistBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+espDistBtn.TextColor3 = Color3.new(1,1,1)
+espDistBtn.Font = Enum.Font.SourceSansBold
+espDistBtn.TextSize = 14
+espDistBtn.Text = "Distance: ON"
+Instance.new("UICorner", espDistBtn)
+
+-- ESP ValCheck
+local espValCheckBtn = Instance.new("TextButton", espSettingsFrame)
+espValCheckBtn.Size = UDim2.new(0.75, -5, 0, 30)
+espValCheckBtn.Position = UDim2.new(0.05, 0, 0, 315)
+espValCheckBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+espValCheckBtn.TextColor3 = Color3.new(1,1,1)
+espValCheckBtn.Font = Enum.Font.SourceSansBold
+espValCheckBtn.TextSize = 14
+espValCheckBtn.Text = "ESP ValCheck: OFF"
+Instance.new("UICorner", espValCheckBtn)
+
+local espValCheckOpenBtn = Instance.new("TextButton", espSettingsFrame)
+espValCheckOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
+espValCheckOpenBtn.Position = UDim2.new(0.8, 0, 0, 315)
+espValCheckOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+espValCheckOpenBtn.TextColor3 = Color3.new(1,1,1)
+espValCheckOpenBtn.Font = Enum.Font.SourceSansBold
+espValCheckOpenBtn.TextSize = 18
+espValCheckOpenBtn.Text = "+"
+Instance.new("UICorner", espValCheckOpenBtn)
+
+-- Close
+local espSettingsCloseBtn = Instance.new("TextButton", espSettingsFrame)
+espSettingsCloseBtn.Size = UDim2.new(0.9, 0, 0, 25)
+espSettingsCloseBtn.Position = UDim2.new(0.05, 0, 1, -30)
+espSettingsCloseBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+espSettingsCloseBtn.TextColor3 = Color3.new(1,1,1)
+espSettingsCloseBtn.Font = Enum.Font.SourceSansBold
+espSettingsCloseBtn.TextSize = 14
+espSettingsCloseBtn.Text = "Close"
+Instance.new("UICorner", espSettingsCloseBtn)
+
 -- PC / Mobile Trigger кнопки
 local pcTriggerButton = Instance.new("TextButton", aimSettingsFrame)
 pcTriggerButton.Size = UDim2.new(0.44, 0, 0, 30)
@@ -327,6 +574,18 @@ aimSettingsOpenButton.Text = "+"
 local aimSettingsOpenButtonCorner = Instance.new("UICorner", aimSettingsOpenButton)
 
 local espButton = createButton("ESP: OFF", 90)
+espButton.Size = UDim2.new(0.75, -5, 0, 30)
+
+local espSettingsOpenButton = Instance.new("TextButton", scrollFrame)
+espSettingsOpenButton.Size = UDim2.new(0.15, -5, 0, 30)
+espSettingsOpenButton.Position = UDim2.new(0.8, 0, 0, 90)
+espSettingsOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+espSettingsOpenButton.TextColor3 = Color3.new(1,1,1)
+espSettingsOpenButton.Font = Enum.Font.SourceSansBold
+espSettingsOpenButton.TextSize = 18
+espSettingsOpenButton.Text = "+"
+Instance.new("UICorner", espSettingsOpenButton)
+
 local charmsButton = createButton("Charms: OFF", 130)
 local infiniteJumpButton = createButton("Infinite Jump: OFF", 170)
 local noclipButton = createButton("Noclip: OFF", 210)
@@ -781,4 +1040,32 @@ return {
 	mobileWDBtn = mobileWDBtn,
 	mobileSpaceBtn = mobileSpaceBtn,
 	mobileSpaceFrame = mobileSpaceFrame,
+	espSettingsFrame = espSettingsFrame,
+	espSettingsTitle = espSettingsTitle,
+	espSettingsCloseBtn = espSettingsCloseBtn,
+	espVisColorBtn = espVisColorBtn,
+	espVisColorOpenBtn = espVisColorOpenBtn,
+	espUnvisColorBtn = espUnvisColorBtn,
+	espUnvisColorOpenBtn = espUnvisColorOpenBtn,
+	espTracerBtn = espTracerBtn,
+	espBoxBtn = espBoxBtn,
+	espNameBtn = espNameBtn,
+	espHealthBtn = espHealthBtn,
+	espDistBtn = espDistBtn,
+	espValCheckBtn = espValCheckBtn,
+	espValCheckOpenBtn = espValCheckOpenBtn,
+	espColorPickerFrame = espColorPickerFrame,
+	espColorPickerTitle = espColorPickerTitle,
+	espRSlider = espRSlider,
+	espRHandle = espRHandle,
+	espGSlider = espGSlider,
+	espGHandle = espGHandle,
+	espBSlider = espBSlider,
+	espBHandle = espBHandle,
+	espColorPreview = espColorPreview,
+	espValCheckFrame = espValCheckFrame,
+	espValCheckScroll = espValCheckScroll,
+	espValCheckClose = espValCheckClose,
+	espSettingsOpenButton = espSettingsOpenButton,
+	espValCheckTitle = espValCheckTitle,
 }
