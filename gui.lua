@@ -38,7 +38,7 @@ aimSettingsTitle.TextSize = 16
 aimSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 local espSettingsFrame = Instance.new("Frame", screenGui)
-espSettingsFrame.Size = UDim2.new(0, 210, 0, 420)
+espSettingsFrame.Size = UDim2.new(0, 210, 0, 380)
 espSettingsFrame.Position = UDim2.new(0.5, 100, 0.3, 0)
 espSettingsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 espSettingsFrame.BorderSizePixel = 0
