@@ -805,6 +805,8 @@ RunService.RenderStepped:Connect(function()
 end)
 
 -- ============ FLY ============
+local mobileMove = {w=false, a=false, s=false, d=false, space=false}
+
 local function startFly()
 	local char = LocalPlayer.Character
 	if char and char:FindFirstChild("HumanoidRootPart") then
@@ -821,11 +823,16 @@ local function startFly()
 			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and bodyVelocity then
 				local moveVector = Vector3.new(0,0,0)
 				local cam = workspace.CurrentCamera
-				if UserInputService:IsKeyDown(Enum.KeyCode.W) then moveVector = moveVector + cam.CFrame.LookVector end
-				if UserInputService:IsKeyDown(Enum.KeyCode.S) then moveVector = moveVector - cam.CFrame.LookVector end
-				if UserInputService:IsKeyDown(Enum.KeyCode.A) then moveVector = moveVector - cam.CFrame.RightVector end
-				if UserInputService:IsKeyDown(Enum.KeyCode.D) then moveVector = moveVector + cam.CFrame.RightVector end
-				if UserInputService:IsKeyDown(Enum.KeyCode.Space) then moveVector = moveVector + Vector3.new(0,1,0) end
+				local isW = UserInputService:IsKeyDown(Enum.KeyCode.W) or mobileMove.w
+				local isS = UserInputService:IsKeyDown(Enum.KeyCode.S) or mobileMove.s
+				local isA = UserInputService:IsKeyDown(Enum.KeyCode.A) or mobileMove.a
+				local isD = UserInputService:IsKeyDown(Enum.KeyCode.D) or mobileMove.d
+				local isSpace = UserInputService:IsKeyDown(Enum.KeyCode.Space) or mobileMove.space
+				if isW then moveVector = moveVector + cam.CFrame.LookVector end
+				if isS then moveVector = moveVector - cam.CFrame.LookVector end
+				if isA then moveVector = moveVector - cam.CFrame.RightVector end
+				if isD then moveVector = moveVector + cam.CFrame.RightVector end
+				if isSpace then moveVector = moveVector + Vector3.new(0,1,0) end
 				if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then moveVector = moveVector + Vector3.new(0,-1,0) end
 				bodyVelocity.Velocity = moveVector.Magnitude > 0 and moveVector.Unit * flySpeed or Vector3.new(0,0,0)
 			end
@@ -938,20 +945,36 @@ end)
 -- ============ TEXT INPUTS ============
 G.speedInput.FocusLost:Connect(function()
 	local v = tonumber(G.speedInput.Text)
-	if v and v >= 16 and v <= 400 then currentSpeed = v; updateSlider(); if speedHackEnabled then updateSpeed() end
-	else G.speedInput.Text = tostring(currentSpeed) end
+	if v then
+		currentSpeed = math.clamp(v, 16, 400)  -- ← клампить автоматично
+		updateSlider()
+		if speedHackEnabled then updateSpeed() end
+		G.speedInput.Text = tostring(currentSpeed)
+	else
+		G.speedInput.Text = tostring(currentSpeed)
+	end
 end)
 
 G.flyInput.FocusLost:Connect(function()
 	local v = tonumber(G.flyInput.Text)
-	if v and v >= 10 and v <= 450 then flySpeed = v
-	else G.flyInput.Text = tostring(flySpeed) end
+	if v then
+		flySpeed = math.clamp(v, 10, 450)
+		G.flyInput.Text = tostring(flySpeed)
+	else
+		G.flyInput.Text = tostring(flySpeed)
+	end
 end)
 
 G.fovInput.FocusLost:Connect(function()
 	local v = tonumber(G.fovInput.Text)
-	if v and v >= 30 and v <= 120 then currentFOV = v; updateFOVSlider(); if fovChangerEnabled then updateFOV() end
-	else G.fovInput.Text = tostring(currentFOV) end
+	if v then
+		currentFOV = math.clamp(v, 30, 120)
+		updateFOVSlider()
+		if fovChangerEnabled then updateFOV() end
+		G.fovInput.Text = tostring(currentFOV)
+	else
+		G.fovInput.Text = tostring(currentFOV)
+	end
 end)
 
 G.aimFOVInput.FocusLost:Connect(function()
@@ -1262,12 +1285,22 @@ makeDraggable(G.espSettingsFrame, G.espSettingsTitle)
 makeDraggable(G.espColorPickerFrame, G.espColorPickerTitle)
 makeDraggable(G.espValCheckFrame, G.espValCheckTitle)
 
+local keyMap = {
+    [Enum.KeyCode.W] = "w",
+    [Enum.KeyCode.A] = "a",
+    [Enum.KeyCode.S] = "s",
+    [Enum.KeyCode.D] = "d",
+    [Enum.KeyCode.Space] = "space"
+}
+
 local function setupMobileKey(btn, key1, key2)
     local press = false
     local function pressDown()
         if not press then
             press = true
             btn.BackgroundColor3 = Color3.fromRGB(80,150,255)
+            if keyMap[key1] then mobileMove[keyMap[key1]] = true end
+            if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = true end
             pcall(function() VIM:SendKeyEvent(true, key1, false, game) end)
             if key2 then pcall(function() VIM:SendKeyEvent(true, key2, false, game) end) end
         end
@@ -1276,6 +1309,8 @@ local function setupMobileKey(btn, key1, key2)
         if press then
             press = false
             btn.BackgroundColor3 = key2 and Color3.fromRGB(60,30,30) or Color3.fromRGB(40,40,60)
+            if keyMap[key1] then mobileMove[keyMap[key1]] = false end
+            if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = false end
             pcall(function() VIM:SendKeyEvent(false, key1, false, game) end)
             if key2 then pcall(function() VIM:SendKeyEvent(false, key2, false, game) end) end
         end
@@ -1286,6 +1321,9 @@ local function setupMobileKey(btn, key1, key2)
         if i.UserInputType == Enum.UserInputType.Touch then pressDown() end
     end)
     btn.InputEnded:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.Touch then pressUp() end
+    end)
+    UserInputService.InputEnded:Connect(function(i)
         if i.UserInputType == Enum.UserInputType.Touch then pressUp() end
     end)
 end
