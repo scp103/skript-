@@ -520,7 +520,7 @@ Instance.new("UICorner", playerSelectClose)
 
 -- Mobile Trigger GUI
 local mobileGui = Instance.new("Frame", screenGui)
-mobileGui.Size = UDim2.new(0, 160, 0, 140)
+mobileGui.Size = UDim2.new(0, 160, 0, 95)
 mobileGui.Position = UDim2.new(0, 20, 1, -160)
 mobileGui.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
 mobileGui.BorderSizePixel = 0
