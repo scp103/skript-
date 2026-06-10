@@ -1546,9 +1546,20 @@ return {
 	updatePlayerSelectList = updatePlayerSelectList,
 	getTriggerWallCheck = function() return triggerWallCheckEnabled end,
 	setTriggerWallCheck = function(v) triggerWallCheckEnabled = v end,
-	updatePlayerSelectList = updatePlayerSelectList,
 	updateEspValCheckList = updateEspValCheckList,
 	setEspColorTarget = function(v) espColorPickerTarget = v end,
+	getEspShowTracer = function() return espShowTracer end,
+	setEspShowTracer = function(v) espShowTracer = v end,
+	getEspShowBox = function() return espShowBox end,
+	setEspShowBox = function(v) espShowBox = v end,
+	getEspShowName = function() return espShowName end,
+	setEspShowName = function(v) espShowName = v end,
+	getEspShowHealth = function() return espShowHealth end,
+	setEspShowHealth = function(v) espShowHealth = v end,
+	getEspShowDist = function() return espShowDist end,
+	setEspShowDist = function(v) espShowDist = v end,
+	getEspValCheck = function() return espValCheckEnabled end,
+	setEspValCheck = function(v) espValCheckEnabled = v end,
 }
 
 end
