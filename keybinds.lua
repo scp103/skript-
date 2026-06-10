@@ -36,6 +36,19 @@ local function init(G, F)
 			F.showNotif("AIM", F.getHolding() and "✅ Enabled" or "❌ Disabled", 2)
 		end
 
+		-- HOME - PC Trigger ON/OFF
+if input.KeyCode == Enum.KeyCode.Home then
+    local newVal = not F.getPCTrigger()
+    if newVal then
+        F.setMobileTrigger(false)
+        G.mobileTriggerButton.Text = "Mobile Trigger: OFF"
+        G.mobileTriggerButton.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    end
+    F.setPCTrigger(newVal)
+    G.pcTriggerButton.Text = newVal and "PC Trigger: ON" or "PC Trigger: OFF"
+    G.pcTriggerButton.BackgroundColor3 = newVal and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    F.showNotif("PC Trigger", newVal and "✅ Enabled" or "❌ Disabled", 2)
+end	
 		-- F1 - Config система
 		if input.KeyCode == Enum.KeyCode.F1 then
 			if G.configFrame.Visible then
