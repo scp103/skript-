@@ -165,8 +165,15 @@ espSettingsTitle.Font = Enum.Font.SourceSansBold
 espSettingsTitle.TextSize = 16
 espSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
+local espScroll = Instance.new("ScrollingFrame", espSettingsFrame)
+espScroll.Size = UDim2.new(1, 0, 1, -60)
+espScroll.Position = UDim2.new(0, 0, 0, 30)
+espScroll.BackgroundTransparency = 1
+espScroll.ScrollBarThickness = 5
+espScroll.CanvasSize = UDim2.new(0, 0, 0, 360)
+
 -- Visible Color
-local espVisColorBtn = Instance.new("TextButton", espSettingsFrame)
+local espVisColorBtn = Instance.new("TextButton", espScroll)
 espVisColorBtn.Size = UDim2.new(0.75, -5, 0, 30)
 espVisColorBtn.Position = UDim2.new(0.05, 0, 0, 35)
 espVisColorBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
@@ -187,7 +194,7 @@ espVisColorOpenBtn.Text = "+"
 Instance.new("UICorner", espVisColorOpenBtn)
 
 -- Unvisible Color
-local espUnvisColorBtn = Instance.new("TextButton", espSettingsFrame)
+local espUnvisColorBtn = Instance.new("TextButton", espScroll)
 espUnvisColorBtn.Size = UDim2.new(0.75, -5, 0, 30)
 espUnvisColorBtn.Position = UDim2.new(0.05, 0, 0, 75)
 espUnvisColorBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
@@ -197,7 +204,7 @@ espUnvisColorBtn.TextSize = 13
 espUnvisColorBtn.Text = "Unvisible Color"
 Instance.new("UICorner", espUnvisColorBtn)
 
-local espUnvisColorOpenBtn = Instance.new("TextButton", espSettingsFrame)
+local espUnvisColorOpenBtn = Instance.new("TextButton", espScroll)
 espUnvisColorOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
 espUnvisColorOpenBtn.Position = UDim2.new(0.8, 0, 0, 75)
 espUnvisColorOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
@@ -208,7 +215,7 @@ espUnvisColorOpenBtn.Text = "+"
 Instance.new("UICorner", espUnvisColorOpenBtn)
 
 -- Tracer
-local espTracerBtn = Instance.new("TextButton", espSettingsFrame)
+local espTracerBtn = Instance.new("TextButton", espScroll)
 espTracerBtn.Size = UDim2.new(0.9, 0, 0, 30)
 espTracerBtn.Position = UDim2.new(0.05, 0, 0, 115)
 espTracerBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -219,7 +226,7 @@ espTracerBtn.Text = "Tracer: ON"
 Instance.new("UICorner", espTracerBtn)
 
 -- Box
-local espBoxBtn = Instance.new("TextButton", espSettingsFrame)
+local espBoxBtn = Instance.new("TextButton", espScroll)
 espBoxBtn.Size = UDim2.new(0.9, 0, 0, 30)
 espBoxBtn.Position = UDim2.new(0.05, 0, 0, 155)
 espBoxBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -230,7 +237,7 @@ espBoxBtn.Text = "Box: ON"
 Instance.new("UICorner", espBoxBtn)
 
 -- Name
-local espNameBtn = Instance.new("TextButton", espSettingsFrame)
+local espNameBtn = Instance.new("TextButton", espScroll)
 espNameBtn.Size = UDim2.new(0.9, 0, 0, 30)
 espNameBtn.Position = UDim2.new(0.05, 0, 0, 195)
 espNameBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -241,7 +248,7 @@ espNameBtn.Text = "Name: ON"
 Instance.new("UICorner", espNameBtn)
 
 -- Health
-local espHealthBtn = Instance.new("TextButton", espSettingsFrame)
+local espHealthBtn = Instance.new("TextButton", espScroll)
 espHealthBtn.Size = UDim2.new(0.9, 0, 0, 30)
 espHealthBtn.Position = UDim2.new(0.05, 0, 0, 235)
 espHealthBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -252,7 +259,7 @@ espHealthBtn.Text = "Health: ON"
 Instance.new("UICorner", espHealthBtn)
 
 -- Distance
-local espDistBtn = Instance.new("TextButton", espSettingsFrame)
+local espDistBtn = Instance.new("TextButton", espScroll)
 espDistBtn.Size = UDim2.new(0.9, 0, 0, 30)
 espDistBtn.Position = UDim2.new(0.05, 0, 0, 275)
 espDistBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -263,7 +270,7 @@ espDistBtn.Text = "Distance: ON"
 Instance.new("UICorner", espDistBtn)
 
 -- ESP ValCheck
-local espValCheckBtn = Instance.new("TextButton", espSettingsFrame)
+local espValCheckBtn = Instance.new("TextButton", espScroll)
 espValCheckBtn.Size = UDim2.new(0.75, -5, 0, 30)
 espValCheckBtn.Position = UDim2.new(0.05, 0, 0, 315)
 espValCheckBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -273,7 +280,7 @@ espValCheckBtn.TextSize = 14
 espValCheckBtn.Text = "ESP ValCheck: OFF"
 Instance.new("UICorner", espValCheckBtn)
 
-local espValCheckOpenBtn = Instance.new("TextButton", espSettingsFrame)
+local espValCheckOpenBtn = Instance.new("TextButton", espScrolle)
 espValCheckOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
 espValCheckOpenBtn.Position = UDim2.new(0.8, 0, 0, 315)
 espValCheckOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
@@ -1079,4 +1086,5 @@ return {
 	espSettingsOpenButton = espSettingsOpenButton,
 	espValCheckTitle = espValCheckTitle,
 	espColorPickerClose = espColorPickerClose,
+	espScroll = espScroll,
 }
