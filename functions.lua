@@ -819,23 +819,39 @@ local function startFly()
 		bodyAngularVelocity.MaxTorque = Vector3.new(4000,4000,4000)
 		bodyAngularVelocity.AngularVelocity = Vector3.new(0,0,0)
 		bodyAngularVelocity.Parent = root
-		flyConnection = RunService.RenderStepped:Connect(function()
-			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and bodyVelocity then
-				local moveVector = Vector3.new(0,0,0)
-				local cam = workspace.CurrentCamera
-				local isW = UserInputService:IsKeyDown(Enum.KeyCode.W) or mobileMove.w
-				local isS = UserInputService:IsKeyDown(Enum.KeyCode.S) or mobileMove.s
-				local isA = UserInputService:IsKeyDown(Enum.KeyCode.A) or mobileMove.a
-				local isD = UserInputService:IsKeyDown(Enum.KeyCode.D) or mobileMove.d
-				local isSpace = UserInputService:IsKeyDown(Enum.KeyCode.Space) or mobileMove.space
-				if isW then moveVector = moveVector + cam.CFrame.LookVector end
-				if isS then moveVector = moveVector - cam.CFrame.LookVector end
-				if isA then moveVector = moveVector - cam.CFrame.RightVector end
-				if isD then moveVector = moveVector + cam.CFrame.RightVector end
-				if isSpace then moveVector = moveVector + Vector3.new(0,1,0) end
-				if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then moveVector = moveVector + Vector3.new(0,-1,0) end
-				bodyVelocity.Velocity = moveVector.Magnitude > 0 and moveVector.Unit * flySpeed or Vector3.new(0,0,0)
-			end
+flyConnection = RunService.RenderStepped:Connect(function()
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and bodyVelocity then
+        local moveVector = Vector3.new(0,0,0)
+        local cam = workspace.CurrentCamera
+        
+        local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+        
+        if isMobile then
+            -- На телефоні — завжди летить туди куди дивиться камера
+            moveVector = cam.CFrame.LookVector
+            -- Space кнопка — летить вгору
+            if mobileMove.space then
+                moveVector = Vector3.new(0, 1, 0)
+            end
+        else
+              -- На ПК — стандартне управління клавішами
+              local isW = UserInputService:IsKeyDown(Enum.KeyCode.W)
+              local isS = UserInputService:IsKeyDown(Enum.KeyCode.S)
+              local isA = UserInputService:IsKeyDown(Enum.KeyCode.A)
+              local isD = UserInputService:IsKeyDown(Enum.KeyCode.D)
+              local isSpace = UserInputService:IsKeyDown(Enum.KeyCode.Space)
+              if isW then moveVector = moveVector + cam.CFrame.LookVector end
+              if isS then moveVector = moveVector - cam.CFrame.LookVector end
+              if isA then moveVector = moveVector - cam.CFrame.RightVector end
+              if isD then moveVector = moveVector + cam.CFrame.RightVector end
+           	  if isSpace then moveVector = moveVector + Vector3.new(0,1,0) end
+          	  if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then 
+              	  moveVector = moveVector + Vector3.new(0,-1,0) 
+         	  end
+     	  end
+        
+  	     	   bodyVelocity.Velocity = moveVector.Magnitude > 0 and moveVector.Unit * flySpeed or Vector3.new(0,0,0)
+ 		   end
 		end)
 	end
 end
@@ -1020,6 +1036,15 @@ local function getCurrentConfig()
 		valCheckTargets = valCheckTargets,
 		triggerWallCheck = triggerWallCheckEnabled,
 		skyIndex = skyIndex,
+		espShowTracer = espShowTracer,
+		espShowBox = espShowBox,
+		espShowName = espShowName,
+		espShowHealth = espShowHealth,
+		espShowDist = espShowDist,
+		espValCheckEnabled = espValCheckEnabled,
+		espValCheckTargets = espValCheckTargets,
+		espVisColor = {r = espVisColor.R, g = espVisColor.G, b = espVisColor.B},
+		espUnvisColor = {r = espUnvisColor.R, g = espUnvisColor.G, b = espUnvisColor.B},
 	}
 end
 
@@ -1129,6 +1154,65 @@ G.valCheckButton.BackgroundColor3 = valCheckEnabled and Color3.fromRGB(0,180,0) 
 -- Val Check Targets
 if config.valCheckTargets then
 	valCheckTargets = config.valCheckTargets
+end
+
+-- ESP toggles
+if config.espShowTracer ~= nil then
+    espShowTracer = config.espShowTracer
+    G.espTracerBtn.Text = espShowTracer and "Tracer: ON" or "Tracer: OFF"
+    G.espTracerBtn.BackgroundColor3 = espShowTracer and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+end
+		
+if config.espShowBox ~= nil then
+    espShowBox = config.espShowBox
+    G.espBoxBtn.Text = espShowBox and "Box: ON" or "Box: OFF"
+    G.espBoxBtn.BackgroundColor3 = espShowBox and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+end
+		
+if config.espShowName ~= nil then
+    espShowName = config.espShowName
+    G.espNameBtn.Text = espShowName and "Name: ON" or "Name: OFF"
+    G.espNameBtn.BackgroundColor3 = espShowName and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+end
+		
+if config.espShowHealth ~= nil then
+    espShowHealth = config.espShowHealth
+    G.espHealthBtn.Text = espShowHealth and "Health: ON" or "Health: OFF"
+    G.espHealthBtn.BackgroundColor3 = espShowHealth and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+end
+		
+if config.espShowDist ~= nil then
+    espShowDist = config.espShowDist
+    G.espDistBtn.Text = espShowDist and "Distance: ON" or "Distance: OFF"
+    G.espDistBtn.BackgroundColor3 = espShowDist and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+end
+		
+if config.espValCheckEnabled ~= nil then
+    espValCheckEnabled = config.espValCheckEnabled
+    G.espValCheckBtn.Text = espValCheckEnabled and "ESP ValCheck: ON" or "ESP ValCheck: OFF"
+    G.espValCheckBtn.BackgroundColor3 = espValCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+end
+		
+if config.espValCheckTargets then
+    espValCheckTargets = config.espValCheckTargets
+end
+		
+if config.espVisColor then
+    espVisColor = Color3.fromRGB(
+        math.floor(config.espVisColor.r * 255),
+        math.floor(config.espVisColor.g * 255),
+        math.floor(config.espVisColor.b * 255)
+    )
+    G.espVisColorBtn.BackgroundColor3 = espVisColor
+end
+		
+if config.espUnvisColor then
+    espUnvisColor = Color3.fromRGB(
+        math.floor(config.espUnvisColor.r * 255),
+        math.floor(config.espUnvisColor.g * 255),
+        math.floor(config.espUnvisColor.b * 255)
+    )
+    G.espUnvisColorBtn.BackgroundColor3 = espUnvisColor
 end
 
 -- Trigger WallCheck
