@@ -167,7 +167,7 @@ espSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 local espScroll = Instance.new("ScrollingFrame", espSettingsFrame)
 espScroll.Size = UDim2.new(1, 0, 1, -60)
-espScroll.Position = UDim2.new(0, 0, 0, 30)
+espScroll.Position = UDim2.new(0, 0, 0, 25)
 espScroll.BackgroundTransparency = 1
 espScroll.ScrollBarThickness = 5
 espScroll.CanvasSize = UDim2.new(0, 0, 0, 360)
