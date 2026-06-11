@@ -1385,8 +1385,10 @@ local function setupMobileKey(btn, key1, key2)
             btn.BackgroundColor3 = Color3.fromRGB(80,150,255)
             if keyMap[key1] then mobileMove[keyMap[key1]] = true end
             if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = true end
-            pcall(function() VIM:SendKeyEvent(true, key1, false, game) end)
-            if key2 then pcall(function() VIM:SendKeyEvent(true, key2, false, game) end) end
+            task.spawn(function()
+                pcall(function() VIM:SendKeyEvent(true, key1, false, game) end)
+                if key2 then pcall(function() VIM:SendKeyEvent(true, key2, false, game) end) end
+            end)
         end
     end
     local function pressUp()
@@ -1395,19 +1397,16 @@ local function setupMobileKey(btn, key1, key2)
             btn.BackgroundColor3 = key2 and Color3.fromRGB(60,30,30) or Color3.fromRGB(40,40,60)
             if keyMap[key1] then mobileMove[keyMap[key1]] = false end
             if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = false end
-            pcall(function() VIM:SendKeyEvent(false, key1, false, game) end)
-            if key2 then pcall(function() VIM:SendKeyEvent(false, key2, false, game) end) end
+            task.spawn(function()
+                pcall(function() VIM:SendKeyEvent(false, key1, false, game) end)
+                if key2 then pcall(function() VIM:SendKeyEvent(false, key2, false, game) end) end
+            end)
         end
     end
-    btn.MouseButton1Down:Connect(pressDown)
-    btn.MouseButton1Up:Connect(pressUp)
     btn.InputBegan:Connect(function(i)
         if i.UserInputType == Enum.UserInputType.Touch then pressDown() end
     end)
     btn.InputEnded:Connect(function(i)
-        if i.UserInputType == Enum.UserInputType.Touch then pressUp() end
-    end)
-    UserInputService.InputEnded:Connect(function(i)
         if i.UserInputType == Enum.UserInputType.Touch then pressUp() end
     end)
 end
