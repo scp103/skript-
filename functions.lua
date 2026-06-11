@@ -1378,36 +1378,50 @@ local keyMap = {
 }
 
 local function setupMobileKey(btn, key1, key2)
-    local press = false
+    local activeTouches = {}
+    
     local function pressDown()
-        if not press then
-            press = true
-            btn.BackgroundColor3 = Color3.fromRGB(80,150,255)
-            if keyMap[key1] then mobileMove[keyMap[key1]] = true end
-            if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = true end
-            task.spawn(function()
-                pcall(function() VIM:SendKeyEvent(true, key1, false, game) end)
-                if key2 then pcall(function() VIM:SendKeyEvent(true, key2, false, game) end) end
-            end)
-        end
+        btn.BackgroundColor3 = Color3.fromRGB(80,150,255)
+        if keyMap[key1] then mobileMove[keyMap[key1]] = true end
+        if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = true end
+        task.spawn(function()
+            pcall(function() VIM:SendKeyEvent(true, key1, false, game) end)
+            if key2 then pcall(function() VIM:SendKeyEvent(true, key2, false, game) end) end
+        end)
     end
+    
     local function pressUp()
-        if press then
-            press = false
-            btn.BackgroundColor3 = key2 and Color3.fromRGB(60,30,30) or Color3.fromRGB(40,40,60)
-            if keyMap[key1] then mobileMove[keyMap[key1]] = false end
-            if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = false end
-            task.spawn(function()
-                pcall(function() VIM:SendKeyEvent(false, key1, false, game) end)
-                if key2 then pcall(function() VIM:SendKeyEvent(false, key2, false, game) end) end
-            end)
-        end
+        if next(activeTouches) ~= nil then return end -- ще є активні дотики
+        btn.BackgroundColor3 = key2 and Color3.fromRGB(60,30,30) or Color3.fromRGB(40,40,60)
+        if keyMap[key1] then mobileMove[keyMap[key1]] = false end
+        if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = false end
+        task.spawn(function()
+            pcall(function() VIM:SendKeyEvent(false, key1, false, game) end)
+            if key2 then pcall(function() VIM:SendKeyEvent(false, key2, false, game) end) end
+        end)
     end
+    
     btn.InputBegan:Connect(function(i)
-        if i.UserInputType == Enum.UserInputType.Touch then pressDown() end
+        if i.UserInputType == Enum.UserInputType.Touch then
+            activeTouches[i] = true
+            pressDown()
+        end
     end)
+    
     btn.InputEnded:Connect(function(i)
-        if i.UserInputType == Enum.UserInputType.Touch then pressUp() end
+        if i.UserInputType == Enum.UserInputType.Touch then
+            activeTouches[i] = nil
+            pressUp()
+        end
+    end)
+    
+    btn.InputChanged:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.Touch then
+            if not activeTouches[i] then
+                activeTouches[i] = true
+                pressDown()
+            end
+        end
     end)
 end
 
