@@ -183,7 +183,7 @@ espVisColorBtn.TextSize = 13
 espVisColorBtn.Text = "Visible Color"
 Instance.new("UICorner", espVisColorBtn)
 
-local espVisColorOpenBtn = Instance.new("TextButton", espSettingsFrame)
+local espVisColorOpenBtn = Instance.new("TextButton", espScroll)
 espVisColorOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
 espVisColorOpenBtn.Position = UDim2.new(0.8, 0, 0, 35)
 espVisColorOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
@@ -280,7 +280,7 @@ espValCheckBtn.TextSize = 14
 espValCheckBtn.Text = "ESP ValCheck: OFF"
 Instance.new("UICorner", espValCheckBtn)
 
-local espValCheckOpenBtn = Instance.new("TextButton", espScrolle)
+local espValCheckOpenBtn = Instance.new("TextButton", espScroll)
 espValCheckOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
 espValCheckOpenBtn.Position = UDim2.new(0.8, 0, 0, 315)
 espValCheckOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
