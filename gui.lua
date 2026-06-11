@@ -412,7 +412,7 @@ local aimFOVSliderButtonCorner = Instance.new("UICorner", aimFOVSliderButton)
 aimFOVSliderButtonCorner.CornerRadius = UDim.new(1, 0)
 
 local hitboxSettingsFrame = Instance.new("Frame", screenGui)
-hitboxSettingsFrame.Size = UDim2.new(0, 200, 0, 350)
+hitboxSettingsFrame.Size = UDim2.new(0, 200, 0, 310)
 hitboxSettingsFrame.Position = UDim2.new(0.5, 100, 0.3, 0)
 hitboxSettingsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 hitboxSettingsFrame.BorderSizePixel = 0
