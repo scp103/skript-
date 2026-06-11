@@ -175,7 +175,7 @@ espScroll.CanvasSize = UDim2.new(0, 0, 0, 360)
 -- Visible Color
 local espVisColorBtn = Instance.new("TextButton", espScroll)
 espVisColorBtn.Size = UDim2.new(0.75, -5, 0, 30)
-espVisColorBtn.Position = UDim2.new(0.05, 0, 0, 35)
+espVisColorBtn.Position = UDim2.new(0.05, 0, 0, 5)
 espVisColorBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 espVisColorBtn.TextColor3 = Color3.new(0,0,0)
 espVisColorBtn.Font = Enum.Font.SourceSansBold
@@ -185,7 +185,7 @@ Instance.new("UICorner", espVisColorBtn)
 
 local espVisColorOpenBtn = Instance.new("TextButton", espScroll)
 espVisColorOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
-espVisColorOpenBtn.Position = UDim2.new(0.8, 0, 0, 35)
+espVisColorOpenBtn.Position = UDim2.new(0.8, 0, 0, 5)
 espVisColorOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
 espVisColorOpenBtn.TextColor3 = Color3.new(1,1,1)
 espVisColorOpenBtn.Font = Enum.Font.SourceSansBold
