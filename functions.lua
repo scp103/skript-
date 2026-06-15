@@ -736,6 +736,16 @@ end
 
 for _, p in pairs(Players:GetPlayers()) do createESP(p) end
 Players.PlayerAdded:Connect(createESP)
+Players.PlayerAdded:Connect(function(p)
+    if charmsEnabled then
+        p.CharacterAdded:Connect(function()
+            task.wait(0.5)
+            if charmsObjects[p] then charmsObjects[p]:Destroy(); charmsObjects[p] = nil end
+            createCharms(p)
+        end)
+        createCharms(p)
+    end
+end)
 Players.PlayerRemoving:Connect(removePlayerESP)
 Players.PlayerRemoving:Connect(function(p)
 	if charmsObjects[p] then charmsObjects[p]:Destroy(); charmsObjects[p] = nil end
@@ -746,7 +756,7 @@ RunService.RenderStepped:Connect(function()
 		for _, p in pairs(Players:GetPlayers()) do
 			if p ~= LocalPlayer then
 				-- якщо немає чармсу або персонаж змінився — створи новий
-				if not charmsObjects[p] or not charmsObjects[p].Parent then
+				if not charmsObjects[p] or not charmsObjects[p].Parent or charmsObjects[p].Parent ~= p.Character then
 					if charmsObjects[p] then charmsObjects[p]:Destroy() end
 					createCharms(p)
 				end
