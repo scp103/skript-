@@ -752,35 +752,37 @@ Players.PlayerRemoving:Connect(function(p)
 end)
 
 RunService.RenderStepped:Connect(function()
-	if charmsEnabled then
-		for _, p in pairs(Players:GetPlayers()) do
-			if p ~= LocalPlayer then
-				-- якщо немає чармсу або персонаж змінився — створи новий
-				if not charmsObjects[p] or not charmsObjects[p].Parent or charmsObjects[p].Parent ~= p.Character then
-					if charmsObjects[p] then charmsObjects[p]:Destroy() end
-					createCharms(p)
-				end
-				-- оновлюємо колір кожен кадр залежно від wallcheck
-				local h = charmsObjects[p]
-				if h then
-				local isVis = true
-				if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-					local rayParams = RaycastParams.new()
-					rayParams.FilterDescendantsInstances = {LocalPlayer.Character, p.Character}
-					rayParams.FilterType = Enum.RaycastFilterType.Exclude
-					local root = p.Character.HumanoidRootPart
-					local result = workspace:Raycast(Camera.CFrame.Position, root.Position - Camera.CFrame.Position, rayParams)
-					isVis = not (result and result.Instance)
-				end
-					local col = isVis and charmsVisColor or charmsUnvisColor
-					h.FillColor = col
-					h.OutlineColor = col
-				end
-			end
-		end
-	else
-		clearCharms()
-	end
+    if charmsEnabled then
+        for _, p in pairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer then
+                local char = p.Character
+                local h = charmsObjects[p]
+                -- якщо хайлайту нема або він відвалився або не в тому персонажі
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    if not h or not h.Parent or h.Parent ~= char then
+                        if h then h:Destroy() end
+                        local newH = Instance.new("Highlight")
+                        newH.Parent = char
+                        newH.FillTransparency = 0.5
+                        newH.OutlineTransparency = 0
+                        charmsObjects[p] = newH
+                        h = newH
+                    end
+                    -- оновлюємо колір
+                    local rayParams = RaycastParams.new()
+                    rayParams.FilterDescendantsInstances = {LocalPlayer.Character, char}
+                    rayParams.FilterType = Enum.RaycastFilterType.Exclude
+                    local root = char.HumanoidRootPart
+                    local result = workspace:Raycast(Camera.CFrame.Position, root.Position - Camera.CFrame.Position, rayParams)
+                    local col = (not result or not result.Instance) and charmsVisColor or charmsUnvisColor
+                    h.FillColor = col
+                    h.OutlineColor = col
+                end
+            end
+        end
+    else
+        clearCharms()
+    end
 end)
 
 RunService.RenderStepped:Connect(function()
