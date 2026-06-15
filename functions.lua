@@ -753,15 +753,15 @@ RunService.RenderStepped:Connect(function()
 				-- оновлюємо колір кожен кадр залежно від wallcheck
 				local h = charmsObjects[p]
 				if h then
-					local isVis = true
-					if WallCheckEnabled and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-						local rayParams = RaycastParams.new()
-						rayParams.FilterDescendantsInstances = {LocalPlayer.Character, p.Character}
-						rayParams.FilterType = Enum.RaycastFilterType.Exclude
-						local root = p.Character.HumanoidRootPart
-						local result = workspace:Raycast(Camera.CFrame.Position, root.Position - Camera.CFrame.Position, rayParams)
-						isVis = not (result and result.Instance)
-					end
+				local isVis = true
+				if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+					local rayParams = RaycastParams.new()
+					rayParams.FilterDescendantsInstances = {LocalPlayer.Character, p.Character}
+					rayParams.FilterType = Enum.RaycastFilterType.Exclude
+					local root = p.Character.HumanoidRootPart
+					local result = workspace:Raycast(Camera.CFrame.Position, root.Position - Camera.CFrame.Position, rayParams)
+					isVis = not (result and result.Instance)
+				end
 					local col = isVis and charmsVisColor or charmsUnvisColor
 					h.FillColor = col
 					h.OutlineColor = col
@@ -1662,14 +1662,31 @@ G.charmsRSlider.InputBegan:Connect(function(i)
         charmsDraggingR = true; charmsHandleRSlider()
     end
 end)
+G.charmsRSlider.InputChanged:Connect(function(i)
+    if charmsDraggingR and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
+        charmsHandleRSlider()
+    end
+end)
+
 G.charmsGSlider.InputBegan:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
         charmsDraggingG = true; charmsHandleGSlider()
     end
 end)
+G.charmsGSlider.InputChanged:Connect(function(i)
+    if charmsDraggingG and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
+        charmsHandleGSlider()
+    end
+end)
+
 G.charmsBSlider.InputBegan:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
         charmsDraggingB = true; charmsHandleBSlider()
+    end
+end)
+G.charmsBSlider.InputChanged:Connect(function(i)
+    if charmsDraggingB and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
+        charmsHandleBSlider()
     end
 end)
 
