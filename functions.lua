@@ -135,9 +135,6 @@ local espColorPickerTarget = nil -- "vis" або "unvis"
 -- Charms кольори (окремо для кожної кнопки)
 local charmsVisColor = Color3.fromRGB(0, 255, 0)   -- дефолт зелений
 local charmsUnvisColor = Color3.fromRGB(255, 0, 0) -- дефолт червоний
-local charmsColorTarget = nil  -- "vis" або "unvis"
-local charmsRVal, charmsGVal, charmsBVal = 0, 255, 0
-local charmsDraggingR, charmsDraggingG, charmsDraggingB = false, false, false
 local espRVal, espGVal, espBVal = 255, 0, 0
 local mobileTriggerLoop = nil
 local pcTriggerLoop = nil
@@ -729,9 +726,9 @@ local function createCharms(p)
 	if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
 		local h = Instance.new("Highlight")
 		h.Parent = p.Character
-		h.FillColor = Color3.fromRGB(0,255,0)
+		h.FillColor = charmsVisColor
 		h.FillTransparency = 0.5
-		h.OutlineColor = Color3.fromRGB(0,255,0)
+		h.OutlineColor = charmsVisColor
 		h.OutlineTransparency = 0
 		charmsObjects[p] = h
 	end
@@ -747,7 +744,29 @@ end)
 RunService.RenderStepped:Connect(function()
 	if charmsEnabled then
 		for _, p in pairs(Players:GetPlayers()) do
-			if p ~= LocalPlayer and not charmsObjects[p] then createCharms(p) end
+			if p ~= LocalPlayer then
+				-- якщо немає чармсу або персонаж змінився — створи новий
+				if not charmsObjects[p] or not charmsObjects[p].Parent then
+					if charmsObjects[p] then charmsObjects[p]:Destroy() end
+					createCharms(p)
+				end
+				-- оновлюємо колір кожен кадр залежно від wallcheck
+				local h = charmsObjects[p]
+				if h then
+					local isVis = true
+					if WallCheckEnabled and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+						local rayParams = RaycastParams.new()
+						rayParams.FilterDescendantsInstances = {LocalPlayer.Character, p.Character}
+						rayParams.FilterType = Enum.RaycastFilterType.Exclude
+						local root = p.Character.HumanoidRootPart
+						local result = workspace:Raycast(Camera.CFrame.Position, root.Position - Camera.CFrame.Position, rayParams)
+						isVis = not (result and result.Instance)
+					end
+					local col = isVis and charmsVisColor or charmsUnvisColor
+					h.FillColor = col
+					h.OutlineColor = col
+				end
+			end
 		end
 	else
 		clearCharms()
@@ -1566,25 +1585,25 @@ UserInputService.InputChanged:Connect(function(i)
         elseif draggingB then handleBSlider()
         elseif charmsDraggingR then charmsHandleRSlider()
         elseif charmsDraggingG then charmsHandleGSlider()
-        elseif charmsDraggingB then charmsHandleBSlider() end
+        elseif charmsDraggingB then charmsHandleBSlider()
+        end
     end
 end)
 
--- ===== CHARMS COLOR PICKER LOGIC =====
+-- ===== CHARMS COLOR PICKER LOGIC (копія ESP) =====
+local charmsDraggingR, charmsDraggingG, charmsDraggingB = false, false, false
+local charmsRVal, charmsGVal, charmsBVal = 0, 255, 0
+local charmsColorTarget = nil
+
 local function updateCharmsColorPreview()
     local c = Color3.fromRGB(charmsRVal, charmsGVal, charmsBVal)
     G.charmsColorPreview.BackgroundColor3 = c
-    -- Яскравість: щоб текст читався
-    local bright = (charmsRVal * 0.299 + charmsGVal * 0.587 + charmsBVal * 0.114)
-    local textCol = bright > 128 and Color3.new(0,0,0) or Color3.new(1,1,1)
     if charmsColorTarget == "vis" then
         charmsVisColor = c
         G.charmsVisBtn.BackgroundColor3 = c
-        G.charmsVisBtn.TextColor3 = textCol
     elseif charmsColorTarget == "unvis" then
         charmsUnvisColor = c
         G.charmsUnvisBtn.BackgroundColor3 = c
-        G.charmsUnvisBtn.TextColor3 = textCol
     end
 end
 
@@ -1631,21 +1650,14 @@ local function openCharmsColorPicker(target)
         charmsGVal = math.floor(charmsUnvisColor.G * 255)
         charmsBVal = math.floor(charmsUnvisColor.B * 255)
     end
-    -- Оновлюємо позиції ручок
-    G.charmsRHandle.Position = UDim2.new(charmsRVal/255, -7, 0, 0)
-    G.charmsGHandle.Position = UDim2.new(charmsGVal/255, -7, 0, 0)
-    G.charmsBHandle.Position = UDim2.new(charmsBVal/255, -7, 0, 0)
+    G.charmsRHandle.Position = UDim2.new(charmsRVal/255, -9, 0, -1.5)
+    G.charmsGHandle.Position = UDim2.new(charmsGVal/255, -9, 0, -1.5)
+    G.charmsBHandle.Position = UDim2.new(charmsBVal/255, -9, 0, -1.5)
     G.charmsColorPreview.BackgroundColor3 = Color3.fromRGB(charmsRVal, charmsGVal, charmsBVal)
     G.charmsColorPickerFrame.Visible = true
 end
 
--- Ловимо і на слайдері і на хендлі — надійніше
 G.charmsRSlider.InputBegan:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-        charmsDraggingR = true; charmsHandleRSlider()
-    end
-end)
-G.charmsRHandle.InputBegan:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
         charmsDraggingR = true; charmsHandleRSlider()
     end
@@ -1655,17 +1667,7 @@ G.charmsGSlider.InputBegan:Connect(function(i)
         charmsDraggingG = true; charmsHandleGSlider()
     end
 end)
-G.charmsGHandle.InputBegan:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-        charmsDraggingG = true; charmsHandleGSlider()
-    end
-end)
 G.charmsBSlider.InputBegan:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-        charmsDraggingB = true; charmsHandleBSlider()
-    end
-end)
-G.charmsBHandle.InputBegan:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
         charmsDraggingB = true; charmsHandleBSlider()
     end
