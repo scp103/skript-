@@ -71,6 +71,39 @@ G.charmsButton.MouseButton1Click:Connect(function()
 	end
 end)
 
+G.charmsSettingsOpenButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        G.charmsSettingsFrame.Visible = not G.charmsSettingsFrame.Visible
+        G.charmsColorPickerFrame.Visible = false
+    end
+end)
+
+G.charmsSettingsCloseBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        G.charmsSettingsFrame.Visible = false
+        G.charmsColorPickerFrame.Visible = false
+    end
+end)
+
+G.charmsVisColorOpenBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.openCharmsColorPicker("vis")
+    end
+end)
+
+G.charmsUnvisColorOpenBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.openCharmsColorPicker("unvis")
+    end
+end)
+
+G.charmsColorPickerClose.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        G.charmsColorPickerFrame.Visible = false
+        G.charmsSettingsFrame.Visible = true
+    end
+end)
+
 G.infiniteJumpButton.MouseButton1Click:Connect(function()
 	if F.canClick() then
 		F.setInfiniteJump(not F.getInfiniteJump())
