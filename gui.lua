@@ -55,6 +55,157 @@ espColorPickerFrame.Visible = false
 espColorPickerFrame.Active = true
 Instance.new("UICorner", espColorPickerFrame)
 
+-- ===== CHARMS SETTINGS FRAME =====
+local charmsSettingsFrame = Instance.new("Frame", screenGui)
+charmsSettingsFrame.Size = UDim2.new(0, 210, 0, 220)
+charmsSettingsFrame.Position = UDim2.new(0.5, 100, 0.3, 0)
+charmsSettingsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+charmsSettingsFrame.BorderSizePixel = 0
+charmsSettingsFrame.Visible = false
+charmsSettingsFrame.Active = true
+Instance.new("UICorner", charmsSettingsFrame)
+
+local charmsSettingsTitle = Instance.new("TextLabel", charmsSettingsFrame)
+charmsSettingsTitle.Size = UDim2.new(1, 0, 0, 30)
+charmsSettingsTitle.BackgroundTransparency = 1
+charmsSettingsTitle.Text = "Charms Settings"
+charmsSettingsTitle.Font = Enum.Font.SourceSansBold
+charmsSettingsTitle.TextSize = 16
+charmsSettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local charmsScroll = Instance.new("ScrollingFrame", charmsSettingsFrame)
+charmsScroll.Size = UDim2.new(1, 0, 1, -60)
+charmsScroll.Position = UDim2.new(0, 0, 0, 30)
+charmsScroll.BackgroundTransparency = 1
+charmsScroll.ScrollBarThickness = 5
+charmsScroll.CanvasSize = UDim2.new(0, 0, 0, 120)
+
+-- Visible кнопка + +
+local charmsVisBtn = Instance.new("TextButton", charmsScroll)
+charmsVisBtn.Size = UDim2.new(0.75, -5, 0, 30)
+charmsVisBtn.Position = UDim2.new(0.05, 0, 0, 5)
+charmsVisBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+charmsVisBtn.TextColor3 = Color3.new(0,0,0)
+charmsVisBtn.Font = Enum.Font.SourceSansBold
+charmsVisBtn.TextSize = 13
+charmsVisBtn.Text = "Visible"
+Instance.new("UICorner", charmsVisBtn)
+
+local charmsVisColorOpenBtn = Instance.new("TextButton", charmsScroll)
+charmsVisColorOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
+charmsVisColorOpenBtn.Position = UDim2.new(0.8, 0, 0, 5)
+charmsVisColorOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+charmsVisColorOpenBtn.TextColor3 = Color3.new(1,1,1)
+charmsVisColorOpenBtn.Font = Enum.Font.SourceSansBold
+charmsVisColorOpenBtn.TextSize = 18
+charmsVisColorOpenBtn.Text = "+"
+Instance.new("UICorner", charmsVisColorOpenBtn)
+
+-- Unvisible кнопка + +
+local charmsUnvisBtn = Instance.new("TextButton", charmsScroll)
+charmsUnvisBtn.Size = UDim2.new(0.75, -5, 0, 30)
+charmsUnvisBtn.Position = UDim2.new(0.05, 0, 0, 45)
+charmsUnvisBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+charmsUnvisBtn.TextColor3 = Color3.new(1,1,1)
+charmsUnvisBtn.Font = Enum.Font.SourceSansBold
+charmsUnvisBtn.TextSize = 13
+charmsUnvisBtn.Text = "Unvisible"
+Instance.new("UICorner", charmsUnvisBtn)
+
+local charmsUnvisColorOpenBtn = Instance.new("TextButton", charmsScroll)
+charmsUnvisColorOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
+charmsUnvisColorOpenBtn.Position = UDim2.new(0.8, 0, 0, 45)
+charmsUnvisColorOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+charmsUnvisColorOpenBtn.TextColor3 = Color3.new(1,1,1)
+charmsUnvisColorOpenBtn.Font = Enum.Font.SourceSansBold
+charmsUnvisColorOpenBtn.TextSize = 18
+charmsUnvisColorOpenBtn.Text = "+"
+Instance.new("UICorner", charmsUnvisColorOpenBtn)
+
+local charmsSettingsCloseBtn = Instance.new("TextButton", charmsSettingsFrame)
+charmsSettingsCloseBtn.Size = UDim2.new(0.9, 0, 0, 25)
+charmsSettingsCloseBtn.Position = UDim2.new(0.05, 0, 1, -30)
+charmsSettingsCloseBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+charmsSettingsCloseBtn.TextColor3 = Color3.new(1,1,1)
+charmsSettingsCloseBtn.Font = Enum.Font.SourceSansBold
+charmsSettingsCloseBtn.TextSize = 14
+charmsSettingsCloseBtn.Text = "Close"
+Instance.new("UICorner", charmsSettingsCloseBtn)
+
+-- ===== CHARMS COLOR PICKER FRAME =====
+local charmsColorPickerFrame = Instance.new("Frame", screenGui)
+charmsColorPickerFrame.Size = UDim2.new(0, 200, 0, 200)
+charmsColorPickerFrame.Position = UDim2.new(0.5, 320, 0.3, 0)
+charmsColorPickerFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+charmsColorPickerFrame.BorderSizePixel = 0
+charmsColorPickerFrame.Visible = false
+charmsColorPickerFrame.Active = true
+Instance.new("UICorner", charmsColorPickerFrame)
+
+local charmsColorPickerTitle = Instance.new("TextLabel", charmsColorPickerFrame)
+charmsColorPickerTitle.Size = UDim2.new(1, 0, 0, 25)
+charmsColorPickerTitle.BackgroundTransparency = 1
+charmsColorPickerTitle.Text = "Pick Color"
+charmsColorPickerTitle.Font = Enum.Font.SourceSansBold
+charmsColorPickerTitle.TextSize = 14
+charmsColorPickerTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local charmsRSlider = Instance.new("Frame", charmsColorPickerFrame)
+charmsRSlider.Size = UDim2.new(0.9, 0, 0, 15)
+charmsRSlider.Position = UDim2.new(0.05, 0, 0, 35)
+charmsRSlider.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+charmsRSlider.BorderSizePixel = 0
+Instance.new("UICorner", charmsRSlider)
+local charmsRHandle = Instance.new("Frame", charmsRSlider)
+charmsRHandle.Size = UDim2.new(0, 18, 0, 18)
+charmsRHandle.Position = UDim2.new(1, -9, 0, -1.5)
+charmsRHandle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+charmsRHandle.BorderSizePixel = 0
+Instance.new("UICorner", charmsRHandle).CornerRadius = UDim.new(1, 0)
+
+local charmsGSlider = Instance.new("Frame", charmsColorPickerFrame)
+charmsGSlider.Size = UDim2.new(0.9, 0, 0, 15)
+charmsGSlider.Position = UDim2.new(0.05, 0, 0, 65)
+charmsGSlider.BackgroundColor3 = Color3.fromRGB(50, 255, 50)
+charmsGSlider.BorderSizePixel = 0
+Instance.new("UICorner", charmsGSlider)
+local charmsGHandle = Instance.new("Frame", charmsGSlider)
+charmsGHandle.Size = UDim2.new(0, 18, 0, 18)
+charmsGHandle.Position = UDim2.new(0, -9, 0, -1.5)
+charmsGHandle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+charmsGHandle.BorderSizePixel = 0
+Instance.new("UICorner", charmsGHandle).CornerRadius = UDim.new(1, 0)
+
+local charmsBSlider = Instance.new("Frame", charmsColorPickerFrame)
+charmsBSlider.Size = UDim2.new(0.9, 0, 0, 15)
+charmsBSlider.Position = UDim2.new(0.05, 0, 0, 95)
+charmsBSlider.BackgroundColor3 = Color3.fromRGB(50, 50, 255)
+charmsBSlider.BorderSizePixel = 0
+Instance.new("UICorner", charmsBSlider)
+local charmsBHandle = Instance.new("Frame", charmsBSlider)
+charmsBHandle.Size = UDim2.new(0, 18, 0, 18)
+charmsBHandle.Position = UDim2.new(0, -9, 0, -1.5)
+charmsBHandle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+charmsBHandle.BorderSizePixel = 0
+Instance.new("UICorner", charmsBHandle).CornerRadius = UDim.new(1, 0)
+
+local charmsColorPreview = Instance.new("Frame", charmsColorPickerFrame)
+charmsColorPreview.Size = UDim2.new(0.9, 0, 0, 25)
+charmsColorPreview.Position = UDim2.new(0.05, 0, 0, 120)
+charmsColorPreview.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+charmsColorPreview.BorderSizePixel = 0
+Instance.new("UICorner", charmsColorPreview)
+
+local charmsColorPickerClose = Instance.new("TextButton", charmsColorPickerFrame)
+charmsColorPickerClose.Size = UDim2.new(0.9, 0, 0, 25)
+charmsColorPickerClose.Position = UDim2.new(0.05, 0, 1, -30)
+charmsColorPickerClose.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+charmsColorPickerClose.TextColor3 = Color3.new(1,1,1)
+charmsColorPickerClose.Font = Enum.Font.SourceSansBold
+charmsColorPickerClose.TextSize = 14
+charmsColorPickerClose.Text = "← Back"
+Instance.new("UICorner", charmsColorPickerClose)
+
 local espColorPickerTitle = Instance.new("TextLabel", espColorPickerFrame)
 espColorPickerTitle.Size = UDim2.new(1, 0, 0, 25)
 espColorPickerTitle.BackgroundTransparency = 1
@@ -604,6 +755,18 @@ espSettingsOpenButton.Text = "+"
 Instance.new("UICorner", espSettingsOpenButton)
 
 local charmsButton = createButton("Charms: OFF", 130)
+charmsButton.Size = UDim2.new(0.75, -5, 0, 30)
+
+local charmsSettingsOpenButton = Instance.new("TextButton", scrollFrame)
+charmsSettingsOpenButton.Size = UDim2.new(0.15, -5, 0, 30)
+charmsSettingsOpenButton.Position = UDim2.new(0.8, 0, 0, 130)
+charmsSettingsOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+charmsSettingsOpenButton.TextColor3 = Color3.new(1,1,1)
+charmsSettingsOpenButton.Font = Enum.Font.SourceSansBold
+charmsSettingsOpenButton.TextSize = 18
+charmsSettingsOpenButton.Text = "+"
+Instance.new("UICorner", charmsSettingsOpenButton)
+
 local infiniteJumpButton = createButton("Infinite Jump: OFF", 170)
 local noclipButton = createButton("Noclip: OFF", 210)
 local bunnyHopButton = createButton("BunnyHop: OFF", 250)
@@ -1087,4 +1250,23 @@ return {
 	espValCheckTitle = espValCheckTitle,
 	espColorPickerClose = espColorPickerClose,
 	espScroll = espScroll,
+	charmsSettingsFrame = charmsSettingsFrame,
+	charmsSettingsTitle = charmsSettingsTitle,
+	charmsScroll = charmsScroll,
+	charmsVisBtn = charmsVisBtn,
+	charmsVisColorOpenBtn = charmsVisColorOpenBtn,
+	charmsUnvisBtn = charmsUnvisBtn,
+	charmsUnvisColorOpenBtn = charmsUnvisColorOpenBtn,
+	charmsSettingsCloseBtn = charmsSettingsCloseBtn,
+	charmsColorPickerFrame = charmsColorPickerFrame,
+	charmsColorPickerTitle = charmsColorPickerTitle,
+	charmsRSlider = charmsRSlider,
+	charmsRHandle = charmsRHandle,
+	charmsGSlider = charmsGSlider,
+	charmsGHandle = charmsGHandle,
+	charmsBSlider = charmsBSlider,
+	charmsBHandle = charmsBHandle,
+	charmsColorPreview = charmsColorPreview,
+	charmsColorPickerClose = charmsColorPickerClose,
+	charmsSettingsOpenButton = charmsSettingsOpenButton,
 }
