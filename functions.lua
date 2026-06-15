@@ -132,6 +132,12 @@ local espShowDist = true
 local espValCheckEnabled = false
 local espValCheckTargets = {}
 local espColorPickerTarget = nil -- "vis" або "unvis"
+-- Charms кольори (окремо для кожної кнопки)
+local charmsVisColor = Color3.fromRGB(0, 255, 0)   -- дефолт зелений
+local charmsUnvisColor = Color3.fromRGB(255, 0, 0) -- дефолт червоний
+local charmsColorTarget = nil  -- "vis" або "unvis"
+local charmsRVal, charmsGVal, charmsBVal = 0, 255, 0
+local charmsDraggingR, charmsDraggingG, charmsDraggingB = false, false, false
 local espRVal, espGVal, espBVal = 255, 0, 0
 local mobileTriggerLoop = nil
 local pcTriggerLoop = nil
@@ -1045,6 +1051,8 @@ local function getCurrentConfig()
 		espValCheckTargets = espValCheckTargets,
 		espVisColor = {r = espVisColor.R, g = espVisColor.G, b = espVisColor.B},
 		espUnvisColor = {r = espUnvisColor.R, g = espUnvisColor.G, b = espUnvisColor.B},
+		charmsVisColor = {r = charmsVisColor.R, g = charmsVisColor.G, b = charmsVisColor.B},
+		charmsUnvisColor = {r = charmsUnvisColor.R, g = charmsUnvisColor.G, b = charmsUnvisColor.B},
 	}
 end
 
@@ -1213,6 +1221,25 @@ if config.espUnvisColor then
         math.floor(config.espUnvisColor.b * 255)
     )
     G.espUnvisColorBtn.BackgroundColor3 = espUnvisColor
+end
+
+-- Charms кольори
+if config.charmsVisColor then
+    charmsVisColor = Color3.fromRGB(
+        math.floor(config.charmsVisColor.r * 255),
+        math.floor(config.charmsVisColor.g * 255),
+        math.floor(config.charmsVisColor.b * 255)
+    )
+    G.charmsVisBtn.BackgroundColor3 = charmsVisColor
+end
+
+if config.charmsUnvisColor then
+    charmsUnvisColor = Color3.fromRGB(
+        math.floor(config.charmsUnvisColor.r * 255),
+        math.floor(config.charmsUnvisColor.g * 255),
+        math.floor(config.charmsUnvisColor.b * 255)
+    )
+    G.charmsUnvisBtn.BackgroundColor3 = charmsUnvisColor
 end
 
 -- Trigger WallCheck
@@ -1537,6 +1564,103 @@ UserInputService.InputChanged:Connect(function(i)
     end
 end)
 
+-- ===== CHARMS COLOR PICKER LOGIC =====
+local function updateCharmsColorPreview()
+    local c = Color3.fromRGB(charmsRVal, charmsGVal, charmsBVal)
+    G.charmsColorPreview.BackgroundColor3 = c
+    if charmsColorTarget == "vis" then
+        charmsVisColor = c
+        G.charmsVisBtn.BackgroundColor3 = c
+        G.charmsVisBtn.TextColor3 = (charmsGVal > 128) and Color3.new(0,0,0) or Color3.new(1,1,1)
+    elseif charmsColorTarget == "unvis" then
+        charmsUnvisColor = c
+        G.charmsUnvisBtn.BackgroundColor3 = c
+        G.charmsUnvisBtn.TextColor3 = (charmsGVal > 128) and Color3.new(0,0,0) or Color3.new(1,1,1)
+    end
+end
+
+local function charmsHandleRSlider()
+    local mouse = UserInputService:GetMouseLocation()
+    local sp = G.charmsRSlider.AbsolutePosition
+    local ss = G.charmsRSlider.AbsoluteSize
+    local pct = math.clamp((mouse.X - sp.X) / ss.X, 0, 1)
+    charmsRVal = math.floor(pct * 255)
+    G.charmsRHandle.Position = UDim2.new(pct, -9, 0, -1.5)
+    updateCharmsColorPreview()
+end
+
+local function charmsHandleGSlider()
+    local mouse = UserInputService:GetMouseLocation()
+    local sp = G.charmsGSlider.AbsolutePosition
+    local ss = G.charmsGSlider.AbsoluteSize
+    local pct = math.clamp((mouse.X - sp.X) / ss.X, 0, 1)
+    charmsGVal = math.floor(pct * 255)
+    G.charmsGHandle.Position = UDim2.new(pct, -9, 0, -1.5)
+    updateCharmsColorPreview()
+end
+
+local function charmsHandleBSlider()
+    local mouse = UserInputService:GetMouseLocation()
+    local sp = G.charmsBSlider.AbsolutePosition
+    local ss = G.charmsBSlider.AbsoluteSize
+    local pct = math.clamp((mouse.X - sp.X) / ss.X, 0, 1)
+    charmsBVal = math.floor(pct * 255)
+    G.charmsBHandle.Position = UDim2.new(pct, -9, 0, -1.5)
+    updateCharmsColorPreview()
+end
+
+local function openCharmsColorPicker(target)
+    charmsColorTarget = target
+    if target == "vis" then
+        G.charmsColorPickerTitle.Text = "Visible Color"
+        charmsRVal = math.floor(charmsVisColor.R * 255)
+        charmsGVal = math.floor(charmsVisColor.G * 255)
+        charmsBVal = math.floor(charmsVisColor.B * 255)
+    else
+        G.charmsColorPickerTitle.Text = "Unvisible Color"
+        charmsRVal = math.floor(charmsUnvisColor.R * 255)
+        charmsGVal = math.floor(charmsUnvisColor.G * 255)
+        charmsBVal = math.floor(charmsUnvisColor.B * 255)
+    end
+    -- Оновлюємо позиції ручок
+    G.charmsRHandle.Position = UDim2.new(charmsRVal/255, -9, 0, -1.5)
+    G.charmsGHandle.Position = UDim2.new(charmsGVal/255, -9, 0, -1.5)
+    G.charmsBHandle.Position = UDim2.new(charmsBVal/255, -9, 0, -1.5)
+    G.charmsColorPreview.BackgroundColor3 = Color3.fromRGB(charmsRVal, charmsGVal, charmsBVal)
+    G.charmsColorPickerFrame.Visible = true
+    G.charmsSettingsFrame.Visible = false
+end
+
+G.charmsRSlider.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+        charmsDraggingR = true; charmsHandleRSlider()
+    end
+end)
+G.charmsGSlider.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+        charmsDraggingG = true; charmsHandleGSlider()
+    end
+end)
+G.charmsBSlider.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+        charmsDraggingB = true; charmsHandleBSlider()
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+        charmsDraggingR = false; charmsDraggingG = false; charmsDraggingB = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
+        if charmsDraggingR then charmsHandleRSlider()
+        elseif charmsDraggingG then charmsHandleGSlider()
+        elseif charmsDraggingB then charmsHandleBSlider() end
+    end
+end)
+
 -- Init sliders
 updateSlider()
 updateFOVSlider()
@@ -1698,6 +1822,9 @@ return {
 	setEspShowDist = function(v) espShowDist = v end,
 	getEspValCheck = function() return espValCheckEnabled end,
 	setEspValCheck = function(v) espValCheckEnabled = v end,
+	getCharmsVisColor = function() return charmsVisColor end,
+	getCharmsUnvisColor = function() return charmsUnvisColor end,
+	openCharmsColorPicker = openCharmsColorPicker,
 }
 
 end
