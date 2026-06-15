@@ -156,7 +156,7 @@ charmsRSlider.Position = UDim2.new(0.05, 0, 0, 35)
 charmsRSlider.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
 charmsRSlider.BorderSizePixel = 0
 Instance.new("UICorner", charmsRSlider)
-charmsRSlider.ClipDescendants = false
+
 local charmsRHandle = Instance.new("Frame", charmsRSlider)
 charmsRHandle.Size = UDim2.new(0, 14, 1, 0)
 charmsRHandle.Position = UDim2.new(1, -7, 0, 0)
@@ -171,7 +171,7 @@ charmsGSlider.Position = UDim2.new(0.05, 0, 0, 65)
 charmsGSlider.BackgroundColor3 = Color3.fromRGB(50, 255, 50)
 charmsGSlider.BorderSizePixel = 0
 Instance.new("UICorner", charmsGSlider)
-charmsGSlider.ClipDescendants = false
+
 local charmsGHandle = Instance.new("Frame", charmsGSlider)
 charmsGHandle.Size = UDim2.new(0, 14, 1, 0)
 charmsGHandle.Position = UDim2.new(0, -7, 0, 0)
@@ -186,7 +186,7 @@ charmsBSlider.Position = UDim2.new(0.05, 0, 0, 95)
 charmsBSlider.BackgroundColor3 = Color3.fromRGB(50, 50, 255)
 charmsBSlider.BorderSizePixel = 0
 Instance.new("UICorner", charmsBSlider)
-charmsBSlider.ClipDescendants = false
+
 local charmsBHandle = Instance.new("Frame", charmsBSlider)
 charmsBHandle.Size = UDim2.new(0, 14, 1, 0)
 charmsBHandle.Position = UDim2.new(0, -7, 0, 0)
