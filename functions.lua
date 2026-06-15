@@ -1395,6 +1395,8 @@ makeDraggable(G.mobileGui)
 makeDraggable(G.espSettingsFrame, G.espSettingsTitle)
 makeDraggable(G.espColorPickerFrame, G.espColorPickerTitle)
 makeDraggable(G.espValCheckFrame, G.espValCheckTitle)
+makeDraggable(G.charmsSettingsFrame, G.charmsSettingsTitle)
+makeDraggable(G.charmsColorPickerFrame, G.charmsColorPickerTitle)
 
 local keyMap = {
     [Enum.KeyCode.W] = "w",
@@ -1553,6 +1555,7 @@ end)
 UserInputService.InputEnded:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
         draggingR = false; draggingG = false; draggingB = false
+        charmsDraggingR = false; charmsDraggingG = false; charmsDraggingB = false
     end
 end)
 
@@ -1560,7 +1563,10 @@ UserInputService.InputChanged:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
         if draggingR then handleRSlider()
         elseif draggingG then handleGSlider()
-        elseif draggingB then handleBSlider() end
+        elseif draggingB then handleBSlider()
+        elseif charmsDraggingR then charmsHandleRSlider()
+        elseif charmsDraggingG then charmsHandleGSlider()
+        elseif charmsDraggingB then charmsHandleBSlider() end
     end
 end)
 
@@ -1628,7 +1634,6 @@ local function openCharmsColorPicker(target)
     G.charmsBHandle.Position = UDim2.new(charmsBVal/255, -9, 0, -1.5)
     G.charmsColorPreview.BackgroundColor3 = Color3.fromRGB(charmsRVal, charmsGVal, charmsBVal)
     G.charmsColorPickerFrame.Visible = true
-    G.charmsSettingsFrame.Visible = false
 end
 
 G.charmsRSlider.InputBegan:Connect(function(i)
@@ -1644,20 +1649,6 @@ end)
 G.charmsBSlider.InputBegan:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
         charmsDraggingB = true; charmsHandleBSlider()
-    end
-end)
-
-UserInputService.InputEnded:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-        charmsDraggingR = false; charmsDraggingG = false; charmsDraggingB = false
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
-        if charmsDraggingR then charmsHandleRSlider()
-        elseif charmsDraggingG then charmsHandleGSlider()
-        elseif charmsDraggingB then charmsHandleBSlider() end
     end
 end)
 
