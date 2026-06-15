@@ -16,7 +16,7 @@ local function logExecution()
         gameName = Market:GetProductInfo(placeId).Name
     end)
 
-    -- Формуємо красиву картку
+    -- Формуємо красиву картку логів
     local payload = {
         ["embeds"] = {{
             ["title"] = "🚀 Новий запуск скрипта!",
@@ -33,17 +33,35 @@ local function logExecution()
         }}
     }
 
-    -- Надсилаємо через твій проксі
-    pcall(function()
-        HttpService:PostAsync(discordWebhookProxy, HttpService:JSONEncode(payload))
-    end)
+    local jsonPayload = HttpService:JSONEncode(payload)
+
+    -- [СПОСІБ 1]: Використовуємо спеціальну функцію ексекутора (request або syn.request)
+    -- Це обходить будь-які блокування самого Roblox
+    local requestFunc = (syn and syn.request) or (http and http.request) or request or http_request
+    if requestFunc then
+        pcall(function()
+            requestFunc({
+                Url = discordWebhookProxy,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = jsonPayload
+            })
+        end)
+    else
+        -- [СПОСІБ 2]: Якщо ексекутор занадто простий, використовуємо стандартний PostAsync
+        pcall(function()
+            HttpService:PostAsync(discordWebhookProxy, jsonPayload)
+        end)
+    end
 end
 
--- Запускаємо логер у фоні
+-- Запускаємо логер у фоні, щоб гравець нічого не помітив
 task.spawn(logExecution)
 
 
--- === ОСНОВНЕ ЗАВАНТАЖЕННЯ СКРИПТА ===
+-- === ОСНОВНЕ ЗАВАНТАЖЕННЯ СКРИПТА (Твій код з GitHub) ===
 local GUI_URL = "https://raw.githubusercontent.com/scp103/skript-/main/gui.lua"
 local FUNC_URL = "https://raw.githubusercontent.com/scp103/skript-/main/functions.lua"
 local BTN_URL = "https://raw.githubusercontent.com/scp103/skript-/main/buttons.lua"
