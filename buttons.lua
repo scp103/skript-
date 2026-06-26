@@ -293,7 +293,7 @@ G.minimizeButton.MouseButton1Click:Connect(function()
         G.charmsColorPickerFrame.Visible = false  -- ← додай
         G.minimizedCircle.Visible = true
     end
-end))
+end)
 
 G.minimizedCircle.MouseButton1Click:Connect(function()
 	if F.canClick() then
