@@ -104,6 +104,14 @@ G.charmsColorPickerClose.MouseButton1Click:Connect(function()
     end
 end)
 
+G.charmsNpcButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setCharmsNpc(not F.getCharmsNpc())
+        G.charmsNpcButton.Text = F.getCharmsNpc() and "NPC: ON" or "NPC: OFF"
+        G.charmsNpcButton.BackgroundColor3 = F.getCharmsNpc() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
 G.infiniteJumpButton.MouseButton1Click:Connect(function()
 	if F.canClick() then
 		F.setInfiniteJump(not F.getInfiniteJump())
