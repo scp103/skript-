@@ -285,12 +285,12 @@ G.minimizeButton.MouseButton1Click:Connect(function()
         G.aimSettingsFrame.Visible = false
         G.hitboxSettingsFrame.Visible = false
         G.configFrame.Visible = false
-        G.espSettingsFrame.Visible = false        -- ← додай
-        G.charmsSettingsFrame.Visible = false     -- ← додай
-        G.playerSelectFrame.Visible = false       -- ← додай
-        G.espValCheckFrame.Visible = false        -- ← додай
-        G.espColorPickerFrame.Visible = false     -- ← додай
-        G.charmsColorPickerFrame.Visible = false  -- ← додай
+        G.espSettingsFrame.Visible = false
+        G.charmsSettingsFrame.Visible = false
+        G.playerSelectFrame.Visible = false
+        G.espValCheckFrame.Visible = false
+        G.espColorPickerFrame.Visible = false
+        G.charmsColorPickerFrame.Visible = false
         G.minimizedCircle.Visible = true
     end
 end)
