@@ -13,7 +13,13 @@ local function init(G, F)
 				G.teleportFrame.Visible = false
 				G.aimSettingsFrame.Visible = false
 				G.hitboxSettingsFrame.Visible = false
-				G.minimizedCircle.Visible = true
+				G.espSettingsFrame.Visible = false        -- ← додай
+        		G.charmsSettingsFrame.Visible = false     -- ← додай
+        		G.playerSelectFrame.Visible = false       -- ← додай
+        		G.espValCheckFrame.Visible = false        -- ← додай
+        		G.espColorPickerFrame.Visible = false     -- ← додай
+        		G.charmsColorPickerFrame.Visible = false  -- ← додай
+        		G.minimizedCircle.Visible = true
 			else
 				G.frame.Visible = true
 				G.minimizedCircle.Visible = false
