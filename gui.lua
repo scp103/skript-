@@ -519,7 +519,7 @@ Instance.new("UICorner", valCheckOpenButton)
 
 local triggerWallCheckButton = Instance.new("TextButton", aimScroll)
 triggerWallCheckButton.Size = UDim2.new(0.9, 0, 0, 30)
-triggerWallCheckButton.Position = UDim2.new(0.05, 0, 0, 320)
+triggerWallCheckButton.Position = UDim2.new(0.05, 0, 0, 235)
 triggerWallCheckButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 triggerWallCheckButton.TextColor3 = Color3.new(1,1,1)
 triggerWallCheckButton.Font = Enum.Font.SourceSansBold
