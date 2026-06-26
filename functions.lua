@@ -108,6 +108,7 @@ local fovChangerEnabled = false
 local currentFOV = 70
 local skyIndex = 1
 local charmsEnabled = false
+local charmsNpcEnabled = false
 local infiniteJumpEnabled = false
 local chaosEnabled = false
 local originalLightingSettings = {}
@@ -734,6 +735,22 @@ local function createCharms(p)
 	end
 end
 
+local function createNpcCharms()
+    for _, obj in pairs(workspace:GetDescendants()) do
+        if obj:IsA("Model") and obj:FindFirstChildOfClass("Humanoid") and not Players:GetPlayerFromCharacter(obj) then
+            if not charmsObjects[obj] then
+                local h = Instance.new("Highlight")
+                h.Parent = obj
+                h.FillColor = charmsVisColor
+                h.FillTransparency = 0.5
+                h.OutlineColor = charmsVisColor
+                h.OutlineTransparency = 0
+                charmsObjects[obj] = h
+            end
+        end
+    end
+end
+
 for _, p in pairs(Players:GetPlayers()) do createESP(p) end
 Players.PlayerAdded:Connect(createESP)
 Players.PlayerAdded:Connect(function(p)
@@ -779,6 +796,9 @@ RunService.RenderStepped:Connect(function()
                     h.OutlineColor = col
                 end
             end
+        end
+		 if charmsNpcEnabled then
+            createNpcCharms()
         end
     else
         clearCharms()
@@ -1866,6 +1886,8 @@ return {
 	getCharmsVisColor = function() return charmsVisColor end,
 	getCharmsUnvisColor = function() return charmsUnvisColor end,
 	openCharmsColorPicker = openCharmsColorPicker,
+	getCharmsNpc = function() return charmsNpcEnabled end,
+	setCharmsNpc = function(v) charmsNpcEnabled = v end,
 }
 
 end
