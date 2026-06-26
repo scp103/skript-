@@ -78,7 +78,7 @@ charmsScroll.Size = UDim2.new(1, 0, 1, -60)
 charmsScroll.Position = UDim2.new(0, 0, 0, 30)
 charmsScroll.BackgroundTransparency = 1
 charmsScroll.ScrollBarThickness = 5
-charmsScroll.CanvasSize = UDim2.new(0, 0, 0, 120)
+charmsScroll.CanvasSize = UDim2.new(0, 0, 0, 160)
 
 -- Visible кнопка + +
 local charmsVisBtn = Instance.new("TextButton", charmsScroll)
@@ -121,6 +121,16 @@ charmsUnvisColorOpenBtn.Font = Enum.Font.SourceSansBold
 charmsUnvisColorOpenBtn.TextSize = 18
 charmsUnvisColorOpenBtn.Text = "+"
 Instance.new("UICorner", charmsUnvisColorOpenBtn)
+
+local charmsNpcButton = Instance.new("TextButton", charmsScroll)
+charmsNpcButton.Size = UDim2.new(0.9, 0, 0, 30)
+charmsNpcButton.Position = UDim2.new(0.05, 0, 0, 85)
+charmsNpcButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+charmsNpcButton.TextColor3 = Color3.new(1,1,1)
+charmsNpcButton.Font = Enum.Font.SourceSansBold
+charmsNpcButton.TextSize = 14
+charmsNpcButton.Text = "NPC: OFF"
+Instance.new("UICorner", charmsNpcButton)
 
 local charmsSettingsCloseBtn = Instance.new("TextButton", charmsSettingsFrame)
 charmsSettingsCloseBtn.Size = UDim2.new(0.9, 0, 0, 25)
@@ -1275,4 +1285,5 @@ return {
 	charmsColorPreview = charmsColorPreview,
 	charmsColorPickerClose = charmsColorPickerClose,
 	charmsSettingsOpenButton = charmsSettingsOpenButton,
+	charmsNpcButton = charmsNpcButton,
 }
