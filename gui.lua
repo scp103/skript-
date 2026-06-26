@@ -42,7 +42,7 @@ aimScroll.Size = UDim2.new(1, 0, 1, -65)
 aimScroll.Position = UDim2.new(0, 0, 0, 30)
 aimScroll.BackgroundTransparency = 1
 aimScroll.ScrollBarThickness = 5
-aimScroll.CanvasSize = UDim2.new(0, 0, 0, 380)
+aimScroll.CanvasSize = UDim2.new(0, 0, 0, 280)
 
 local espSettingsFrame = Instance.new("Frame", screenGui)
 espSettingsFrame.Size = UDim2.new(0, 210, 0, 260)
@@ -478,7 +478,7 @@ Instance.new("UICorner", espSettingsCloseBtn)
 -- PC / Mobile Trigger кнопки
 local pcTriggerButton = Instance.new("TextButton", aimScroll)
 pcTriggerButton.Size = UDim2.new(0.44, 0, 0, 30)
-pcTriggerButton.Position = UDim2.new(0.05, 0, 0, 240)
+pcTriggerButton.Position = UDim2.new(0.05, 0, 0, 155)
 pcTriggerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 pcTriggerButton.TextColor3 = Color3.new(1,1,1)
 pcTriggerButton.Font = Enum.Font.SourceSansBold
@@ -488,7 +488,7 @@ Instance.new("UICorner", pcTriggerButton)
 
 local mobileTriggerButton = Instance.new("TextButton", aimScroll)
 mobileTriggerButton.Size = UDim2.new(0.44, 0, 0, 30)
-mobileTriggerButton.Position = UDim2.new(0.51, 0, 0, 240)
+mobileTriggerButton.Position = UDim2.new(0.51, 0, 0, 155)
 mobileTriggerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mobileTriggerButton.TextColor3 = Color3.new(1,1,1)
 mobileTriggerButton.Font = Enum.Font.SourceSansBold
@@ -499,7 +499,7 @@ Instance.new("UICorner", mobileTriggerButton)
 -- Val Check кнопка + відкрити список гравців
 local valCheckButton = Instance.new("TextButton", aimScroll)
 valCheckButton.Size = UDim2.new(0.75, -5, 0, 30)
-valCheckButton.Position = UDim2.new(0.05, 0, 0, 280)
+valCheckButton.Position = UDim2.new(0.05, 0, 0, 195)
 valCheckButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 valCheckButton.TextColor3 = Color3.new(1,1,1)
 valCheckButton.Font = Enum.Font.SourceSansBold
@@ -509,7 +509,7 @@ Instance.new("UICorner", valCheckButton)
 
 local valCheckOpenButton = Instance.new("TextButton", aimScroll)
 valCheckOpenButton.Size = UDim2.new(0.15, -5, 0, 30)
-valCheckOpenButton.Position = UDim2.new(0.8, 0, 0, 280)
+valCheckOpenButton.Position = UDim2.new(0.8, 0, 0, 195)
 valCheckOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
 valCheckOpenButton.TextColor3 = Color3.new(1,1,1)
 valCheckOpenButton.Font = Enum.Font.SourceSansBold
@@ -539,7 +539,7 @@ local aimCloseButtonCorner = Instance.new("UICorner", aimCloseButton)
 
 local fovCircleButton = Instance.new("TextButton", aimScroll)
 fovCircleButton.Size = UDim2.new(0.9, 0, 0, 30)
-fovCircleButton.Position = UDim2.new(0.05, 0, 0, 40)
+fovCircleButton.Position = UDim2.new(0.05, 0, 0, 5)
 fovCircleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 fovCircleButton.TextColor3 = Color3.new(1,1,1)
 fovCircleButton.Font = Enum.Font.SourceSansBold
@@ -549,7 +549,7 @@ local fovCircleButtonCorner = Instance.new("UICorner", fovCircleButton)
 
 local wallButton = Instance.new("TextButton", aimScroll)
 wallButton.Size = UDim2.new(0.9, 0, 0, 30)
-wallButton.Position = UDim2.new(0.05, 0, 0, 80)
+wallButton.Position = UDim2.new(0.05, 0, 0, 45)
 wallButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 wallButton.TextColor3 = Color3.new(1,1,1)
 wallButton.Font = Enum.Font.SourceSansBold
@@ -559,7 +559,7 @@ local wallButtonCorner = Instance.new("UICorner", wallButton)
 
 local aimFOVInputLabel = Instance.new("TextLabel", aimScroll)
 aimFOVInputLabel.Size = UDim2.new(0.4, 0, 0, 25)
-aimFOVInputLabel.Position = UDim2.new(0.05, 0, 0, 160)
+aimFOVInputLabel.Position = UDim2.new(0.05, 0, 0, 85)
 aimFOVInputLabel.BackgroundTransparency = 1
 aimFOVInputLabel.Text = "Aim FOV:"
 aimFOVInputLabel.Font = Enum.Font.SourceSansBold
@@ -569,7 +569,7 @@ aimFOVInputLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local aimFOVInput = Instance.new("TextBox", aimScroll)
 aimFOVInput.Size = UDim2.new(0.45, 0, 0, 25)
-aimFOVInput.Position = UDim2.new(0.5, 0, 0, 160)
+aimFOVInput.Position = UDim2.new(0.5, 0, 0, 85)
 aimFOVInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 aimFOVInput.TextColor3 = Color3.new(1,1,1)
 aimFOVInput.Font = Enum.Font.SourceSans
@@ -579,7 +579,7 @@ local aimFOVInputCorner = Instance.new("UICorner", aimFOVInput)
 
 local aimFOVSliderFrame = Instance.new("Frame", aimScroll)
 aimFOVSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
-aimFOVSliderFrame.Position = UDim2.new(0.05, 0, 0, 190)
+aimFOVSliderFrame.Position = UDim2.new(0.05, 0, 0, 115)
 aimFOVSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 aimFOVSliderFrame.BorderSizePixel = 0
 local aimFOVSliderCorner = Instance.new("UICorner", aimFOVSliderFrame)
