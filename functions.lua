@@ -1440,38 +1440,14 @@ makeDraggable(G.teleportFrame, G.teleportTitle)
 makeDraggable(G.minimizedCircle)
 makeDraggable(G.configFrame, G.configTitle)
 makeDraggable(G.mobileGui)
-
--- Оновлення позицій сабменю відносно frame
-local function updateSubMenuPositions()
-    local framePos = G.frame.AbsolutePosition
-    local frameSize = G.frame.AbsoluteSize
-    local x = framePos.X + frameSize.X + 10
-    
-    G.aimSettingsFrame.Position = UDim2.new(0, x, 0, framePos.Y)
-    G.espSettingsFrame.Position = UDim2.new(0, x, 0, framePos.Y)
-    G.charmsSettingsFrame.Position = UDim2.new(0, x, 0, framePos.Y)
-    G.hitboxSettingsFrame.Position = UDim2.new(0, x, 0, framePos.Y)
-    
-    -- Val check / esp players / trigger players праворуч від своїх батьків
-    if G.aimSettingsFrame.Visible then
-        local aimPos = G.aimSettingsFrame.AbsolutePosition
-        local aimSize = G.aimSettingsFrame.AbsoluteSize
-        G.playerSelectFrame.Position = UDim2.new(0, aimPos.X + aimSize.X + 10, 0, aimPos.Y)
-    end
-    if G.espSettingsFrame.Visible then
-        local espPos = G.espSettingsFrame.AbsolutePosition
-        local espSize = G.espSettingsFrame.AbsoluteSize
-        G.espValCheckFrame.Position = UDim2.new(0, espPos.X + espSize.X + 10, 0, espPos.Y)
-        G.espColorPickerFrame.Position = UDim2.new(0, espPos.X + espSize.X + 10, 0, espPos.Y)
-    end
-    if G.charmsSettingsFrame.Visible then
-        local charmsPos = G.charmsSettingsFrame.AbsolutePosition
-        local charmsSize = G.charmsSettingsFrame.AbsoluteSize
-        G.charmsColorPickerFrame.Position = UDim2.new(0, charmsPos.X + charmsSize.X + 10, 0, charmsPos.Y)
-    end
-end
-
-RunService.RenderStepped:Connect(updateSubMenuPositions)
+makeDraggable(G.aimSettingsFrame, G.aimSettingsTitle)
+makeDraggable(G.hitboxSettingsFrame, G.hitboxSettingsTitle)
+makeDraggable(G.espSettingsFrame, G.espSettingsTitle)
+makeDraggable(G.espColorPickerFrame, G.espColorPickerTitle)
+makeDraggable(G.espValCheckFrame, G.espValCheckTitle)
+makeDraggable(G.charmsSettingsFrame, G.charmsSettingsTitle)
+makeDraggable(G.charmsColorPickerFrame, G.charmsColorPickerTitle)
+makeDraggable(G.playerSelectFrame, G.playerSelectTitle)
 
 local keyMap = {
     [Enum.KeyCode.W] = "w",
