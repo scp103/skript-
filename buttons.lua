@@ -279,15 +279,21 @@ end)
 
 -- ============ MINIMIZE ============
 G.minimizeButton.MouseButton1Click:Connect(function()
-	if F.canClick() then
-		G.frame.Visible = false
-		G.teleportFrame.Visible = false
-		G.aimSettingsFrame.Visible = false
-		G.hitboxSettingsFrame.Visible = false
-		G.configFrame.Visible = false
-		G.minimizedCircle.Visible = true
-	end
-end)
+    if F.canClick() then
+        G.frame.Visible = false
+        G.teleportFrame.Visible = false
+        G.aimSettingsFrame.Visible = false
+        G.hitboxSettingsFrame.Visible = false
+        G.configFrame.Visible = false
+        G.espSettingsFrame.Visible = false        -- ← додай
+        G.charmsSettingsFrame.Visible = false     -- ← додай
+        G.playerSelectFrame.Visible = false       -- ← додай
+        G.espValCheckFrame.Visible = false        -- ← додай
+        G.espColorPickerFrame.Visible = false     -- ← додай
+        G.charmsColorPickerFrame.Visible = false  -- ← додай
+        G.minimizedCircle.Visible = true
+    end
+end))
 
 G.minimizedCircle.MouseButton1Click:Connect(function()
 	if F.canClick() then
