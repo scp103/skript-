@@ -994,7 +994,7 @@ aimValCheckTitle.TextSize = 15
 aimValCheckTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 local aimValCheckScroll = Instance.new("ScrollingFrame", aimValCheckFrame)
-aimValCheckScroll.Size = UDim2.new(1, 0, 1, -60)
+aimValCheckScroll.Size = UDim2.new(1, 0, 1, -65)
 aimValCheckScroll.Position = UDim2.new(0, 0, 0, 35)
 aimValCheckScroll.BackgroundTransparency = 1
 aimValCheckScroll.ScrollBarThickness = 5
@@ -1002,7 +1002,7 @@ aimValCheckScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 
 local aimValCheckClose = Instance.new("TextButton", aimValCheckFrame)
 aimValCheckClose.Size = UDim2.new(0.9, 0, 0, 25)
-aimValCheckClose.Position = UDim2.new(0.05, 0, 1, 278)
+aimValCheckClose.Position = UDim2.new(0.05, 0, 1, -30)
 aimValCheckClose.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 aimValCheckClose.TextColor3 = Color3.new(1,1,1)
 aimValCheckClose.Font = Enum.Font.SourceSansBold
