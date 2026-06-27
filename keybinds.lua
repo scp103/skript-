@@ -19,6 +19,7 @@ local function init(G, F)
         		G.espValCheckFrame.Visible = false        -- ← додай
         		G.espColorPickerFrame.Visible = false     -- ← додай
         		G.charmsColorPickerFrame.Visible = false  -- ← додай
+				G.aimValCheckFrame.Visible = false  -- ← додай
         		G.minimizedCircle.Visible = true
 			else
 				G.frame.Visible = true
