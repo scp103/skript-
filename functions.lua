@@ -123,6 +123,8 @@ local pcTriggerEnabled = false
 local mobileTriggerEnabled = false
 local valCheckEnabled = false
 local valCheckTargets = {}
+local aimValCheckEnabled = false
+local aimValCheckTargets = {}
 local espVisColor = Color3.fromRGB(0, 255, 0)
 local espUnvisColor = Color3.fromRGB(255, 0, 0)
 local espShowTracer = true
@@ -652,18 +654,22 @@ local function IsVisible(part)
 end
 
 local function GetClosestPlayer()
-	local closestPlayer, shortestDistance = nil, FieldOfView
-	for _, v in pairs(Players:GetPlayers()) do
-		if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild(AimPart) then
-			local part = v.Character[AimPart]
-			local vector, onScreen = Camera:WorldToViewportPoint(part.Position)
-			if onScreen and IsVisible(part) then
-				local dist = (Vector2.new(vector.X, vector.Y) - screenCenter).Magnitude
-				if dist < shortestDistance then closestPlayer, shortestDistance = v, dist end
-			end
-		end
-	end
-	return closestPlayer
+    local closestPlayer, shortestDistance = nil, FieldOfView
+    for _, v in pairs(Players:GetPlayers()) do
+        if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild(AimPart) then
+            if aimValCheckEnabled and not aimValCheckTargets[v.Name] then
+                -- пропускаємо якщо не в списку
+            else
+                local part = v.Character[AimPart]
+                local vector, onScreen = Camera:WorldToViewportPoint(part.Position)
+                if onScreen and IsVisible(part) then
+                    local dist = (Vector2.new(vector.X, vector.Y) - screenCenter).Magnitude
+                    if dist < shortestDistance then closestPlayer, shortestDistance = v, dist end
+                end
+            end
+        end
+    end
+    return closestPlayer
 end
 
 RunService.RenderStepped:Connect(function()
@@ -1215,6 +1221,15 @@ if config.valCheckTargets then
 	valCheckTargets = config.valCheckTargets
 end
 
+if config.aimValCheck ~= nil then
+    aimValCheckEnabled = config.aimValCheck
+    G.aimValCheckButton.Text = aimValCheckEnabled and "AIM ValCheck: ON" or "AIM ValCheck: OFF"
+    G.aimValCheckButton.BackgroundColor3 = aimValCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+end
+if config.aimValCheckTargets then
+    aimValCheckTargets = config.aimValCheckTargets
+end
+
 -- ESP toggles
 if config.espShowTracer ~= nil then
     espShowTracer = config.espShowTracer
@@ -1448,6 +1463,7 @@ makeDraggable(G.espValCheckFrame, G.espValCheckTitle)
 makeDraggable(G.charmsSettingsFrame, G.charmsSettingsTitle)
 makeDraggable(G.charmsColorPickerFrame, G.charmsColorPickerTitle)
 makeDraggable(G.playerSelectFrame, G.playerSelectTitle)
+makeDraggable(G.aimValCheckFrame, G.aimValCheckTitle)
 
 local keyMap = {
     [Enum.KeyCode.W] = "w",
@@ -1540,6 +1556,34 @@ local function updateEspValCheckList()
         end
     end
     G.espValCheckScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
+end
+
+local function updateAimValCheckList()
+    for _, child in pairs(G.aimValCheckFrame:GetChildren()) do
+        if child:IsA("TextButton") then child:Destroy() end
+    end
+    local yPos = 5
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            local isSel = aimValCheckTargets[player.Name] == true
+            local btn = Instance.new("TextButton", G.aimValCheckScroll)
+            btn.Size = UDim2.new(0.9, 0, 0, 30)
+            btn.Position = UDim2.new(0.05, 0, 0, yPos)
+            btn.BackgroundColor3 = isSel and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
+            btn.TextColor3 = Color3.new(1,1,1)
+            btn.Font = Enum.Font.SourceSans
+            btn.TextSize = 14
+            btn.Text = (isSel and "✅ " or "⬜ ") .. player.Name
+            Instance.new("UICorner", btn)
+            btn.MouseButton1Click:Connect(function()
+                aimValCheckTargets[player.Name] = not aimValCheckTargets[player.Name]
+                btn.BackgroundColor3 = aimValCheckTargets[player.Name] and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
+                btn.Text = (aimValCheckTargets[player.Name] and "✅ " or "⬜ ") .. player.Name
+            end)
+            yPos = yPos + 35
+        end
+    end
+    G.aimValCheckScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
 end
 
 -- Color picker слайдери
@@ -1888,6 +1932,9 @@ return {
 	openCharmsColorPicker = openCharmsColorPicker,
 	getCharmsNpc = function() return charmsNpcEnabled end,
 	setCharmsNpc = function(v) charmsNpcEnabled = v end,
+	getAimValCheck = function() return aimValCheckEnabled end,
+	setAimValCheck = function(v) aimValCheckEnabled = v end,
+	updateAimValCheckList = updateAimValCheckList,
 }
 
 end
