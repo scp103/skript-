@@ -291,6 +291,7 @@ G.minimizeButton.MouseButton1Click:Connect(function()
         G.espValCheckFrame.Visible = false
         G.espColorPickerFrame.Visible = false
         G.charmsColorPickerFrame.Visible = false
+		G.aimValCheckFrame.Visible = false
         G.minimizedCircle.Visible = true
     end
 end)
