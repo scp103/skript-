@@ -994,7 +994,7 @@ aimValCheckTitle.TextSize = 15
 aimValCheckTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 local aimValCheckScroll = Instance.new("ScrollingFrame", aimValCheckFrame)
-aimValCheckScroll.Size = UDim2.new(1, 0, 1, -70)
+aimValCheckScroll.Size = UDim2.new(1, 0, 1, 240)
 aimValCheckScroll.Position = UDim2.new(0, 0, 0, 35)
 aimValCheckScroll.BackgroundTransparency = 1
 aimValCheckScroll.ScrollBarThickness = 5
