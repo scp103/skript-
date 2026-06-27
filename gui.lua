@@ -42,7 +42,7 @@ aimScroll.Size = UDim2.new(1, 0, 1, -65)
 aimScroll.Position = UDim2.new(0, 0, 0, 30)
 aimScroll.BackgroundTransparency = 1
 aimScroll.ScrollBarThickness = 5
-aimScroll.CanvasSize = UDim2.new(0, 0, 0, 280)
+aimScroll.CanvasSize = UDim2.new(0, 0, 0, 320)
 
 local espSettingsFrame = Instance.new("Frame", screenGui)
 espSettingsFrame.Size = UDim2.new(0, 210, 0, 260)
