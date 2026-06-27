@@ -465,6 +465,25 @@ G.espColorPickerClose.MouseButton1Click:Connect(function()
     if F.canClick() then G.espColorPickerFrame.Visible = false end
 end)
 
+G.aimValCheckButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setAimValCheck(not F.getAimValCheck())
+        G.aimValCheckButton.Text = F.getAimValCheck() and "AIM ValCheck: ON" or "AIM ValCheck: OFF"
+        G.aimValCheckButton.BackgroundColor3 = F.getAimValCheck() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+G.aimValCheckOpenButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        G.aimValCheckFrame.Visible = not G.aimValCheckFrame.Visible
+        if G.aimValCheckFrame.Visible then F.updateAimValCheckList() end
+    end
+end)
+
+G.aimValCheckClose.MouseButton1Click:Connect(function()
+    if F.canClick() then G.aimValCheckFrame.Visible = false end
+end)
+
 end
 
 return init
