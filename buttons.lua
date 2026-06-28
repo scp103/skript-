@@ -351,7 +351,12 @@ G.valCheckOpenButton.MouseButton1Click:Connect(function()
     if F.canClick() then
         local visible = not G.playerSelectFrame.Visible
         G.playerSelectFrame.Visible = visible
-        if visible then F.updatePlayerSelectList() end
+        if visible then
+            F.updatePlayerSelectList()
+            local aimPos = G.aimSettingsFrame.AbsolutePosition
+            local aimSize = G.aimSettingsFrame.AbsoluteSize
+            G.playerSelectFrame.Position = UDim2.new(0, aimPos.X + aimSize.X + 10, 0, aimPos.Y)
+        end
     end
 end)
 
