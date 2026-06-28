@@ -1559,7 +1559,7 @@ local function updateEspValCheckList()
 end
 
 local function updateAimValCheckList()
-    for _, child in pairs(G.aimValCheckFrame:GetChildren()) do
+    for _, child in pairs(G.aimValCheckScroll:GetChildren()) do  -- ← змінити на aimValCheckScroll
         if child:IsA("TextButton") then child:Destroy() end
     end
     local yPos = 5
