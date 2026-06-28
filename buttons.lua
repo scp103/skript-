@@ -477,7 +477,13 @@ end)
 G.aimValCheckOpenButton.MouseButton1Click:Connect(function()
     if F.canClick() then
         G.aimValCheckFrame.Visible = not G.aimValCheckFrame.Visible
-        if G.aimValCheckFrame.Visible then F.updateAimValCheckList() end
+        if G.aimValCheckFrame.Visible then
+            F.updateAimValCheckList()
+            -- позиція збоку від aimSettingsFrame
+            local aimPos = G.aimSettingsFrame.AbsolutePosition
+            local aimSize = G.aimSettingsFrame.AbsoluteSize
+            G.aimValCheckFrame.Position = UDim2.new(0, aimPos.X + aimSize.X + 10, 0, aimPos.Y)
+        end
     end
 end)
 
