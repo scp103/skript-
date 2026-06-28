@@ -977,7 +977,7 @@ playerSelectFrame.Active = true
 Instance.new("UICorner", playerSelectFrame)
 
 local aimValCheckFrame = Instance.new("Frame", screenGui)
-aimValCheckFrame.Size = UDim2.new(0, 180, 0, 310)
+aimValCheckFrame.Size = UDim2.new(0, 180, 0, 280)
 aimValCheckFrame.Position = UDim2.new(0.5, 110, 0.3, 0)
 aimValCheckFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 aimValCheckFrame.BorderSizePixel = 0
