@@ -761,21 +761,31 @@ local function createNpcCharms()
 end
 
 local function scanEspObjects()
-    local found = {}
-    local counter = 0
-    for _, v in pairs(workspace:GetDescendants()) do
-        if v:IsA("BasePart") then
-            local hasPrompt = v:FindFirstChildOfClass("ProximityPrompt") or 
-                (v.Parent and v.Parent:FindFirstChildOfClass("ProximityPrompt"))
-            if hasPrompt then
-                counter = counter + 1
-                if counter <= 30 then
-                    table.insert(found, v)
-                else break end
+    table.clear(charmsEspObjTargets) -- Очищаємо старий список перед новим скануванням
+    
+    -- Шукаємо всі об'єкти у Workspace
+    for _, descendant in pairs(workspace:GetDescendants()) do
+        -- Перевіряємо, чи є в об'єкта ProximityPrompt або ClickDetector
+        if descendant:IsA("ProximityPrompt") or descendant:IsA("ClickDetector") then
+            
+            -- Нам потрібен сам фізичний об'єкт (Part, MeshPart і т.д.), до якого прив'язана взаємодія
+            local parentObj = descendant.Parent
+            
+            if parentObj and parentObj:IsA("BasePart") then
+                -- Перевіряємо, щоб не додати один і той самий об'єкт двічі
+                if not table.find(charmsEspObjTargets, parentObj) then
+                    
+                    -- Якщо це ProximityPrompt і у нього є гарний кастомний текст (наприклад, "Обшукати")
+                    -- Можна міняти ім'я об'єкта, щоб у ESP відображалося: "Смітник (Обшукати)"
+                    if descendant:IsA("ProximityPrompt") and descendant.ObjectText ~= "" then
+                        parentObj.Name = descendant.ObjectText
+                    end
+                    
+                    table.insert(charmsEspObjTargets, parentObj)
+                end
             end
         end
     end
-    charmsEspObjTargets = found
 end
 
 -- ============ ОНОВЛЕНІ ФУНКЦІЇ ДЛЯ ESP ОБ'ЄКТІВ ============
