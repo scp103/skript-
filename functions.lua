@@ -778,20 +778,44 @@ local function scanEspObjects()
     charmsEspObjTargets = found
 end
 
+-- ============ ОНОВЛЕНІ ФУНКЦІЇ ДЛЯ ESP ОБ'ЄКТІВ ============
+
 local function createObjESP(obj)
     if charmsEspObjStorage[obj] then return end
+    
+    -- Створюємо підсвітку (Обводку)
     local h = Instance.new("Highlight")
-    h.FillTransparency = 1
+    h.FillTransparency = 1 -- Тільки обводка, без заливки
     h.OutlineTransparency = 0
     h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
     h.Adornee = obj
     h.Parent = game:GetService("CoreGui")
-    charmsEspObjStorage[obj] = h
+    
+    -- Створюємо GUI для відображення Назви та Відстані
+    local bgui = Instance.new("BillboardGui")
+    bgui.Size = UDim2.new(0, 200, 0, 50)
+    bgui.AlwaysOnTop = true
+    bgui.Adornee = obj
+    bgui.ExtentsOffset = Vector3.new(0, 2, 0) -- Піднімаємо текст трохи вище об'єкта
+    bgui.Parent = game:GetService("CoreGui")
+    
+    local textLabel = Instance.new("TextLabel", bgui)
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.TextSize = 14
+    textLabel.TextStrokeTransparency = 0 -- Робимо чорний контур тексту, щоб добре було видно
+    textLabel.Text = obj.Name -- Ставимо назву об'єкта за замовчуванням
+    
+    -- Зберігаємо таблицю об'єктів разом із їхніми компонентами
+    charmsEspObjStorage[obj] = {Highlight = h, Billboard = bgui, Label = textLabel}
 end
 
 local function clearObjESP()
-    for obj, h in pairs(charmsEspObjStorage) do
-        if h then h:Destroy() end
+    for obj, data in pairs(charmsEspObjStorage) do
+        if data.Highlight then data.Highlight:Destroy() end
+        if data.Billboard then data.Billboard:Destroy() end
     end
     charmsEspObjStorage = {}
 end
@@ -853,27 +877,44 @@ RunService.RenderStepped:Connect(function()
 	    for _, obj in pairs(charmsEspObjTargets) do
 	        if obj and obj.Parent then
 	            createObjESP(obj)
-            local h = charmsEspObjStorage[obj]
-	            if h then
-	                -- raycast для перевірки видимості
+	            local data = charmsEspObjStorage[obj]
+	            if data then
 	                local char = LocalPlayer.Character
 	                if char and char:FindFirstChild("HumanoidRootPart") then
 	                    local origin = char.HumanoidRootPart.Position
 	                    local dir = obj.Position - origin
-	                    local params = RaycastParams.new()
-	                    params.FilterDescendantsInstances = {char, obj.Parent}
+                    
+                    -- Розрахунок відстані
+	                    local distance = math.floor(dir.Magnitude)
+                    
+                    -- Оновлюємо текст: Назва об'єкта + Відстань
+	                    data.Label.Text = obj.Name .. " [" .. tostring(distance) .. "m]"
+                    
+                    -- НАЛАШТУВАННЯ ФІЛЬТРА РЕЙКАСТУ (Фікс багу видимості)
+ 	                   local params = RaycastParams.new()
+                    -- Виключаємо твого персонажа, сам об'єкт та його батьківський елемент з перевірки
+	                    params.FilterDescendantsInstances = {char, obj, obj.Parent}
 	                    params.FilterType = Enum.RaycastFilterType.Exclude
+                    
 	                    local result = workspace:Raycast(origin, dir, params)
-	                    h.OutlineColor = (not result) and charmsVisColor or charmsUnvisColor
+                    
+                    -- Якщо рейкаст нічого не зустрів на шляху — об'єкт видимий (not result)
+	                    local isVisible = (not result)
+	                    local targetColor = isVisible and charmsVisColor or charmsUnvisColor
+                    
+	                    -- Фарбуємо обводку та текст у відповідний колір
+	                    data.Highlight.OutlineColor = targetColor
+	                    data.Label.TextColor3 = targetColor
 	                end
 	            end
 	        else
 	            if charmsEspObjStorage[obj] then
-	                charmsEspObjStorage[obj]:Destroy()
+	                if charmsEspObjStorage[obj].Highlight then 	charmsEspObjStorage[obj].Highlight:Destroy() end
+	                if charmsEspObjStorage[obj].Billboard then 	charmsEspObjStorage[obj].Billboard:Destroy() end
 	                charmsEspObjStorage[obj] = nil
-	            end
-	        end
-	    end
+ 	           end
+ 	       end
+    end
 	else
 	    clearObjESP()
 	end
