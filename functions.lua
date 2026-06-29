@@ -848,54 +848,64 @@ Players.PlayerRemoving:Connect(function(p)
 end)
 
 RunService.RenderStepped:Connect(function()
-	if charmsEspNpcEnabled then
-    -- Тут має бути твій метод збору NPC (наприклад, scanEspNpcs())
-    -- Припустимо, вони зберігаються у таблиці charmsEspNpcTargets
-    
-	    for _, npc in pairs(charmsEspNpcTargets) do
-	        if npc and npc.Parent and npc:FindFirstChild("Humanoid") then
-	            createNpcESP(npc)
-	            local data = charmsEspNpcStorage[npc]
-            
-	            if data and data.TargetPart then
-	                local char = LocalPlayer.Character
-	                if char and char:FindFirstChild("HumanoidRootPart") then
-	                    local origin = char.HumanoidRootPart.Position
-	                    local dir = data.TargetPart.Position - origin
-                    
-                    -- Дистанція до NPC
-	                    local distance = math.floor(dir.Magnitude)
-	                    data.Label.Text = npc.Name .. " [" .. tostring(distance) .. "m]"
-                    
-                    -- РЕЙКАСТ ПЕРЕВІРКА ВИДИМОСТІ
-	                    local params = RaycastParams.new()
-                    -- Виключаємо себе та всю модель NPC з перешкод
-	                    params.FilterDescendantsInstances = {char, npc}
-	                    params.FilterType = Enum.RaycastFilterType.Exclude
-                    
-	                    local result = workspace:Raycast(origin, dir, params)
-                    
-                    -- Якщо промінь чистий — NPC видно
-	                    local isVisible = (not result)
-	                    local targetColor = isVisible and charmsVisColor or charmsUnvisColor
-                    
-	                    -- Синхронізуємо кольори обводки та тексту
-	                    data.Highlight.OutlineColor = targetColor
-	                    data.Label.TextColor3 = targetColor
-	                end
-	            end
-	        else
-            -- Якщо NPC зник або помер — видаляємо його ESP
-	            if charmsEspNpcStorage[npc] then
-	                if charmsEspNpcStorage[npc].Highlight then 	charmsEspNpcStorage[npc].Highlight:Destroy() end
-	                if charmsEspNpcStorage[npc].Billboard then 	charmsEspNpcStorage[npc].Billboard:Destroy() end
-	                charmsEspNpcStorage[npc] = nil
-	            end
-	        end
-	    end
-	else
-	    clearNpcESP()
-	end
+    if charmsEspNpcEnabled then
+        -- Тут має бути твій метод збору NPC (наприклад, scanEspNpcs())
+        -- Припустимо, вони зберігаються у таблиці charmsEspNpcTargets
+        
+        -- Створюємо швидкий список для перевірки наявності активних NPC
+        local currentNpcs = {}
+        
+        for _, npc in pairs(charmsEspNpcTargets) do
+            if npc and npc.Parent and npc:FindFirstChild("Humanoid") then
+                currentNpcs[npc] = true -- Позначаємо, що NPC живий і є на карті
+                
+                createNpcESP(npc)
+                local data = charmsEspNpcStorage[npc]
+                
+                if data and data.TargetPart then
+                    local char = LocalPlayer.Character
+                    if char and char:FindFirstChild("HumanoidRootPart") then
+                        local origin = char.HumanoidRootPart.Position
+                        local dir = data.TargetPart.Position - origin
+                        
+                        -- Дистанція до NPC
+                        local distance = math.floor(dir.Magnitude)
+                        data.Label.Text = npc.Name .. " [" .. tostring(distance) .. "m]"
+                        
+                        -- РЕЙКАСТ ПЕРЕВІРКА ВИДИМОСТІ
+                        local params = RaycastParams.new()
+                        params.FilterDescendantsInstances = {char, npc}
+                        params.FilterType = Enum.RaycastFilterType.Exclude
+                        
+                        local result = workspace:Raycast(origin, dir, params)
+                        
+                        -- Надійне визначення кольору
+                        local targetColor
+                        if not result then
+                            targetColor = charmsVisColor
+                        else
+                            targetColor = charmsUnvisColor
+                        end
+                        
+                        -- Синхронізуємо кольори обводки та тексту
+                        if data.Highlight then data.Highlight.OutlineColor = targetColor end
+                        if data.Label then data.Label.TextColor3 = targetColor end
+                    end
+                end
+            end
+        end
+        
+        -- Окремо чистимо ESP для тих NPC, які зникли з таблиці або померли
+        for npc, data in pairs(charmsEspNpcStorage) do
+            if not currentNpcs[npc] then
+                if data.Highlight then data.Highlight:Destroy() end
+                if data.Billboard then data.Billboard:Destroy() end
+                charmsEspNpcStorage[npc] = nil
+            end
+        end
+    else
+        clearNpcESP()
+    end
 	if charmsEspObjEnabled then
 	    if tick() % 2 < 0.03 then scanEspObjects() end
 	    for _, obj in pairs(charmsEspObjTargets) do
