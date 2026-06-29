@@ -848,40 +848,54 @@ Players.PlayerRemoving:Connect(function(p)
 end)
 
 RunService.RenderStepped:Connect(function()
-    if charmsEnabled then
-        for _, p in pairs(Players:GetPlayers()) do
-            if p ~= LocalPlayer then
-                local char = p.Character
-                local h = charmsObjects[p]
-                -- якщо хайлайту нема або він відвалився або не в тому персонажі
-                if char and char:FindFirstChild("HumanoidRootPart") then
-                    if not h or not h.Parent or h.Parent ~= char then
-                        if h then h:Destroy() end
-                        local newH = Instance.new("Highlight")
-                        newH.Parent = char
-                        newH.FillTransparency = 0.5
-                        newH.OutlineTransparency = 0
-                        charmsObjects[p] = newH
-                        h = newH
-                    end
-                    -- оновлюємо колір
-                    local rayParams = RaycastParams.new()
-                    rayParams.FilterDescendantsInstances = {LocalPlayer.Character, char}
-                    rayParams.FilterType = Enum.RaycastFilterType.Exclude
-                    local root = char.HumanoidRootPart
-                    local result = workspace:Raycast(Camera.CFrame.Position, root.Position - Camera.CFrame.Position, rayParams)
-                    local col = (not result or not result.Instance) and charmsVisColor or charmsUnvisColor
-                    h.FillColor = col
-                    h.OutlineColor = col
-                end
-            end
-        end
-		 if charmsNpcEnabled then
-            createNpcCharms()
-        end
-    else
-        clearCharms()
-    end
+	if charmsEspNpcEnabled then
+    -- Тут має бути твій метод збору NPC (наприклад, scanEspNpcs())
+    -- Припустимо, вони зберігаються у таблиці charmsEspNpcTargets
+    
+	    for _, npc in pairs(charmsEspNpcTargets) do
+	        if npc and npc.Parent and npc:FindFirstChild("Humanoid") then
+	            createNpcESP(npc)
+	            local data = charmsEspNpcStorage[npc]
+            
+	            if data and data.TargetPart then
+	                local char = LocalPlayer.Character
+	                if char and char:FindFirstChild("HumanoidRootPart") then
+	                    local origin = char.HumanoidRootPart.Position
+	                    local dir = data.TargetPart.Position - origin
+                    
+                    -- Дистанція до NPC
+	                    local distance = math.floor(dir.Magnitude)
+	                    data.Label.Text = npc.Name .. " [" .. tostring(distance) .. "m]"
+                    
+                    -- РЕЙКАСТ ПЕРЕВІРКА ВИДИМОСТІ
+	                    local params = RaycastParams.new()
+                    -- Виключаємо себе та всю модель NPC з перешкод
+	                    params.FilterDescendantsInstances = {char, npc}
+	                    params.FilterType = Enum.RaycastFilterType.Exclude
+                    
+	                    local result = workspace:Raycast(origin, dir, params)
+                    
+                    -- Якщо промінь чистий — NPC видно
+	                    local isVisible = (not result)
+	                    local targetColor = isVisible and charmsVisColor or charmsUnvisColor
+                    
+	                    -- Синхронізуємо кольори обводки та тексту
+	                    data.Highlight.OutlineColor = targetColor
+	                    data.Label.TextColor3 = targetColor
+	                end
+	            end
+	        else
+            -- Якщо NPC зник або помер — видаляємо його ESP
+	            if charmsEspNpcStorage[npc] then
+	                if charmsEspNpcStorage[npc].Highlight then 	charmsEspNpcStorage[npc].Highlight:Destroy() end
+	                if charmsEspNpcStorage[npc].Billboard then 	charmsEspNpcStorage[npc].Billboard:Destroy() end
+	                charmsEspNpcStorage[npc] = nil
+	            end
+	        end
+	    end
+	else
+	    clearNpcESP()
+	end
 	if charmsEspObjEnabled then
 	    if tick() % 2 < 0.03 then scanEspObjects() end
 	    for _, obj in pairs(charmsEspObjTargets) do
