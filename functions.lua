@@ -109,6 +109,9 @@ local currentFOV = 70
 local skyIndex = 1
 local charmsEnabled = false
 local charmsNpcEnabled = false
+local charmsEspObjEnabled = false
+local charmsEspObjStorage = {}
+local charmsEspObjTargets = {}
 local infiniteJumpEnabled = false
 local chaosEnabled = false
 local originalLightingSettings = {}
@@ -757,6 +760,42 @@ local function createNpcCharms()
     end
 end
 
+local function scanEspObjects()
+    local found = {}
+    local counter = 0
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("BasePart") then
+            local hasPrompt = v:FindFirstChildOfClass("ProximityPrompt") or 
+                (v.Parent and v.Parent:FindFirstChildOfClass("ProximityPrompt"))
+            if hasPrompt then
+                counter = counter + 1
+                if counter <= 30 then
+                    table.insert(found, v)
+                else break end
+            end
+        end
+    end
+    charmsEspObjTargets = found
+end
+
+local function createObjESP(obj)
+    if charmsEspObjStorage[obj] then return end
+    local h = Instance.new("Highlight")
+    h.FillTransparency = 1
+    h.OutlineTransparency = 0
+    h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    h.Adornee = obj
+    h.Parent = game:GetService("CoreGui")
+    charmsEspObjStorage[obj] = h
+end
+
+local function clearObjESP()
+    for obj, h in pairs(charmsEspObjStorage) do
+        if h then h:Destroy() end
+    end
+    charmsEspObjStorage = {}
+end
+
 for _, p in pairs(Players:GetPlayers()) do createESP(p) end
 Players.PlayerAdded:Connect(createESP)
 Players.PlayerAdded:Connect(function(p)
@@ -809,6 +848,35 @@ RunService.RenderStepped:Connect(function()
     else
         clearCharms()
     end
+	if charmsEspObjEnabled then
+	    if tick() % 2 < 0.03 then scanEspObjects() end
+	    for _, obj in pairs(charmsEspObjTargets) do
+	        if obj and obj.Parent then
+	            createObjESP(obj)
+            local h = charmsEspObjStorage[obj]
+	            if h then
+	                -- raycast для перевірки видимості
+	                local char = LocalPlayer.Character
+	                if char and char:FindFirstChild("HumanoidRootPart") then
+	                    local origin = char.HumanoidRootPart.Position
+	                    local dir = obj.Position - origin
+	                    local params = RaycastParams.new()
+	                    params.FilterDescendantsInstances = {char, obj.Parent}
+	                    params.FilterType = Enum.RaycastFilterType.Exclude
+	                    local result = workspace:Raycast(origin, dir, params)
+	                    h.OutlineColor = (not result) and charmsVisColor or charmsUnvisColor
+	                end
+	            end
+	        else
+	            if charmsEspObjStorage[obj] then
+	                charmsEspObjStorage[obj]:Destroy()
+	                charmsEspObjStorage[obj] = nil
+	            end
+	        end
+	    end
+	else
+	    clearObjESP()
+	end
 end)
 
 RunService.RenderStepped:Connect(function()
@@ -1935,6 +2003,8 @@ return {
 	getAimValCheck = function() return aimValCheckEnabled end,
 	setAimValCheck = function(v) aimValCheckEnabled = v end,
 	updateAimValCheckList = updateAimValCheckList,
+	getCharmsEspObj = function() return charmsEspObjEnabled end,
+	setCharmsEspObj = function(v) charmsEspObjEnabled = v end,
 }
 
 end
