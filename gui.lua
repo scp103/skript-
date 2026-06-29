@@ -139,6 +139,16 @@ charmsNpcButton.TextSize = 14
 charmsNpcButton.Text = "NPC: OFF"
 Instance.new("UICorner", charmsNpcButton)
 
+local charmsEspObjButton = Instance.new("TextButton", charmsScroll)
+charmsEspObjButton.Size = UDim2.new(0.9, 0, 0, 30)
+charmsEspObjButton.Position = UDim2.new(0.05, 0, 0, 125)
+charmsEspObjButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+charmsEspObjButton.TextColor3 = Color3.new(1,1,1)
+charmsEspObjButton.Font = Enum.Font.SourceSansBold
+charmsEspObjButton.TextSize = 14
+charmsEspObjButton.Text = "ESP Objects: OFF"
+Instance.new("UICorner", charmsEspObjButton)
+
 local charmsSettingsCloseBtn = Instance.new("TextButton", charmsSettingsFrame)
 charmsSettingsCloseBtn.Size = UDim2.new(0.9, 0, 0, 25)
 charmsSettingsCloseBtn.Position = UDim2.new(0.05, 0, 1, -30)
@@ -1355,4 +1365,5 @@ return {
 	aimValCheckClose = aimValCheckClose,
 	aimValCheckButton = aimValCheckButton,
 	aimValCheckOpenButton = aimValCheckOpenButton,
+	charmsEspObjButton = charmsEspObjButton,
 }
