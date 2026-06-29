@@ -496,6 +496,14 @@ G.aimValCheckClose.MouseButton1Click:Connect(function()
     if F.canClick() then G.aimValCheckFrame.Visible = false end
 end)
 
+G.charmsEspObjButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setCharmsEspObj(not F.getCharmsEspObj())
+        G.charmsEspObjButton.Text = F.getCharmsEspObj() and "ESP Objects: ON" or "ESP Objects: OFF"
+        G.charmsEspObjButton.BackgroundColor3 = F.getCharmsEspObj() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
 end
 
 return init
