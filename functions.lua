@@ -853,8 +853,7 @@ RunService.RenderStepped:Connect(function()
 
     -- ==================== 1. БЛОК ДЛЯ NPC ====================
     if charmsEspNpcEnabled then
-        -- Якщо у тебе немає окремої функції збору, автоматично шукаємо NPC на карті
-        -- (Шукаємо моделі з Humanoid, які не є твоїм персонажем)
+        -- Автоматичний збір NPC, якщо таблиця пуста
         if tick() % 2 < 0.03 then
             table.clear(charmsEspNpcTargets)
             for _, v in pairs(workspace:GetDescendants()) do
@@ -872,9 +871,14 @@ RunService.RenderStepped:Connect(function()
         for _, npc in pairs(charmsEspNpcTargets) do
             if npc and npc.Parent and npc:FindFirstChild("Humanoid") then
                 currentNpcs[npc] = true
-                createNpcESP(npc)
                 
-                local data = charmsEspNpcStorage[npc]
+                -- БЕЗПЕЧНИЙ ВИКЛИК: перевіряємо, чи існує функція createNpcESP
+                if createNpcESP then 
+                    createNpcESP(npc) 
+                end
+                
+                -- Перевіряємо, чи є сховище
+                local data = charmsEspNpcStorage and charmsEspNpcStorage[npc]
                 if data and data.TargetPart and root then
                     local origin = root.Position
                     local dir = data.TargetPart.Position - origin
@@ -882,13 +886,11 @@ RunService.RenderStepped:Connect(function()
                     
                     data.Label.Text = npc.Name .. " [" .. tostring(distance) .. "m]"
                     
-                    -- Рейкаст перевірка видимості NPC
                     local params = RaycastParams.new()
                     params.FilterDescendantsInstances = {char, npc}
                     params.FilterType = Enum.RaycastFilterType.Exclude
                     
                     local result = workspace:Raycast(origin, dir, params)
-                    
                     local targetColor = (not result) and charmsVisColor or charmsUnvisColor
                     
                     if data.Highlight then data.Highlight.OutlineColor = targetColor end
@@ -897,27 +899,34 @@ RunService.RenderStepped:Connect(function()
             end
         end
         
-        -- Очищення для зниклих NPC
-        for npc, data in pairs(charmsEspNpcStorage) do
-            if not currentNpcs[npc] then
-                if data.Highlight then data.Highlight:Destroy() end
-                if data.Billboard then data.Billboard:Destroy() end
-                charmsEspNpcStorage[npc] = nil
+        -- Очищення зниклих NPC
+        if charmsEspNpcStorage then
+            for npc, data in pairs(charmsEspNpcStorage) do
+                if not currentNpcs[npc] then
+                    if data.Highlight then data.Highlight:Destroy() end
+                    if data.Billboard then data.Billboard:Destroy() end
+                    charmsEspNpcStorage[npc] = nil
+                end
             end
         end
     else
-        clearNpcESP()
+        -- Безпечний виклик очищення
+        if clearNpcESP then clearNpcESP() end
     end
 
     -- ==================== 2. БЛОК ДЛЯ ОБ'ЄКТІВ ====================
     if charmsEspObjEnabled then
-        if tick() % 2 < 0.03 then scanEspObjects() end
+        -- БЕЗПЕЧНИЙ ВИКЛИК С КАНУВАННЯ: перевіряємо, чи існує функція scanEspObjects
+        if tick() % 2 < 0.03 and scanEspObjects then 
+            scanEspObjects() 
+        end
         
         for _, obj in pairs(charmsEspObjTargets) do
             if obj and obj.Parent then
-                createObjESP(obj)
+                -- Безпечний виклик створення ESP об'єкта
+                if createObjESP then createObjESP(obj) end
                 
-                local data = charmsEspObjStorage[obj]
+                local data = charmsEspObjStorage and charmsEspObjStorage[obj]
                 if data and root then
                     local origin = root.Position
                     local dir = obj.Position - origin
@@ -925,20 +934,18 @@ RunService.RenderStepped:Connect(function()
                     
                     data.Label.Text = obj.Name .. " [" .. tostring(distance) .. "m]"
                     
-                    -- Рейкаст перевірка видимості об'єкта
                     local params = RaycastParams.new()
                     params.FilterDescendantsInstances = {char, obj, obj.Parent}
                     params.FilterType = Enum.RaycastFilterType.Exclude
                     
                     local result = workspace:Raycast(origin, dir, params)
-                    
                     local targetColor = (not result) and charmsVisColor or charmsUnvisColor
                     
                     if data.Highlight then data.Highlight.OutlineColor = targetColor end
                     if data.Label then data.Label.TextColor3 = targetColor end
                 end
             else
-                if charmsEspObjStorage[obj] then
+                if charmsEspObjStorage and charmsEspObjStorage[obj] then
                     if charmsEspObjStorage[obj].Highlight then charmsEspObjStorage[obj].Highlight:Destroy() end
                     if charmsEspObjStorage[obj].Billboard then charmsEspObjStorage[obj].Billboard:Destroy() end
                     charmsEspObjStorage[obj] = nil
@@ -946,10 +953,10 @@ RunService.RenderStepped:Connect(function()
             end
         end
     else
-        clearObjESP()
+        -- Безпечний виклик очищення об'єктів
+        if clearObjESP then clearObjESP() end
     end
 end)
-
 RunService.RenderStepped:Connect(function()
 	if not espEnabled then
 		for _, esp in pairs(espObjects) do
