@@ -504,6 +504,30 @@ G.charmsEspObjButton.MouseButton1Click:Connect(function()
     end
 end)
 
+G.teamCheckButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setTeamCheck(not F.getTeamCheck())
+        G.teamCheckButton.Text = F.getTeamCheck() and "Team Check: ON" or "Team Check: OFF"
+        G.teamCheckButton.BackgroundColor3 = F.getTeamCheck() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+G.silentAimButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setSilentAim(not F.getSilentAim())
+        G.silentAimButton.Text = F.getSilentAim() and "Silent Aim: ON" or "Silent Aim: OFF"
+        G.silentAimButton.BackgroundColor3 = F.getSilentAim() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
+G.smoothButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setSmoothToggle(not F.getSmoothToggle())
+        G.smoothButton.Text = F.getSmoothToggle() and "Smooth: ON" or "Smooth: OFF"
+        G.smoothButton.BackgroundColor3 = F.getSmoothToggle() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
 end
 
 return init
