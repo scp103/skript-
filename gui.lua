@@ -42,7 +42,7 @@ aimScroll.Size = UDim2.new(1, 0, 1, -65)
 aimScroll.Position = UDim2.new(0, 0, 0, 30)
 aimScroll.BackgroundTransparency = 1
 aimScroll.ScrollBarThickness = 5
-aimScroll.CanvasSize = UDim2.new(0, 0, 0, 320)
+aimScroll.CanvasSize = UDim2.new(0, 0, 0, 470)
 
 local espSettingsFrame = Instance.new("Frame", screenGui)
 espSettingsFrame.Size = UDim2.new(0, 210, 0, 260)
@@ -488,7 +488,7 @@ Instance.new("UICorner", espSettingsCloseBtn)
 -- PC / Mobile Trigger кнопки
 local pcTriggerButton = Instance.new("TextButton", aimScroll)
 pcTriggerButton.Size = UDim2.new(0.44, 0, 0, 30)
-pcTriggerButton.Position = UDim2.new(0.05, 0, 0, 195)
+pcTriggerButton.Position = UDim2.new(0.05, 0, 0, 345)
 pcTriggerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 pcTriggerButton.TextColor3 = Color3.new(1,1,1)
 pcTriggerButton.Font = Enum.Font.SourceSansBold
@@ -498,7 +498,7 @@ Instance.new("UICorner", pcTriggerButton)
 
 local mobileTriggerButton = Instance.new("TextButton", aimScroll)
 mobileTriggerButton.Size = UDim2.new(0.44, 0, 0, 30)
-mobileTriggerButton.Position = UDim2.new(0.51, 0, 0, 195)
+mobileTriggerButton.Position = UDim2.new(0.51, 0, 0, 345)
 mobileTriggerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mobileTriggerButton.TextColor3 = Color3.new(1,1,1)
 mobileTriggerButton.Font = Enum.Font.SourceSansBold
@@ -509,7 +509,7 @@ Instance.new("UICorner", mobileTriggerButton)
 -- Val Check кнопка + відкрити список гравців
 local valCheckButton = Instance.new("TextButton", aimScroll)
 valCheckButton.Size = UDim2.new(0.75, -5, 0, 30)
-valCheckButton.Position = UDim2.new(0.05, 0, 0, 235)
+valCheckButton.Position = UDim2.new(0.05, 0, 0, 385)
 valCheckButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 valCheckButton.TextColor3 = Color3.new(1,1,1)
 valCheckButton.Font = Enum.Font.SourceSansBold
@@ -519,7 +519,7 @@ Instance.new("UICorner", valCheckButton)
 
 local valCheckOpenButton = Instance.new("TextButton", aimScroll)
 valCheckOpenButton.Size = UDim2.new(0.15, -5, 0, 30)
-valCheckOpenButton.Position = UDim2.new(0.8, 0, 0, 235)
+valCheckOpenButton.Position = UDim2.new(0.8, 0, 0, 385)
 valCheckOpenButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
 valCheckOpenButton.TextColor3 = Color3.new(1,1,1)
 valCheckOpenButton.Font = Enum.Font.SourceSansBold
@@ -529,7 +529,7 @@ Instance.new("UICorner", valCheckOpenButton)
 
 local triggerWallCheckButton = Instance.new("TextButton", aimScroll)
 triggerWallCheckButton.Size = UDim2.new(0.9, 0, 0, 30)
-triggerWallCheckButton.Position = UDim2.new(0.05, 0, 0, 275)
+triggerWallCheckButton.Position = UDim2.new(0.05, 0, 0, 425)
 triggerWallCheckButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 triggerWallCheckButton.TextColor3 = Color3.new(1,1,1)
 triggerWallCheckButton.Font = Enum.Font.SourceSansBold
@@ -622,6 +622,64 @@ aimFOVSliderButton.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
 aimFOVSliderButton.BorderSizePixel = 0
 local aimFOVSliderButtonCorner = Instance.new("UICorner", aimFOVSliderButton)
 aimFOVSliderButtonCorner.CornerRadius = UDim.new(1, 0)
+
+-- Smooth Aim слайдер
+local smoothLabel = Instance.new("TextLabel", aimScroll)
+smoothLabel.Size = UDim2.new(0.4, 0, 0, 25)
+smoothLabel.Position = UDim2.new(0.05, 0, 0, 175)
+smoothLabel.BackgroundTransparency = 1
+smoothLabel.Text = "Smooth:"
+smoothLabel.Font = Enum.Font.SourceSansBold
+smoothLabel.TextSize = 14
+smoothLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+smoothLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local smoothInput = Instance.new("TextBox", aimScroll)
+smoothInput.Size = UDim2.new(0.45, 0, 0, 25)
+smoothInput.Position = UDim2.new(0.5, 0, 0, 175)
+smoothInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+smoothInput.TextColor3 = Color3.new(1,1,1)
+smoothInput.Font = Enum.Font.SourceSans
+smoothInput.TextSize = 14
+smoothInput.Text = "1"
+Instance.new("UICorner", smoothInput)
+
+local smoothSliderFrame = Instance.new("Frame", aimScroll)
+smoothSliderFrame.Size = UDim2.new(0.9, 0, 0, 15)
+smoothSliderFrame.Position = UDim2.new(0.05, 0, 0, 205)
+smoothSliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+smoothSliderFrame.BorderSizePixel = 0
+Instance.new("UICorner", smoothSliderFrame)
+
+local smoothSliderButton = Instance.new("Frame", smoothSliderFrame)
+smoothSliderButton.Size = UDim2.new(0, 20, 0, 20)
+smoothSliderButton.Position = UDim2.new(0, -2, 0, -2.5)
+smoothSliderButton.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+smoothSliderButton.BorderSizePixel = 0
+local smoothSliderButtonCorner = Instance.new("UICorner", smoothSliderButton)
+smoothSliderButtonCorner.CornerRadius = UDim.new(1, 0)
+
+-- Team Check кнопка
+local teamCheckButton = Instance.new("TextButton", aimScroll)
+teamCheckButton.Size = UDim2.new(0.9, 0, 0, 30)
+teamCheckButton.Position = UDim2.new(0.05, 0, 0, 235)
+teamCheckButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+teamCheckButton.TextColor3 = Color3.new(1,1,1)
+teamCheckButton.Font = Enum.Font.SourceSansBold
+teamCheckButton.TextSize = 14
+teamCheckButton.Text = "Team Check: OFF"
+Instance.new("UICorner", teamCheckButton)
+
+-- Silent Aim кнопка
+local silentAimButton = Instance.new("TextButton", aimScroll)
+silentAimButton.Size = UDim2.new(0.9, 0, 0, 30)
+silentAimButton.Position = UDim2.new(0.05, 0, 0, 275)
+silentAimButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+silentAimButton.TextColor3 = Color3.new(1,1,1)
+silentAimButton.Font = Enum.Font.SourceSansBold
+silentAimButton.TextSize = 14
+silentAimButton.Text = "Silent Aim: OFF"
+Instance.new("UICorner", silentAimButton)
 
 local hitboxSettingsFrame = Instance.new("Frame", screenGui)
 hitboxSettingsFrame.Size = UDim2.new(0, 200, 0, 310)
@@ -1366,4 +1424,9 @@ return {
 	aimValCheckButton = aimValCheckButton,
 	aimValCheckOpenButton = aimValCheckOpenButton,
 	charmsEspObjButton = charmsEspObjButton,
+	smoothInput = smoothInput,
+	smoothSliderFrame = smoothSliderFrame,
+	smoothSliderButton = smoothSliderButton,
+	teamCheckButton = teamCheckButton,
+	silentAimButton = silentAimButton,
 }
