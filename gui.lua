@@ -646,7 +646,7 @@ smoothLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local smoothInput = Instance.new("TextBox", aimScroll)
 smoothInput.Size = UDim2.new(0.45, 0, 0, 25)
-smoothInput.Position = UDim2.new(0.5, 0, 0, 245)
+smoothInput.Position = UDim2.new(0.5, 0, 0, 215)
 smoothInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 smoothInput.TextColor3 = Color3.new(1,1,1)
 smoothInput.Font = Enum.Font.SourceSans
