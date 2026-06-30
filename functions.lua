@@ -55,39 +55,59 @@ local function loadAllConfigs()
 	end
 end
 
--- ========== АНТИ-ДЕТЕКТ ==========
-local function genrandstr(length)
-	local charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	local result = ""
-	for i = 1, length do
-		local randIndex = math.random(1, #charset)
-		result = result .. charset:sub(randIndex, randIndex)
-	end
-	return result
+-- ========== АНТИ-ДЕТЕКТ (ОНОВЛЕНИЙ & ОПТИМІЗОВАНИЙ) ==========
+local function genrandstr()
+    -- Випадкова довжина назви від 12 до 22 символів, щоб уникнути фіксованих патернів рядків
+    local length = math.random(12, 22)
+    local charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    local result = ""
+    for i = 1, length do
+        local randIndex = math.random(1, #charset)
+        result = result .. charset:sub(randIndex, randIndex)
+    end
+    return result
 end
 
 local function encryptNames(parent)
-	for _, child in ipairs(parent:GetChildren()) do
-		if child:IsA("GuiObject") or child:IsA("UIBase") then
-			child.Name = genrandstr(15)
-			encryptNames(child)
-		end
-	end
+    for _, child in ipairs(parent:GetChildren()) do
+        if child:IsA("GuiObject") or child:IsA("UIBase") then
+            child.Name = genrandstr()
+            encryptNames(child) -- Рекурсивно шифруємо всі вкладені елементи
+        end
+    end
 end
 
 local function startSecurity()
-	while task.wait(1) do
-		if G.screenGui then G.screenGui.Name = genrandstr(20) end
-		if G.frame then G.frame.Name = genrandstr(18); encryptNames(G.frame) end
-		if G.teleportFrame then G.teleportFrame.Name = genrandstr(18) end
-		if G.aimSettingsFrame then G.aimSettingsFrame.Name = genrandstr(18) end
-		if G.hitboxSettingsFrame then G.hitboxSettingsFrame.Name = genrandstr(18) end
-		if G.configFrame then G.configFrame.Name = genrandstr(18) end
-		if G.minimizedCircle then G.minimizedCircle.Name = genrandstr(15) end
-	end
+    -- Етап 1: Одноразове повне маскування інтерфейсу (Економить FPS і не тригерить .Changed івенти)
+    if G.screenGui then G.screenGui.Name = genrandstr() end
+    
+    local frames = {
+        G.frame, 
+        G.teleportFrame, 
+        G.aimSettingsFrame, 
+        G.hitboxSettingsFrame, 
+        G.configFrame, 
+        G.minimizedCircle
+    }
+    
+    for _, frame in ipairs(frames) do
+        if frame then
+            frame.Name = genrandstr()
+            encryptNames(frame)
+        end
+    end
+
+    -- Етап 2: Фоновий моніторинг головного контейнера на випадок перевірок анти-читом
+    while task.wait(2) do
+        if G.screenGui and math.random(1, 100) > 85 then 
+            -- Рандомно (з шансом 15%) оновлюємо ім'я ScreenGui, щоб імітувати динамічну зміну
+            G.screenGui.Name = genrandstr() 
+        end
+    end
 end
 
-spawn(startSecurity)
+-- Використовуємо сучасний task.spawn замість застарілого звичайного spawn
+task.spawn(startSecurity)
 
 local VIM = game:GetService("VirtualInputManager")
 local TS = game:GetService("TweenService")
