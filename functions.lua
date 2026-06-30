@@ -1,3 +1,4 @@
+
 -- Functions частина
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -976,8 +977,8 @@ RunService.RenderStepped:Connect(function()
         clearNpcESP()
     end
 
-    -- === ОРИГІНАЛЬНА ЛОГІКА ОБ'ЄКТІВ (БЕЗ ЗМІН) ===
-    if charmsEspObjEnabled then
+-- === ОРИГІНАЛЬНА ЛОГІКА ОБ'ЄКТІВ (ЗАЛЕЖИТЬ ВІД CHARMS) ===
+    if charmsEnabled and charmsEspObjEnabled then
         if tick() % 2 < 0.03 then scanEspObjects() end
         for _, obj in pairs(charmsEspObjTargets) do
             if obj and obj.Parent then
