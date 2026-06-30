@@ -113,6 +113,10 @@ local VIM = game:GetService("VirtualInputManager")
 local TS = game:GetService("TweenService")
 
 -- ============ ЗМІННІ ============
+local smoothToggle = false -- ON/OFF кнопка
+local smoothValue = 0.2 -- сила плавності коли ввімкнено
+local teamCheckEnabled = false
+local silentAimEnabled = false
 local AimPart = "Head"
 local FieldOfView = 60
 local Holding = false
@@ -449,11 +453,16 @@ local function startPCTrigger()
                     local vector, onScreen = Camera:WorldToViewportPoint(part.Position)
                     if onScreen then
                         local dist = (Vector2.new(vector.X, vector.Y) - screenCenter).Magnitude
-                        if dist < FieldOfView then
-                            -- симулюємо клік мишею для ПК
-                            mouse1click()
-                            task.wait(0.05)
-                        end
+			if dist < FieldOfView then
+			    if silentAimEnabled then
+        -- Silent aim: миттєво доводимо приціл точно на ціль (без видимого руху камери для оточуючих)
+			        local camPos = Camera.CFrame.Position
+			        Camera.CFrame = CFrame.new(camPos, part.Position)
+			    end
+  			  -- симулюємо клік мишею для ПК
+			    mouse1click()
+			    task.wait(0.05)
+			end
                     end
                 end
             end
@@ -479,14 +488,18 @@ local function startMobileTrigger()
                     local pos, onScreen = Camera:WorldToViewportPoint(head.Position)
                     if onScreen then
                         local dist = (Vector2.new(pos.X, pos.Y) - center).Magnitude
-                        if dist < FieldOfView then
-                            pcall(function()
-                                VIM:SendMouseButtonEvent(0,0,0,true,game,0)
-                                task.wait(0.05)
-                                VIM:SendMouseButtonEvent(0,0,0,false,game,0)
-                            end)
-                            task.wait(0.05)
-                        end
+			if dist < FieldOfView then
+			    if silentAimEnabled then
+			        local camPos = Camera.CFrame.Position
+			        Camera.CFrame = CFrame.new(camPos, head.Position)
+			    end
+			    pcall(function()
+			        VIM:SendMouseButtonEvent(0,0,0,true,game,0)
+			        task.wait(0.05)
+			        VIM:SendMouseButtonEvent(0,0,0,false,game,0)
+			    end)
+			    task.wait(0.05)
+			end
                     end
                 end
             end
@@ -681,9 +694,10 @@ local function GetClosestPlayer()
     local closestPlayer, shortestDistance = nil, FieldOfView
     for _, v in pairs(Players:GetPlayers()) do
         if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild(AimPart) then
-            if aimValCheckEnabled and not aimValCheckTargets[v.Name] then
-                -- пропускаємо якщо не в списку
-            else
+            local skip = false
+            if aimValCheckEnabled and not aimValCheckTargets[v.Name] then skip = true end
+            if teamCheckEnabled and v.Team == LocalPlayer.Team then skip = true end
+            if not skip then
                 local part = v.Character[AimPart]
                 local vector, onScreen = Camera:WorldToViewportPoint(part.Position)
                 if onScreen and IsVisible(part) then
@@ -697,12 +711,17 @@ local function GetClosestPlayer()
 end
 
 RunService.RenderStepped:Connect(function()
-	if Holding then
+	if Holding and not silentAimEnabled then
 		local target = GetClosestPlayer()
 		if target and target.Character and target.Character:FindFirstChild(AimPart) then
 			local camPos = Camera.CFrame.Position
 			local headPos = target.Character[AimPart].Position
-			Camera.CFrame = CFrame.new(camPos, camPos + (headPos - camPos).Unit)
+			local targetCFrame = CFrame.new(camPos, camPos + (headPos - camPos).Unit)
+			if smoothToggle then
+				Camera.CFrame = Camera.CFrame:Lerp(targetCFrame, smoothValue)
+			else
+				Camera.CFrame = targetCFrame
+			end
 		end
 	end
 	local target = GetClosestPlayer()
@@ -713,6 +732,23 @@ RunService.RenderStepped:Connect(function()
 	end
 	circle.Position = screenCenter
 	circle.Visible = fovCircleEnabled
+end)
+
+local UserInputServiceForSilent = game:GetService("UserInputService")
+UserInputServiceForSilent.InputBegan:Connect(function(input, gameProcessed)
+	if gameProcessed then return end
+	if input.UserInputType == Enum.UserInputType.MouseButton1 and Holding and silentAimEnabled then
+		local target = GetClosestPlayer()
+		if target and target.Character and target.Character:FindFirstChild(AimPart) then
+			local originalCFrame = Camera.CFrame
+			local camPos = Camera.CFrame.Position
+			local headPos = target.Character[AimPart].Position
+			Camera.CFrame = CFrame.new(camPos, camPos + (headPos - camPos).Unit)
+			task.defer(function()
+				Camera.CFrame = originalCFrame
+			end)
+		end
+	end
 end)
 
 -- ============ ESP ============
@@ -1179,6 +1215,11 @@ local function updateAimFOVSlider()
 	circle.Radius = FieldOfView
 end
 
+local function updateSmoothSlider()
+    G.smoothSliderButton.Position = UDim2.new(smoothValue, -10, 0, -2.5)
+    G.smoothInput.Text = tostring(math.floor(smoothValue * 100) / 100)
+end
+
 -- ============ SLIDERS ============
 local draggingSlider, draggingFOVSlider, draggingAimFOVSlider = false, false, false
 
@@ -1223,6 +1264,25 @@ G.sliderFrame.InputBegan:Connect(function(input)
 	end
 end)
 
+local draggingSmoothSlider = false
+
+local function handleSmoothSliderInput()
+    local mouse = UserInputService:GetMouseLocation()
+    local sp = G.smoothSliderFrame.AbsolutePosition
+    local ss = G.smoothSliderFrame.AbsoluteSize
+    if mouse.X >= sp.X and mouse.X <= sp.X+ss.X then
+        local pct = math.clamp(mouse.X-sp.X, 0, ss.X)/ss.X
+        smoothValue = math.clamp(pct, 0.01, 1)
+        updateSmoothSlider()
+    end
+end
+
+G.smoothSliderFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingSmoothSlider = true; handleSmoothSliderInput()
+	end
+end)
+
 G.fovSliderFrame.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		draggingFOVSlider = true; handleFOVSliderInput()
@@ -1237,15 +1297,22 @@ end)
 
 UserInputService.InputEnded:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		draggingSlider, draggingFOVSlider, draggingAimFOVSlider = false, false, false
+		draggingSlider, draggingFOVSlider, draggingAimFOVSlider, draggingSmoothSlider = false, false, false, false
 	end
 end)
 
-UserInputService.InputChanged:Connect(function(input)
-	if draggingSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then handleSliderInput()
-	elseif draggingFOVSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then handleFOVSliderInput()
-	elseif draggingAimFOVSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then handleAimFOVSliderInput()
-	end
+UserInputService.InputChanged:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
+        if draggingR then handleRSlider()
+        elseif draggingG then handleGSlider()
+        elseif draggingB then handleBSlider()
+        elseif charmsDraggingR then charmsHandleRSlider()
+        elseif charmsDraggingG then charmsHandleGSlider()
+        elseif charmsDraggingB then charmsHandleBSlider()
+        -- ДОДАЙ ОЦЕЙ РЯДОК СЮДИ:
+        elseif draggingSmoothSlider then handleSmoothSliderInput()
+        end
+    end
 end)
 
 -- ============ TEXT INPUTS ============
@@ -1287,6 +1354,17 @@ G.aimFOVInput.FocusLost:Connect(function()
 	local v = tonumber(G.aimFOVInput.Text)
 	if v and v >= 30 and v <= 200 then FieldOfView = v; updateAimFOVSlider()
 	else G.aimFOVInput.Text = tostring(FieldOfView) end
+end)
+
+-- ДОДАЙ ТУТ:
+G.smoothInput.FocusLost:Connect(function()
+	local v = tonumber(G.smoothInput.Text)
+	if v then
+		smoothValue = math.clamp(v, 0.01, 1)
+		updateSmoothSlider()
+	else
+		G.smoothInput.Text = tostring(smoothValue)
+	end
 end)
 
 G.hitboxSizeInput.FocusLost:Connect(function()
@@ -1874,10 +1952,14 @@ G.espBSlider.InputBegan:Connect(function(i)
     end
 end)
 
-UserInputService.InputEnded:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-        draggingR = false; draggingG = false; draggingB = false
-        charmsDraggingR = false; charmsDraggingG = false; charmsDraggingB = false
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        -- Твої старі скидання прапорців (наприклад, draggingR = false тощо)
+        
+        -- ДОДАЙ СЮДИ СКИДАННЯ ДЛЯ SMOOTH:
+        if draggingSmoothSlider then
+            draggingSmoothSlider = false
+        end
     end
 end)
 
@@ -2164,6 +2246,14 @@ return {
 	updateAimValCheckList = updateAimValCheckList,
 	getCharmsEspObj = function() return charmsEspObjEnabled end,
 	setCharmsEspObj = function(v) charmsEspObjEnabled = v end,
+	getTeamCheck = function() return teamCheckEnabled end,
+	setTeamCheck = function(v) teamCheckEnabled = v end,
+	getSilentAim = function() return silentAimEnabled end,
+	setSilentAim = function(v) silentAimEnabled = v end,
+	getSmoothToggle = function() return smoothToggle end,
+	setSmoothToggle = function(v) smoothToggle = v end,
+	getSmoothValue = function() return smoothValue end,
+	setSmoothValue = function(v) smoothValue = v end,
 }
 
 end
