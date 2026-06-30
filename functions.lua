@@ -1483,6 +1483,14 @@ local function getCurrentConfig()
 		espUnvisColor = {r = espUnvisColor.R, g = espUnvisColor.G, b = espUnvisColor.B},
 		charmsVisColor = {r = charmsVisColor.R, g = charmsVisColor.G, b = charmsVisColor.B},
 		charmsUnvisColor = {r = charmsUnvisColor.R, g = charmsUnvisColor.G, b = charmsUnvisColor.B},
+		teamCheck = teamCheckEnabled,
+		silentAim = silentAimEnabled,
+		smoothToggle = smoothToggle,
+		smoothValue = smoothValue,
+		charmsNpc = charmsNpcEnabled,
+		charmsEspObj = charmsEspObjEnabled,
+		aimValCheck = aimValCheckEnabled,
+		aimValCheckTargets = aimValCheckTargets,
 	}
 end
 
@@ -1573,6 +1581,36 @@ local function applyConfig(config)
 
     if config.valCheckTargets then valCheckTargets = config.valCheckTargets end
 
+    -- ==== ЗАВАНТАЖЕННЯ НОВИХ ФУНКЦІЙ АЇМУ ====
+    if config.teamCheck ~= nil then
+        teamCheckEnabled = config.teamCheck
+        if G.teamCheckButton then 
+            G.teamCheckButton.Text = teamCheckEnabled and "Team Check: ON" or "Team Check: OFF"
+            G.teamCheckButton.BackgroundColor3 = teamCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+        end
+    end
+
+    if config.silentAim ~= nil then
+        silentAimEnabled = config.silentAim
+        if G.silentAimButton then
+            G.silentAimButton.Text = silentAimEnabled and "Silent Aim: ON" or "Silent Aim: OFF"
+            G.silentAimButton.BackgroundColor3 = silentAimEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+        end
+    end
+
+    if config.smoothToggle ~= nil then
+        smoothToggle = config.smoothToggle
+        if G.smoothToggleButton then
+            G.smoothToggleButton.Text = smoothToggle and "Smooth: ON" or "Smooth: OFF"
+            G.smoothToggleButton.BackgroundColor3 = smoothToggle and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+        end
+    end
+
+    if config.smoothValue ~= nil then
+        smoothValue = config.smoothValue
+        updateSmoothSlider() -- Автоматично посуне повзунок у GUI
+    end
+
     if config.aimValCheck ~= nil then
         aimValCheckEnabled = config.aimValCheck
         G.aimValCheckButton.Text = aimValCheckEnabled and "AIM ValCheck: ON" or "AIM ValCheck: OFF"
@@ -1580,6 +1618,24 @@ local function applyConfig(config)
     end
     if config.aimValCheckTargets then aimValCheckTargets = config.aimValCheckTargets end
 
+    -- ==== ЗАВАНТАЖЕННЯ ДОДАТКОВИХ НАЛАШТУВАНЬ ЧАРМСІВ ====
+    if config.charmsNpc ~= nil then
+        charmsNpcEnabled = config.charmsNpc
+        if G.charmsNpcBtn then
+            G.charmsNpcBtn.Text = charmsNpcEnabled and "NPC: ON" or "NPC: OFF"
+            G.charmsNpcBtn.BackgroundColor3 = charmsNpcEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+        end
+    end
+
+    if config.charmsEspObj ~= nil then
+        charmsEspObjEnabled = config.charmsEspObj
+        if G.charmsObjBtn then
+            G.charmsObjBtn.Text = charmsEspObjEnabled and "Objects: ON" or "Objects: OFF"
+            G.charmsObjBtn.BackgroundColor3 = charmsEspObjEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+        end
+    end
+
+    -- ==== ЗАВАНТАЖЕННЯ НАЛАШТУВАНЬ ESP ====
     if config.espShowTracer ~= nil then
         espShowTracer = config.espShowTracer
         G.espTracerBtn.Text = espShowTracer and "Tracer: ON" or "Tracer: OFF"
