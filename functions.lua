@@ -1,4 +1,3 @@
-
 -- Functions частина
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -12,7 +11,6 @@ local function init(G, V)
 local HttpService = game:GetService("HttpService")
 local CONFIG_FOLDER = "SmileConfigs"
 
--- ДОДАЙ ЦЕЙ РЯДОК СЮДИ  (перед усіма функціями!)
 local savedConfigs = {}
 local selectedConfig = nil
 
@@ -55,9 +53,8 @@ local function loadAllConfigs()
 	end
 end
 
--- ========== АНТИ-ДЕТЕКТ (ОНОВЛЕНИЙ & ОПТИМІЗОВАНИЙ) ==========
+-- ========== АНТИ-ДЕТЕКТ ==========
 local function genrandstr()
-    -- Випадкова довжина назви від 12 до 22 символів, щоб уникнути фіксованих патернів рядків
     local length = math.random(12, 22)
     local charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     local result = ""
@@ -72,13 +69,12 @@ local function encryptNames(parent)
     for _, child in ipairs(parent:GetChildren()) do
         if child:IsA("GuiObject") or child:IsA("UIBase") then
             child.Name = genrandstr()
-            encryptNames(child) -- Рекурсивно шифруємо всі вкладені елементи
+            encryptNames(child)
         end
     end
 end
 
 local function startSecurity()
-    -- Етап 1: Одноразове повне маскування інтерфейсу (Економить FPS і не тригерить .Changed івенти)
     if G.screenGui then G.screenGui.Name = genrandstr() end
     
     local frames = {
@@ -97,24 +93,21 @@ local function startSecurity()
         end
     end
 
-    -- Етап 2: Фоновий моніторинг головного контейнера на випадок перевірок анти-читом
     while task.wait(2) do
         if G.screenGui and math.random(1, 100) > 85 then 
-            -- Рандомно (з шансом 15%) оновлюємо ім'я ScreenGui, щоб імітувати динамічну зміну
             G.screenGui.Name = genrandstr() 
         end
     end
 end
 
--- Використовуємо сучасний task.spawn замість застарілого звичайного spawn
 task.spawn(startSecurity)
 
 local VIM = game:GetService("VirtualInputManager")
 local TS = game:GetService("TweenService")
 
 -- ============ ЗМІННІ ============
-local smoothToggle = false -- ON/OFF кнопка
-local smoothValue = 0.2 -- сила плавності коли ввімкнено
+local smoothToggle = false 
+local smoothValue = 0.2 
 local teamCheckEnabled = false
 local silentAimEnabled = false
 local AimPart = "Head"
@@ -162,10 +155,9 @@ local espShowHealth = true
 local espShowDist = true
 local espValCheckEnabled = false
 local espValCheckTargets = {}
-local espColorPickerTarget = nil -- "vis" або "unvis"
--- Charms кольори (окремо для кожної кнопки)
-local charmsVisColor = Color3.fromRGB(0, 255, 0)   -- дефолт зелений
-local charmsUnvisColor = Color3.fromRGB(255, 0, 0) -- дефолт червоний
+local espColorPickerTarget = nil 
+local charmsVisColor = Color3.fromRGB(0, 255, 0)   
+local charmsUnvisColor = Color3.fromRGB(255, 0, 0) 
 local espRVal, espGVal, espBVal = 255, 0, 0
 local mobileTriggerLoop = nil
 local pcTriggerLoop = nil
@@ -440,8 +432,6 @@ local function isValidTarget(player)
     return true
 end
 
--- PC Trigger логіка
-local pcTriggerLoop = nil
 local function startPCTrigger()
     if pcTriggerLoop then return end
     pcTriggerLoop = RunService.Heartbeat:Connect(function()
@@ -455,11 +445,9 @@ local function startPCTrigger()
                         local dist = (Vector2.new(vector.X, vector.Y) - screenCenter).Magnitude
 			if dist < FieldOfView then
 			    if silentAimEnabled then
-        -- Silent aim: миттєво доводимо приціл точно на ціль (без видимого руху камери для оточуючих)
 			        local camPos = Camera.CFrame.Position
 			        Camera.CFrame = CFrame.new(camPos, part.Position)
 			    end
-  			  -- симулюємо клік мишею для ПК
 			    mouse1click()
 			    task.wait(0.05)
 			end
@@ -474,7 +462,6 @@ local function stopPCTrigger()
     if pcTriggerLoop then pcTriggerLoop:Disconnect(); pcTriggerLoop = nil end
 end
 
--- Mobile Trigger логіка
 local function startMobileTrigger()
     if mobileTriggerLoop then return end
     mobileTriggerLoop = RunService.Heartbeat:Connect(function()
@@ -592,28 +579,6 @@ local function disableFullbright()
 	Lighting.OutdoorAmbient = Color3.fromRGB(70, 70, 70)
 end
 
--- ============ GOD MODE ============
-local function startGodMode()
-	local char = LocalPlayer.Character
-	if not char then return end
-	for _, v in pairs(char:GetDescendants()) do
-		if v:IsA("BasePart") then v.CanTouch = false end
-	end
-	godModeConnection = char.DescendantAdded:Connect(function(d)
-		if godModeEnabled and d:IsA("BasePart") then d.CanTouch = false end
-	end)
-end
-
-local function stopGodMode()
-	if godModeConnection then godModeConnection:Disconnect(); godModeConnection = nil end
-	local char = LocalPlayer.Character
-	if char then
-		for _, v in pairs(char:GetDescendants()) do
-			if v:IsA("BasePart") then v.CanTouch = true end
-		end
-	end
-end
-
 -- ============ HITBOX ============
 local function updateHitboxPartButtons()
 	G.hitboxHeadButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -653,10 +618,7 @@ local function updateHitboxes()
 			if hitboxPart == "Head" then
 				setPartSize(player.Character:FindFirstChild("Head"), "Head")
 			elseif hitboxPart == "Torso" then
-				setPartSize(
-					player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso"),
-					"Torso"
-				)
+				setPartSize(player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso"), "Torso")
 			elseif hitboxPart == "Arms" then
 				setPartSize(player.Character:FindFirstChild("Left Arm") or player.Character:FindFirstChild("LeftUpperArm"), "LeftArm")
 				setPartSize(player.Character:FindFirstChild("Right Arm") or player.Character:FindFirstChild("RightUpperArm"), "RightArm")
@@ -801,43 +763,16 @@ local function createCharms(p)
 	end
 end
 
-local function createNpcCharms()
-    for _, obj in pairs(workspace:GetDescendants()) do
-        if obj:IsA("Model") and obj:FindFirstChildOfClass("Humanoid") and not Players:GetPlayerFromCharacter(obj) then
-            if not charmsObjects[obj] then
-                local h = Instance.new("Highlight")
-                h.Parent = obj
-                h.FillColor = charmsVisColor
-                h.FillTransparency = 0.5
-                h.OutlineColor = charmsVisColor
-                h.OutlineTransparency = 0
-                charmsObjects[obj] = h
-            end
-        end
-    end
-end
-
 local function scanEspObjects()
-    table.clear(charmsEspObjTargets) -- Очищаємо старий список перед новим скануванням
-    
-    -- Шукаємо всі об'єкти у Workspace
+    table.clear(charmsEspObjTargets) 
     for _, descendant in pairs(workspace:GetDescendants()) do
-        -- Перевіряємо, чи є в об'єкта ProximityPrompt або ClickDetector
         if descendant:IsA("ProximityPrompt") or descendant:IsA("ClickDetector") then
-            
-            -- Нам потрібен сам фізичний об'єкт (Part, MeshPart і т.д.), до якого прив'язана взаємодія
             local parentObj = descendant.Parent
-            
             if parentObj and parentObj:IsA("BasePart") then
-                -- Перевіряємо, щоб не додати один і той самий об'єкт двічі
                 if not table.find(charmsEspObjTargets, parentObj) then
-                    
-                    -- Якщо це ProximityPrompt і у нього є гарний кастомний текст (наприклад, "Обшукати")
-                    -- Можна міняти ім'я об'єкта, щоб у ESP відображалося: "Смітник (Обшукати)"
                     if descendant:IsA("ProximityPrompt") and descendant.ObjectText ~= "" then
                         parentObj.Name = descendant.ObjectText
                     end
-                    
                     table.insert(charmsEspObjTargets, parentObj)
                 end
             end
@@ -845,17 +780,15 @@ local function scanEspObjects()
     end
 end
 
--- ============ ОНОВЛЕНІ ФУНКЦІЇ ДЛЯ ESP NPC ============
+-- ============ ESP NPC ============
 local charmsEspNpcStorage = {}
 local charmsEspNpcTargets = {}
 
 local function createNpcESP(npc)
     if charmsEspNpcStorage[npc] then return end
-    
     local root = npc:FindFirstChild("HumanoidRootPart") or npc:FindFirstChild("Head")
     if not root then return end
     
-    -- Створюємо підсвітку (Обводку)
     local h = Instance.new("Highlight")
     h.FillTransparency = 1
     h.OutlineTransparency = 0
@@ -863,7 +796,6 @@ local function createNpcESP(npc)
     h.Adornee = npc
     h.Parent = game:GetService("CoreGui")
     
-    -- Створюємо GUI для відображення Назви та Відстані
     local bgui = Instance.new("BillboardGui")
     bgui.Size = UDim2.new(0, 200, 0, 50)
     bgui.AlwaysOnTop = true
@@ -891,20 +823,16 @@ local function clearNpcESP()
     charmsEspNpcStorage = {}
 end
 
--- ============ ОНОВЛЕНІ ФУНКЦІЇ ДЛЯ ESP ОБ'ЄКТІВ ============
-
+-- ============ ESP ОБ'ЄКТІВ ============
 local function createObjESP(obj)
     if charmsEspObjStorage[obj] then return end
-    
-    -- Створюємо підсвітку (Обводку) чітко для самого об'єкта
     local h = Instance.new("Highlight")
-    h.FillTransparency = 1        -- Повністю прозоре всередині
-    h.OutlineTransparency = 0     -- Чітка обводка
+    h.FillTransparency = 1        
+    h.OutlineTransparency = 0     
     h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-    h.Adornee = obj               -- Робимо обводку конкретно для цього Part
+    h.Adornee = obj               
     h.Parent = game:GetService("CoreGui")
     
-    -- Створюємо GUI для відображення Назви та Відстані
     local bgui = Instance.new("BillboardGui")
     bgui.Size = UDim2.new(0, 200, 0, 50)
     bgui.AlwaysOnTop = true
@@ -977,7 +905,6 @@ RunService.RenderStepped:Connect(function()
             end
         end
         
-        -- === ЛОГІКА ДЛЯ NPC (НАША НОВА) ===
         if charmsNpcEnabled then
             if tick() % 2 < 0.03 then
                 table.clear(charmsEspNpcTargets)
@@ -1033,7 +960,6 @@ RunService.RenderStepped:Connect(function()
         clearNpcESP()
     end
 
--- === ОРИГІНАЛЬНА ЛОГІКА ОБ'ЄКТІВ (ЗАЛЕЖИТЬ ВІД CHARMS) ===
     if charmsEnabled and charmsEspObjEnabled then
         if tick() % 2 < 0.03 then scanEspObjects() end
         for _, obj in pairs(charmsEspObjTargets) do
@@ -1145,39 +1071,34 @@ local function startFly()
 		bodyAngularVelocity.MaxTorque = Vector3.new(4000,4000,4000)
 		bodyAngularVelocity.AngularVelocity = Vector3.new(0,0,0)
 		bodyAngularVelocity.Parent = root
-flyConnection = RunService.RenderStepped:Connect(function()
-    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and bodyVelocity then
-        local moveVector = Vector3.new(0,0,0)
-        local cam = workspace.CurrentCamera
-        
-        local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
-        
-        if isMobile then
-            -- На телефоні — завжди летить туди куди дивиться камера
-            moveVector = cam.CFrame.LookVector
-            -- Space кнопка — летить вгору
-            if mobileMove.space then
-                moveVector = Vector3.new(0, 1, 0)
-            end
-        else
-              -- На ПК — стандартне управління клавішами
-              local isW = UserInputService:IsKeyDown(Enum.KeyCode.W)
-              local isS = UserInputService:IsKeyDown(Enum.KeyCode.S)
-              local isA = UserInputService:IsKeyDown(Enum.KeyCode.A)
-              local isD = UserInputService:IsKeyDown(Enum.KeyCode.D)
-              local isSpace = UserInputService:IsKeyDown(Enum.KeyCode.Space)
-              if isW then moveVector = moveVector + cam.CFrame.LookVector end
-              if isS then moveVector = moveVector - cam.CFrame.LookVector end
-              if isA then moveVector = moveVector - cam.CFrame.RightVector end
-              if isD then moveVector = moveVector + cam.CFrame.RightVector end
-           	  if isSpace then moveVector = moveVector + Vector3.new(0,1,0) end
-          	  if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then 
-              	  moveVector = moveVector + Vector3.new(0,-1,0) 
-         	  end
-     	  end
-        
-  	     	   bodyVelocity.Velocity = moveVector.Magnitude > 0 and moveVector.Unit * flySpeed or Vector3.new(0,0,0)
- 		   end
+        flyConnection = RunService.RenderStepped:Connect(function()
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and bodyVelocity then
+                local moveVector = Vector3.new(0,0,0)
+                local cam = workspace.CurrentCamera
+                local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+                
+                if isMobile then
+                    moveVector = cam.CFrame.LookVector
+                    if mobileMove.space then
+                        moveVector = Vector3.new(0, 1, 0)
+                    end
+                else
+                    local isW = UserInputService:IsKeyDown(Enum.KeyCode.W)
+                    local isS = UserInputService:IsKeyDown(Enum.KeyCode.S)
+                    local isA = UserInputService:IsKeyDown(Enum.KeyCode.A)
+                    local isD = UserInputService:IsKeyDown(Enum.KeyCode.D)
+                    local isSpace = UserInputService:IsKeyDown(Enum.KeyCode.Space)
+                    if isW then moveVector = moveVector + cam.CFrame.LookVector end
+                    if isS then moveVector = moveVector - cam.CFrame.LookVector end
+                    if isA then moveVector = moveVector - cam.CFrame.RightVector end
+                    if isD then moveVector = moveVector + cam.CFrame.RightVector end
+           	        if isSpace then moveVector = moveVector + Vector3.new(0,1,0) end
+          	        if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then 
+              	        moveVector = moveVector + Vector3.new(0,-1,0) 
+         	        end
+     	        end
+                bodyVelocity.Velocity = moveVector.Magnitude > 0 and moveVector.Unit * flySpeed or Vector3.new(0,0,0)
+ 		    end
 		end)
 	end
 end
@@ -1220,8 +1141,9 @@ local function updateSmoothSlider()
     G.smoothInput.Text = tostring(math.floor(smoothValue * 100) / 100)
 end
 
--- ============ SLIDERS ============
+-- ============ SLIDERS INPUT ============
 local draggingSlider, draggingFOVSlider, draggingAimFOVSlider = false, false, false
+local draggingSmoothSlider = false
 
 local function handleSliderInput()
 	local mouse = UserInputService:GetMouseLocation()
@@ -1258,14 +1180,6 @@ local function handleAimFOVSliderInput()
 	end
 end
 
-G.sliderFrame.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		draggingSlider = true; handleSliderInput()
-	end
-end)
-
-local draggingSmoothSlider = false
-
 local function handleSmoothSliderInput()
     local mouse = UserInputService:GetMouseLocation()
     local sp = G.smoothSliderFrame.AbsolutePosition
@@ -1276,6 +1190,12 @@ local function handleSmoothSliderInput()
         updateSmoothSlider()
     end
 end
+
+G.sliderFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingSlider = true; handleSliderInput()
+	end
+end)
 
 G.smoothSliderFrame.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -1295,603 +1215,7 @@ G.aimFOVSliderFrame.InputBegan:Connect(function(input)
 	end
 end)
 
-UserInputService.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		draggingSlider, draggingFOVSlider, draggingAimFOVSlider, draggingSmoothSlider = false, false, false, false
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
-        if draggingR then handleRSlider()
-        elseif draggingG then handleGSlider()
-        elseif draggingB then handleBSlider()
-        elseif charmsDraggingR then charmsHandleRSlider()
-        elseif charmsDraggingG then charmsHandleGSlider()
-        elseif charmsDraggingB then charmsHandleBSlider()
-        -- ДОДАЙ ОЦЕЙ РЯДОК СЮДИ:
-        elseif draggingSmoothSlider then handleSmoothSliderInput()
-        end
-    end
-end)
-
--- ============ TEXT INPUTS ============
-G.speedInput.FocusLost:Connect(function()
-	local v = tonumber(G.speedInput.Text)
-	if v then
-		currentSpeed = math.clamp(v, 16, 400)  -- ← клампить автоматично
-		updateSlider()
-		if speedHackEnabled then updateSpeed() end
-		G.speedInput.Text = tostring(currentSpeed)
-	else
-		G.speedInput.Text = tostring(currentSpeed)
-	end
-end)
-
-G.flyInput.FocusLost:Connect(function()
-	local v = tonumber(G.flyInput.Text)
-	if v then
-		flySpeed = math.clamp(v, 10, 450)
-		G.flyInput.Text = tostring(flySpeed)
-	else
-		G.flyInput.Text = tostring(flySpeed)
-	end
-end)
-
-G.fovInput.FocusLost:Connect(function()
-	local v = tonumber(G.fovInput.Text)
-	if v then
-		currentFOV = math.clamp(v, 30, 120)
-		updateFOVSlider()
-		if fovChangerEnabled then updateFOV() end
-		G.fovInput.Text = tostring(currentFOV)
-	else
-		G.fovInput.Text = tostring(currentFOV)
-	end
-end)
-
-G.aimFOVInput.FocusLost:Connect(function()
-	local v = tonumber(G.aimFOVInput.Text)
-	if v and v >= 30 and v <= 200 then FieldOfView = v; updateAimFOVSlider()
-	else G.aimFOVInput.Text = tostring(FieldOfView) end
-end)
-
--- ДОДАЙ ТУТ:
-G.smoothInput.FocusLost:Connect(function()
-	local v = tonumber(G.smoothInput.Text)
-	if v then
-		smoothValue = math.clamp(v, 0.01, 1)
-		updateSmoothSlider()
-	else
-		G.smoothInput.Text = tostring(smoothValue)
-	end
-end)
-
-G.hitboxSizeInput.FocusLost:Connect(function()
-	local v = tonumber(G.hitboxSizeInput.Text)
-	if v and v >= 5 and v <= 50 then hitboxSize = v; if hitboxEnabled then updateHitboxes() end
-	else G.hitboxSizeInput.Text = tostring(hitboxSize) end
-end)
-
--- ============ CONFIG СИСТЕМА ============
-local function getCurrentConfig()
-	return {
-		aimEnabled = Holding,
-		fovCircle = fovCircleEnabled,
-		wallCheck = WallCheckEnabled,
-		aimFOV = FieldOfView,
-		espEnabled = espEnabled,
-		charmsEnabled = charmsEnabled,
-		infiniteJump = infiniteJumpEnabled,
-		noclip = (noclipConnection ~= nil),
-		bunnyHop = bunnyHopEnabled,
-		chaos = chaosEnabled,
-		thirdPerson = thirdPersonEnabled,
-		wallHop = wallHopEnabled,
-		hitboxEnabled = hitboxEnabled,
-		hitboxPart = hitboxPart,
-		hitboxSize = hitboxSize,
-		fullbright = fullbrightEnabled,
-		godMode = godModeEnabled,
-		fpsBoost = fpsBoostEnabled,
-		antiAfk = antiAfkEnabled,
-		flySpeed = flySpeed,
-		speed = currentSpeed,
-		fov = currentFOV,
-		pcTrigger = pcTriggerEnabled,
-		mobileTrigger = mobileTriggerEnabled,
-		valCheck = valCheckEnabled,
-		valCheckTargets = valCheckTargets,
-		triggerWallCheck = triggerWallCheckEnabled,
-		skyIndex = skyIndex,
-		espShowTracer = espShowTracer,
-		espShowBox = espShowBox,
-		espShowName = espShowName,
-		espShowHealth = espShowHealth,
-		espShowDist = espShowDist,
-		espValCheckEnabled = espValCheckEnabled,
-		espValCheckTargets = espValCheckTargets,
-		espVisColor = {r = espVisColor.R, g = espVisColor.G, b = espVisColor.B},
-		espUnvisColor = {r = espUnvisColor.R, g = espUnvisColor.G, b = espUnvisColor.B},
-		charmsVisColor = {r = charmsVisColor.R, g = charmsVisColor.G, b = charmsVisColor.B},
-		charmsUnvisColor = {r = charmsUnvisColor.R, g = charmsUnvisColor.G, b = charmsUnvisColor.B},
-	}
-end
-
-local function updateConfigList()
-	for _, child in pairs(G.configScroll:GetChildren()) do
-		if child:IsA("TextButton") then child:Destroy() end
-	end
-	
-	local yPos = 5
-	local count = 0
-	
-	for name, _ in pairs(savedConfigs) do
-		count = count + 1
-		local btn = Instance.new("TextButton", G.configScroll)
-		btn.Size = UDim2.new(0.95, 0, 0, 35)
-		btn.Position = UDim2.new(0.025, 0, 0, yPos)
-		btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-		btn.TextColor3 = Color3.new(1,1,1)
-		btn.Font = Enum.Font.SourceSans
-		btn.TextSize = 14
-		btn.Text = name
-		local c = Instance.new("UICorner", btn)
-		c.CornerRadius = UDim.new(0, 6)
-		
-		-- Якщо це вибраний - підсвічуємо
-		if name == selectedConfig then
-			btn.BackgroundColor3 = Color3.fromRGB(0, 130, 255)
-		end
-		
-		btn.MouseButton1Click:Connect(function()
-			for _, b in pairs(G.configScroll:GetChildren()) do
-				if b:IsA("TextButton") then
-					b.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-				end
-			end
-			btn.BackgroundColor3 = Color3.fromRGB(0, 130, 255)
-			selectedConfig = name
-			G.configNameInput.Text = name
-		end)
-		
-		yPos = yPos + 40
-	end
-	
-	G.configScroll.CanvasSize = UDim2.new(0, 0, 0, yPos + 5)
-end
-
-local function applyConfig(config)
-	-- AIM
-	Holding = config.aimEnabled
-	G.aimButton.Text = Holding and "AIM: ON" or "AIM: OFF"
-	-- FOV Circle
-	fovCircleEnabled = config.fovCircle
-	G.fovCircleButton.Text = fovCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
-	-- WallCheck
-	WallCheckEnabled = config.wallCheck
-	G.wallButton.Text = WallCheckEnabled and "WallCheck: ON" or "WallCheck: OFF"
-	-- Aim FOV
-	FieldOfView = config.aimFOV
-	updateAimFOVSlider()
-	-- ESP
-	espEnabled = config.espEnabled
-	G.espButton.Text = espEnabled and "ESP: ON" or "ESP: OFF"
-	-- Charms
-	charmsEnabled = config.charmsEnabled
-	G.charmsButton.Text = charmsEnabled and "Charms: ON" or "Charms: OFF"
-	-- Infinite Jump
-	infiniteJumpEnabled = config.infiniteJump
-	G.infiniteJumpButton.Text = infiniteJumpEnabled and "Infinite Jump: ON" or "Infinite Jump: OFF"
-	-- BunnyHop
-	bunnyHopEnabled = config.bunnyHop
-	G.bunnyHopButton.Text = bunnyHopEnabled and "BunnyHop: ON" or "BunnyHop: OFF"
-	-- Hitbox
-	hitboxEnabled = config.hitboxEnabled
-	hitboxPart = config.hitboxPart
-	hitboxSize = config.hitboxSize
-	G.hitboxButton.Text = hitboxEnabled and "Hitbox: ON" or "Hitbox: OFF"
-	G.hitboxSizeInput.Text = tostring(hitboxSize)
-	updateHitboxPartButtons()
-	-- Fullbright
-	if config.fullbright ~= fullbrightEnabled then
-	fullbrightEnabled = config.fullbright
-	G.fullbrightButton.Text = fullbrightEnabled and "Fullbright: ON" or "Fullbright: OFF"
-	if fullbrightEnabled then enableFullbright() else disableFullbright() end
-end
-
--- PC Trigger
-if config.pcTrigger then
-	pcTriggerEnabled = true
-	G.pcTriggerButton.Text = "PC Trigger: ON"
-	G.pcTriggerButton.BackgroundColor3 = Color3.fromRGB(0,180,0)
-	startPCTrigger()
-end
-
--- Mobile Trigger
-if config.mobileTrigger then
-	mobileTriggerEnabled = true
-	G.mobileTriggerButton.Text = "Mobile Trigger: ON"
-	G.mobileTriggerButton.BackgroundColor3 = Color3.fromRGB(0,180,0)
-	startMobileTrigger()
-end
-
--- Val Check
-valCheckEnabled = config.valCheck or false
-G.valCheckButton.Text = valCheckEnabled and "Val Check: ON" or "Val Check: OFF"
-G.valCheckButton.BackgroundColor3 = valCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
-
--- Val Check Targets
-if config.valCheckTargets then
-	valCheckTargets = config.valCheckTargets
-end
-
-if config.aimValCheck ~= nil then
-    aimValCheckEnabled = config.aimValCheck
-    G.aimValCheckButton.Text = aimValCheckEnabled and "AIM ValCheck: ON" or "AIM ValCheck: OFF"
-    G.aimValCheckButton.BackgroundColor3 = aimValCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
-end
-if config.aimValCheckTargets then
-    aimValCheckTargets = config.aimValCheckTargets
-end
-
--- ESP toggles
-if config.espShowTracer ~= nil then
-    espShowTracer = config.espShowTracer
-    G.espTracerBtn.Text = espShowTracer and "Tracer: ON" or "Tracer: OFF"
-    G.espTracerBtn.BackgroundColor3 = espShowTracer and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
-end
-		
-if config.espShowBox ~= nil then
-    espShowBox = config.espShowBox
-    G.espBoxBtn.Text = espShowBox and "Box: ON" or "Box: OFF"
-    G.espBoxBtn.BackgroundColor3 = espShowBox and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
-end
-		
-if config.espShowName ~= nil then
-    espShowName = config.espShowName
-    G.espNameBtn.Text = espShowName and "Name: ON" or "Name: OFF"
-    G.espNameBtn.BackgroundColor3 = espShowName and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
-end
-		
-if config.espShowHealth ~= nil then
-    espShowHealth = config.espShowHealth
-    G.espHealthBtn.Text = espShowHealth and "Health: ON" or "Health: OFF"
-    G.espHealthBtn.BackgroundColor3 = espShowHealth and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
-end
-		
-if config.espShowDist ~= nil then
-    espShowDist = config.espShowDist
-    G.espDistBtn.Text = espShowDist and "Distance: ON" or "Distance: OFF"
-    G.espDistBtn.BackgroundColor3 = espShowDist and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
-end
-		
-if config.espValCheckEnabled ~= nil then
-    espValCheckEnabled = config.espValCheckEnabled
-    G.espValCheckBtn.Text = espValCheckEnabled and "ESP ValCheck: ON" or "ESP ValCheck: OFF"
-    G.espValCheckBtn.BackgroundColor3 = espValCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
-end
-		
-if config.espValCheckTargets then
-    espValCheckTargets = config.espValCheckTargets
-end
-		
-if config.espVisColor then
-    espVisColor = Color3.fromRGB(
-        math.floor(config.espVisColor.r * 255),
-        math.floor(config.espVisColor.g * 255),
-        math.floor(config.espVisColor.b * 255)
-    )
-    G.espVisColorBtn.BackgroundColor3 = espVisColor
-end
-		
-if config.espUnvisColor then
-    espUnvisColor = Color3.fromRGB(
-        math.floor(config.espUnvisColor.r * 255),
-        math.floor(config.espUnvisColor.g * 255),
-        math.floor(config.espUnvisColor.b * 255)
-    )
-    G.espUnvisColorBtn.BackgroundColor3 = espUnvisColor
-end
-
--- Charms кольори
-if config.charmsVisColor then
-    charmsVisColor = Color3.fromRGB(
-        math.floor(config.charmsVisColor.r * 255),
-        math.floor(config.charmsVisColor.g * 255),
-        math.floor(config.charmsVisColor.b * 255)
-    )
-    G.charmsVisBtn.BackgroundColor3 = charmsVisColor
-end
-
-if config.charmsUnvisColor then
-    charmsUnvisColor = Color3.fromRGB(
-        math.floor(config.charmsUnvisColor.r * 255),
-        math.floor(config.charmsUnvisColor.g * 255),
-        math.floor(config.charmsUnvisColor.b * 255)
-    )
-    G.charmsUnvisBtn.BackgroundColor3 = charmsUnvisColor
-end
-
--- Trigger WallCheck
-triggerWallCheckEnabled = config.triggerWallCheck or false
-G.triggerWallCheckButton.Text = triggerWallCheckEnabled and "Trigger WallCheck: ON" or "Trigger WallCheck: OFF"
-G.triggerWallCheckButton.BackgroundColor3 = triggerWallCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
-
--- Sky
-if config.skyIndex then
-	skyIndex = config.skyIndex
-	if skyIndex == 2 then
-		skyIndex = 1
-		changeSky()
-	end
-end
-
-currentSpeed = config.speed
-updateSlider()
-if speedHackEnabled then updateSpeed() end
-
-currentFOV = config.fov
-updateFOVSlider()
-if fovChangerEnabled then updateFOV() end
-
-flySpeed = config.flySpeed
-G.flyInput.Text = tostring(flySpeed)
-
--- Speed
-	currentSpeed = config.speed
-	updateSlider()
-	if config.speed ~= 16 then
-		speedHackEnabled = true
-		G.speedButton.Text = "Speed: ON"
-		if speedHackConnection then speedHackConnection:Disconnect() end
-		speedHackConnection = RunService.RenderStepped:Connect(updateSpeed)
-	else
-		speedHackEnabled = false
-		G.speedButton.Text = "Speed: OFF"
-		if speedHackConnection then speedHackConnection:Disconnect(); speedHackConnection = nil end
-	end
-
-	-- FOV
-	currentFOV = config.fov
-	updateFOVSlider()
-	if config.fov ~= 70 then
-		fovChangerEnabled = true
-		G.fovButton.Text = "FOV: ON"
-		if fovChangerConnection then fovChangerConnection:Disconnect() end
-		fovChangerConnection = RunService.RenderStepped:Connect(updateFOV)
-	else
-		fovChangerEnabled = false
-		G.fovButton.Text = "FOV: OFF"
-		if fovChangerConnection then fovChangerConnection:Disconnect(); fovChangerConnection = nil end
-	end
-
-	-- Fly
-	flySpeed = config.flySpeed
-	G.flyInput.Text = tostring(flySpeed)
-
-	showNotif("✅ Config", "Loaded: "..selectedConfig, 2)
-end
-
--- Config кнопки
-G.configButton.MouseButton1Click:Connect(function()
-	if canClick() then
-		G.frame.Visible = false
-		G.aimSettingsFrame.Visible = false
-		G.hitboxSettingsFrame.Visible = false
-		G.configFrame.Visible = true
-		updateConfigList()
-	end
-end)
-
-G.configBackButton.MouseButton1Click:Connect(function()
-	if canClick() then
-		G.configFrame.Visible = false
-		G.frame.Visible = true
-	end
-end)
-
-G.saveConfigButton.MouseButton1Click:Connect(function()
-	if canClick() then
-		local name = G.configNameInput.Text
-		if name ~= "" then
-			local config = getCurrentConfig()
-			savedConfigs[name] = config
-			saveConfigToFile(name, config)
-			selectedConfig = name
-			updateConfigList() -- оновлює список зразу
-			showNotif("💾 Config", "Saved: "..name, 2)
-		end
-	end
-end)
-
-G.loadConfigButton.MouseButton1Click:Connect(function()
-	if canClick() then
-		local name = G.configNameInput.Text ~= "" and G.configNameInput.Text or selectedConfig
-		if name and savedConfigs[name] then
-			selectedConfig = name
-			applyConfig(savedConfigs[name])
-		end
-	end
-end)
-
-G.deleteConfigButton.MouseButton1Click:Connect(function()
-	if canClick() then
-		if selectedConfig and savedConfigs[selectedConfig] then
-			local path = CONFIG_FOLDER.."/"..selectedConfig..".json"
-			if isfile(path) then
-				delfile(path)
-			end
-			savedConfigs[selectedConfig] = nil
-			selectedConfig = nil
-			G.configNameInput.Text = ""
-			updateConfigList()
-			showNotif("🗑️ Config", "Deleted!", 2)
-		end
-	end
-end)
-
--- ============ DRAG ============
-local function makeDraggable(frame, dragHandle)
-	local dragging, dragStart, startPos = false, nil, nil
-	local handle = dragHandle or frame
-	handle.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			if not draggingSlider and not draggingFOVSlider and not draggingAimFOVSlider then
-				dragging = true; dragStart = input.Position; startPos = frame.Position
-			end
-		end
-	end)
-	handle.InputChanged:Connect(function(input)
-		if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-			local delta = input.Position - dragStart
-			frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset+delta.X, startPos.Y.Scale, startPos.Y.Offset+delta.Y)
-		end
-	end)
-	handle.InputEnded:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			dragging = false
-		end
-	end)
-end
-
-makeDraggable(G.frame, G.titleLabel)
-makeDraggable(G.teleportFrame, G.teleportTitle)
-makeDraggable(G.minimizedCircle)
-makeDraggable(G.configFrame, G.configTitle)
-makeDraggable(G.mobileGui)
-makeDraggable(G.aimSettingsFrame, G.aimSettingsTitle)
-makeDraggable(G.hitboxSettingsFrame, G.hitboxSettingsTitle)
-makeDraggable(G.espSettingsFrame, G.espSettingsTitle)
-makeDraggable(G.espColorPickerFrame, G.espColorPickerTitle)
-makeDraggable(G.espValCheckFrame, G.espValCheckTitle)
-makeDraggable(G.charmsSettingsFrame, G.charmsSettingsTitle)
-makeDraggable(G.charmsColorPickerFrame, G.charmsColorPickerTitle)
-makeDraggable(G.playerSelectFrame, G.playerSelectTitle)
-makeDraggable(G.aimValCheckFrame, G.aimValCheckTitle)
-
-local keyMap = {
-    [Enum.KeyCode.W] = "w",
-    [Enum.KeyCode.A] = "a",
-    [Enum.KeyCode.S] = "s",
-    [Enum.KeyCode.D] = "d",
-    [Enum.KeyCode.Space] = "space"
-}
-
-local function setupMobileKey(btn, key1, key2)
-    local activeTouches = {}
-    
-    local function pressDown()
-        btn.BackgroundColor3 = Color3.fromRGB(80,150,255)
-        if keyMap[key1] then mobileMove[keyMap[key1]] = true end
-        if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = true end
-        task.spawn(function()
-            pcall(function() VIM:SendKeyEvent(true, key1, false, game) end)
-            if key2 then pcall(function() VIM:SendKeyEvent(true, key2, false, game) end) end
-        end)
-    end
-    
-    local function pressUp()
-        if next(activeTouches) ~= nil then return end -- ще є активні дотики
-        btn.BackgroundColor3 = key2 and Color3.fromRGB(60,30,30) or Color3.fromRGB(40,40,60)
-        if keyMap[key1] then mobileMove[keyMap[key1]] = false end
-        if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = false end
-        task.spawn(function()
-            pcall(function() VIM:SendKeyEvent(false, key1, false, game) end)
-            if key2 then pcall(function() VIM:SendKeyEvent(false, key2, false, game) end) end
-        end)
-    end
-    
-    btn.InputBegan:Connect(function(i)
-        if i.UserInputType == Enum.UserInputType.Touch then
-            activeTouches[i] = true
-            pressDown()
-        end
-    end)
-    
-    btn.InputEnded:Connect(function(i)
-        if i.UserInputType == Enum.UserInputType.Touch then
-            activeTouches[i] = nil
-            pressUp()
-        end
-    end)
-    
-    btn.InputChanged:Connect(function(i)
-        if i.UserInputType == Enum.UserInputType.Touch then
-            if not activeTouches[i] then
-                activeTouches[i] = true
-                pressDown()
-            end
-        end
-    end)
-end
-
-setupMobileKey(G.mobileWBtn, Enum.KeyCode.W)
-setupMobileKey(G.mobileABtn, Enum.KeyCode.A)
-setupMobileKey(G.mobileSBtn, Enum.KeyCode.S)
-setupMobileKey(G.mobileDBtn, Enum.KeyCode.D)
-setupMobileKey(G.mobileSpaceBtn, Enum.KeyCode.Space)
-setupMobileKey(G.mobileWABtn, Enum.KeyCode.W, Enum.KeyCode.A)
-setupMobileKey(G.mobileWDBtn, Enum.KeyCode.W, Enum.KeyCode.D)
-
--- ESP ValCheck список
-local function updateEspValCheckList()
-    for _, child in pairs(G.espValCheckScroll:GetChildren()) do
-        if child:IsA("TextButton") then child:Destroy() end
-    end
-    local yPos = 5
-    for _, player in pairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer then
-            local isSel = espValCheckTargets[player.Name] == true
-            local btn = Instance.new("TextButton", G.espValCheckScroll)
-            btn.Size = UDim2.new(0.9, 0, 0, 30)
-            btn.Position = UDim2.new(0.05, 0, 0, yPos)
-            btn.BackgroundColor3 = isSel and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
-            btn.TextColor3 = Color3.new(1,1,1)
-            btn.Font = Enum.Font.SourceSans
-            btn.TextSize = 14
-            btn.Text = (isSel and "✅ " or "⬜ ") .. player.Name
-            Instance.new("UICorner", btn)
-            btn.MouseButton1Click:Connect(function()
-                espValCheckTargets[player.Name] = not espValCheckTargets[player.Name]
-                btn.BackgroundColor3 = espValCheckTargets[player.Name] and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
-                btn.Text = (espValCheckTargets[player.Name] and "✅ " or "⬜ ") .. player.Name
-            end)
-            yPos = yPos + 35
-        end
-    end
-    G.espValCheckScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
-end
-
-local function updateAimValCheckList()
-    for _, child in pairs(G.aimValCheckScroll:GetChildren()) do  -- ← змінити на aimValCheckScroll
-        if child:IsA("TextButton") then child:Destroy() end
-    end
-    local yPos = 5
-    for _, player in pairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer then
-            local isSel = aimValCheckTargets[player.Name] == true
-            local btn = Instance.new("TextButton", G.aimValCheckScroll)
-            btn.Size = UDim2.new(0.9, 0, 0, 30)
-            btn.Position = UDim2.new(0.05, 0, 0, yPos)
-            btn.BackgroundColor3 = isSel and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
-            btn.TextColor3 = Color3.new(1,1,1)
-            btn.Font = Enum.Font.SourceSans
-            btn.TextSize = 14
-            btn.Text = (isSel and "✅ " or "⬜ ") .. player.Name
-            Instance.new("UICorner", btn)
-            btn.MouseButton1Click:Connect(function()
-                aimValCheckTargets[player.Name] = not aimValCheckTargets[player.Name]
-                btn.BackgroundColor3 = aimValCheckTargets[player.Name] and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
-                btn.Text = (aimValCheckTargets[player.Name] and "✅ " or "⬜ ") .. player.Name
-            end)
-            yPos = yPos + 35
-        end
-    end
-    G.aimValCheckScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
-end
-
--- Color picker слайдери
+-- ===== COLOR PICKER SLIDERS LOGIC =====
 local draggingR, draggingG, draggingB = false, false, false
 
 local function updateColorPreview()
@@ -1952,30 +1276,7 @@ G.espBSlider.InputBegan:Connect(function(i)
     end
 end)
 
-UserInputService.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        -- Твої старі скидання прапорців (наприклад, draggingR = false тощо)
-        
-        -- ДОДАЙ СЮДИ СКИДАННЯ ДЛЯ SMOOTH:
-        if draggingSmoothSlider then
-            draggingSmoothSlider = false
-        end
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
-        if draggingR then handleRSlider()
-        elseif draggingG then handleGSlider()
-        elseif draggingB then handleBSlider()
-        elseif charmsDraggingR then charmsHandleRSlider()
-        elseif charmsDraggingG then charmsHandleGSlider()
-        elseif charmsDraggingB then charmsHandleBSlider()
-        end
-    end
-end)
-
--- ===== CHARMS COLOR PICKER LOGIC (копія ESP) =====
+-- ===== CHARMS COLOR PICKER LOGIC =====
 local charmsDraggingR, charmsDraggingG, charmsDraggingB = false, false, false
 local charmsRVal, charmsGVal, charmsBVal = 0, 255, 0
 local charmsColorTarget = nil
@@ -2047,44 +1348,557 @@ G.charmsRSlider.InputBegan:Connect(function(i)
         charmsDraggingR = true; charmsHandleRSlider()
     end
 end)
-G.charmsRSlider.InputChanged:Connect(function(i)
-    if charmsDraggingR and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
-        charmsHandleRSlider()
-    end
-end)
-
 G.charmsGSlider.InputBegan:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
         charmsDraggingG = true; charmsHandleGSlider()
     end
 end)
-G.charmsGSlider.InputChanged:Connect(function(i)
-    if charmsDraggingG and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
-        charmsHandleGSlider()
-    end
-end)
-
 G.charmsBSlider.InputBegan:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
         charmsDraggingB = true; charmsHandleBSlider()
     end
 end)
-G.charmsBSlider.InputChanged:Connect(function(i)
-    if charmsDraggingB and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
-        charmsHandleBSlider()
+
+-- ===== ОБ'ЄДНАНА СИСТЕМНА ПОДІЯ ДЛЯ МУВУ ВСІХ СЛАЙДЕРІВ =====
+UserInputService.InputChanged:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
+        if draggingSlider then handleSliderInput()
+        elseif draggingFOVSlider then handleFOVSliderInput()
+        elseif draggingAimFOVSlider then handleAimFOVSliderInput()
+        elseif draggingSmoothSlider then handleSmoothSliderInput()
+        elseif draggingR then handleRSlider()
+        elseif draggingG then handleGSlider()
+        elseif draggingB then handleBSlider()
+        elseif charmsDraggingR then charmsHandleRSlider()
+        elseif charmsDraggingG then charmsHandleGSlider()
+        elseif charmsDraggingB then charmsHandleBSlider()
+        end
     end
 end)
+
+UserInputService.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		draggingSlider, draggingFOVSlider, draggingAimFOVSlider, draggingSmoothSlider = false, false, false, false
+        draggingR, draggingG, draggingB = false, false, false
+        charmsDraggingR, charmsDraggingG, charmsDraggingB = false, false, false
+	end
+end)
+
+-- ============ TEXT INPUTS FOCUS LOST ============
+G.speedInput.FocusLost:Connect(function()
+	local v = tonumber(G.speedInput.Text)
+	if v then
+		currentSpeed = math.clamp(v, 16, 400)  
+		updateSlider()
+		if speedHackEnabled then updateSpeed() end
+		G.speedInput.Text = tostring(currentSpeed)
+	else
+		G.speedInput.Text = tostring(currentSpeed)
+	end
+end)
+
+G.flyInput.FocusLost:Connect(function()
+	local v = tonumber(G.flyInput.Text)
+	if v then
+		flySpeed = math.clamp(v, 10, 450)
+		G.flyInput.Text = tostring(flySpeed)
+	else
+		G.flyInput.Text = tostring(flySpeed)
+	end
+end)
+
+G.fovInput.FocusLost:Connect(function()
+	local v = tonumber(G.fovInput.Text)
+	if v then
+		currentFOV = math.clamp(v, 30, 120)
+		updateFOVSlider()
+		if fovChangerEnabled then updateFOV() end
+		G.fovInput.Text = tostring(currentFOV)
+	else
+		G.fovInput.Text = tostring(currentFOV)
+	end
+end)
+
+G.aimFOVInput.FocusLost:Connect(function()
+	local v = tonumber(G.aimFOVInput.Text)
+	if v and v >= 30 and v <= 200 then FieldOfView = v; updateAimFOVSlider()
+	else G.aimFOVInput.Text = tostring(FieldOfView) end
+end)
+
+G.smoothInput.FocusLost:Connect(function()
+	local v = tonumber(G.smoothInput.Text)
+	if v then
+		smoothValue = math.clamp(v, 0.01, 1)
+		updateSmoothSlider()
+	else
+		G.smoothInput.Text = tostring(smoothValue)
+	end
+end)
+
+G.hitboxSizeInput.FocusLost:Connect(function()
+	local v = tonumber(G.hitboxSizeInput.Text)
+	if v and v >= 5 and v <= 50 then hitboxSize = v; if hitboxEnabled then updateHitboxes() end
+	else G.hitboxSizeInput.Text = tostring(hitboxSize) end
+end)
+
+-- ============ CONFIG СИСТЕМА ============
+local function getCurrentConfig()
+	return {
+		aimEnabled = Holding,
+		fovCircle = fovCircleEnabled,
+		wallCheck = WallCheckEnabled,
+		aimFOV = FieldOfView,
+		espEnabled = espEnabled,
+		charmsEnabled = charmsEnabled,
+		infiniteJump = infiniteJumpEnabled,
+		noclip = (noclipConnection ~= nil),
+		bunnyHop = bunnyHopEnabled,
+		chaos = chaosEnabled,
+		thirdPerson = thirdPersonEnabled,
+		wallHop = wallHopEnabled,
+		hitboxEnabled = hitboxEnabled,
+		hitboxPart = hitboxPart,
+		hitboxSize = hitboxSize,
+		fullbright = fullbrightEnabled,
+		godMode = godModeEnabled,
+		fpsBoost = fpsBoostEnabled,
+		antiAfk = antiAfkEnabled,
+		flySpeed = flySpeed,
+		speed = currentSpeed,
+		fov = currentFOV,
+		pcTrigger = pcTriggerEnabled,
+		mobileTrigger = mobileTriggerEnabled,
+		valCheck = valCheckEnabled,
+		valCheckTargets = valCheckTargets,
+		triggerWallCheck = triggerWallCheckEnabled,
+		skyIndex = skyIndex,
+		espShowTracer = espShowTracer,
+		espShowBox = espShowBox,
+		espShowName = espShowName,
+		espShowHealth = espShowHealth,
+		espShowDist = espShowDist,
+		espValCheckEnabled = espValCheckEnabled,
+		espValCheckTargets = espValCheckTargets,
+		espVisColor = {r = espVisColor.R, g = espVisColor.G, b = espVisColor.B},
+		espUnvisColor = {r = espUnvisColor.R, g = espUnvisColor.G, b = espUnvisColor.B},
+		charmsVisColor = {r = charmsVisColor.R, g = charmsVisColor.G, b = charmsVisColor.B},
+		charmsUnvisColor = {r = charmsUnvisColor.R, g = charmsUnvisColor.G, b = charmsUnvisColor.B},
+	}
+end
+
+local function updateConfigList()
+	for _, child in pairs(G.configScroll:GetChildren()) do
+		if child:IsA("TextButton") then child:Destroy() end
+	end
+	
+	local yPos = 5
+	for name, _ in pairs(savedConfigs) do
+		local btn = Instance.new("TextButton", G.configScroll)
+		btn.Size = UDim2.new(0.95, 0, 0, 35)
+		btn.Position = UDim2.new(0.025, 0, 0, yPos)
+		btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		btn.TextColor3 = Color3.new(1,1,1)
+		btn.Font = Enum.Font.SourceSans
+		btn.TextSize = 14
+		btn.Text = name
+		local c = Instance.new("UICorner", btn)
+		c.CornerRadius = UDim.new(0, 6)
+		
+		if name == selectedConfig then
+			btn.BackgroundColor3 = Color3.fromRGB(0, 130, 255)
+		end
+		
+		btn.MouseButton1Click:Connect(function()
+			for _, b in pairs(G.configScroll:GetChildren()) do
+				if b:IsA("TextButton") then
+					b.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+				end
+			end
+			btn.BackgroundColor3 = Color3.fromRGB(0, 130, 255)
+			selectedConfig = name
+			G.configNameInput.Text = name
+		end)
+		yPos = yPos + 40
+	end
+	G.configScroll.CanvasSize = UDim2.new(0, 0, 0, yPos + 5)
+end
+
+local function applyConfig(config)
+	Holding = config.aimEnabled
+	G.aimButton.Text = Holding and "AIM: ON" or "AIM: OFF"
+	fovCircleEnabled = config.fovCircle
+	G.fovCircleButton.Text = fovCircleEnabled and "FOV Circle: ON" or "FOV Circle: OFF"
+	WallCheckEnabled = config.wallCheck
+	G.wallButton.Text = WallCheckEnabled and "WallCheck: ON" or "WallCheck: OFF"
+	FieldOfView = config.aimFOV
+	updateAimFOVSlider()
+	espEnabled = config.espEnabled
+	G.espButton.Text = espEnabled and "ESP: ON" or "ESP: OFF"
+	charmsEnabled = config.charmsEnabled
+	G.charmsButton.Text = charmsEnabled and "Charms: ON" or "Charms: OFF"
+	infiniteJumpEnabled = config.infiniteJump
+	G.infiniteJumpButton.Text = infiniteJumpEnabled and "Infinite Jump: ON" or "Infinite Jump: OFF"
+	bunnyHopEnabled = config.bunnyHop
+	G.bunnyHopButton.Text = bunnyHopEnabled and "BunnyHop: ON" or "BunnyHop: OFF"
+	hitboxEnabled = config.hitboxEnabled
+	hitboxPart = config.hitboxPart
+	hitboxSize = config.hitboxSize
+	G.hitboxButton.Text = hitboxEnabled and "Hitbox: ON" or "Hitbox: OFF"
+	G.hitboxSizeInput.Text = tostring(hitboxSize)
+	updateHitboxPartButtons()
+
+	if config.fullbright ~= fullbrightEnabled then
+	    fullbrightEnabled = config.fullbright
+	    G.fullbrightButton.Text = fullbrightEnabled and "Fullbright: ON" or "Fullbright: OFF"
+	    if fullbrightEnabled then enableFullbright() else disableFullbright() end
+    end
+
+    if config.pcTrigger then
+	    pcTriggerEnabled = true
+	    G.pcTriggerButton.Text = "PC Trigger: ON"
+	    G.pcTriggerButton.BackgroundColor3 = Color3.fromRGB(0,180,0)
+	    startPCTrigger()
+    end
+
+    if config.mobileTrigger then
+	    mobileTriggerEnabled = true
+	    G.mobileTriggerButton.Text = "Mobile Trigger: ON"
+	    G.mobileTriggerButton.BackgroundColor3 = Color3.fromRGB(0,180,0)
+	    startMobileTrigger()
+    end
+
+    valCheckEnabled = config.valCheck or false
+    G.valCheckButton.Text = valCheckEnabled and "Val Check: ON" or "Val Check: OFF"
+    G.valCheckButton.BackgroundColor3 = valCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+
+    if config.valCheckTargets then valCheckTargets = config.valCheckTargets end
+
+    if config.aimValCheck ~= nil then
+        aimValCheckEnabled = config.aimValCheck
+        G.aimValCheckButton.Text = aimValCheckEnabled and "AIM ValCheck: ON" or "AIM ValCheck: OFF"
+        G.aimValCheckButton.BackgroundColor3 = aimValCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+    if config.aimValCheckTargets then aimValCheckTargets = config.aimValCheckTargets end
+
+    if config.espShowTracer ~= nil then
+        espShowTracer = config.espShowTracer
+        G.espTracerBtn.Text = espShowTracer and "Tracer: ON" or "Tracer: OFF"
+        G.espTracerBtn.BackgroundColor3 = espShowTracer and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+		
+    if config.espShowBox ~= nil then
+        espShowBox = config.espShowBox
+        G.espBoxBtn.Text = espShowBox and "Box: ON" or "Box: OFF"
+        G.espBoxBtn.BackgroundColor3 = espShowBox and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+		
+    if config.espShowName ~= nil then
+        espShowName = config.espShowName
+        G.espNameBtn.Text = espShowName and "Name: ON" or "Name: OFF"
+        G.espNameBtn.BackgroundColor3 = espShowName and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+		
+    if config.espShowHealth ~= nil then
+        espShowHealth = config.espShowHealth
+        G.espHealthBtn.Text = espShowHealth and "Health: ON" or "Health: OFF"
+        G.espHealthBtn.BackgroundColor3 = espShowHealth and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+		
+    if config.espShowDist ~= nil then
+        espShowDist = config.espShowDist
+        G.espDistBtn.Text = espShowDist and "Distance: ON" or "Distance: OFF"
+        G.espDistBtn.BackgroundColor3 = espShowDist and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+		
+    if config.espValCheckEnabled ~= nil then
+        espValCheckEnabled = config.espValCheckEnabled
+        G.espValCheckBtn.Text = espValCheckEnabled and "ESP ValCheck: ON" or "ESP ValCheck: OFF"
+        G.espValCheckBtn.BackgroundColor3 = espValCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+		
+    if config.espValCheckTargets then espValCheckTargets = config.espValCheckTargets end
+		
+    if config.espVisColor then
+        espVisColor = Color3.fromRGB(math.floor(config.espVisColor.r * 255), math.floor(config.espVisColor.g * 255), math.floor(config.espVisColor.b * 255))
+        G.espVisColorBtn.BackgroundColor3 = espVisColor
+    end
+		
+    if config.espUnvisColor then
+        espUnvisColor = Color3.fromRGB(math.floor(config.espUnvisColor.r * 255), math.floor(config.espUnvisColor.g * 255), math.floor(config.espUnvisColor.b * 255))
+        G.espUnvisColorBtn.BackgroundColor3 = espUnvisColor
+    end
+
+    if config.charmsVisColor then
+        charmsVisColor = Color3.fromRGB(math.floor(config.charmsVisColor.r * 255), math.floor(config.charmsVisColor.g * 255), math.floor(config.charmsVisColor.b * 255))
+        G.charmsVisBtn.BackgroundColor3 = charmsVisColor
+    end
+
+    if config.charmsUnvisColor then
+        charmsUnvisColor = Color3.fromRGB(math.floor(config.charmsUnvisColor.r * 255), math.floor(config.charmsUnvisColor.g * 255), math.floor(config.charmsUnvisColor.b * 255))
+        G.charmsUnvisBtn.BackgroundColor3 = charmsUnvisColor
+    end
+
+    triggerWallCheckEnabled = config.triggerWallCheck or false
+    G.triggerWallCheckButton.Text = triggerWallCheckEnabled and "Trigger WallCheck: ON" or "Trigger WallCheck: OFF"
+    G.triggerWallCheckButton.BackgroundColor3 = triggerWallCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+
+    if config.skyIndex then
+	    skyIndex = config.skyIndex
+	    if skyIndex == 2 then skyIndex = 1; changeSky() end
+    end
+
+    flySpeed = config.flySpeed
+    G.flyInput.Text = tostring(flySpeed)
+
+	currentSpeed = config.speed
+	updateSlider()
+	if config.speed ~= 16 then
+		speedHackEnabled = true
+		G.speedButton.Text = "Speed: ON"
+		if speedHackConnection then speedHackConnection:Disconnect() end
+		speedHackConnection = RunService.RenderStepped:Connect(updateSpeed)
+	else
+		speedHackEnabled = false
+		G.speedButton.Text = "Speed: OFF"
+		if speedHackConnection then speedHackConnection:Disconnect(); speedHackConnection = nil end
+	end
+
+	currentFOV = config.fov
+	updateFOVSlider()
+	if config.fov ~= 70 then
+		fovChangerEnabled = true
+		G.fovButton.Text = "FOV: ON"
+		if fovChangerConnection then fovChangerConnection:Disconnect() end
+		fovChangerConnection = RunService.RenderStepped:Connect(updateFOV)
+	else
+		fovChangerEnabled = false
+		G.fovButton.Text = "FOV: OFF"
+		if fovChangerConnection then fovChangerConnection:Disconnect(); fovChangerConnection = nil end
+	end
+
+	showNotif("✅ Config", "Loaded: "..selectedConfig, 2)
+end
+
+-- ============ CONFIG КНОПКИ ============
+G.configButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		G.frame.Visible = false
+		G.aimSettingsFrame.Visible = false
+		G.hitboxSettingsFrame.Visible = false
+		G.configFrame.Visible = true
+		updateConfigList()
+	end
+end)
+
+G.configBackButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		G.configFrame.Visible = false
+		G.frame.Visible = true
+	end
+end)
+
+G.saveConfigButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		local name = G.configNameInput.Text
+		if name ~= "" then
+			local config = getCurrentConfig()
+			savedConfigs[name] = config
+			saveConfigToFile(name, config)
+			selectedConfig = name
+			updateConfigList() 
+			showNotif("💾 Config", "Saved: "..name, 2)
+		end
+	end
+end)
+
+G.loadConfigButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		local name = G.configNameInput.Text ~= "" and G.configNameInput.Text or selectedConfig
+		if name and savedConfigs[name] then
+			selectedConfig = name
+			applyConfig(savedConfigs[name])
+		end
+	end
+end)
+
+G.deleteConfigButton.MouseButton1Click:Connect(function()
+	if canClick() then
+		if selectedConfig and savedConfigs[selectedConfig] then
+			local path = CONFIG_FOLDER.."/"..selectedConfig..".json"
+			if isfile(path) then delfile(path) end
+			savedConfigs[selectedConfig] = nil
+			selectedConfig = nil
+			G.configNameInput.Text = ""
+			updateConfigList()
+			showNotif("🗑️ Config", "Deleted!", 2)
+		end
+	end
+end)
+
+-- ============ DRAG ============
+local function makeDraggable(frame, dragHandle)
+	local dragging, dragStart, startPos = false, nil, nil
+	local handle = dragHandle or frame
+	handle.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			if not draggingSlider and not draggingFOVSlider and not draggingAimFOVSlider and not draggingSmoothSlider then
+				dragging = true; dragStart = input.Position; startPos = frame.Position
+			end
+		end
+	end)
+	handle.InputChanged:Connect(function(input)
+		if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+			local delta = input.Position - dragStart
+			frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset+delta.X, startPos.Y.Scale, startPos.Y.Offset+delta.Y)
+		end
+	end)
+	handle.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = false
+		end
+	end)
+end
+
+makeDraggable(G.frame, G.titleLabel)
+makeDraggable(G.teleportFrame, G.teleportTitle)
+makeDraggable(G.minimizedCircle)
+makeDraggable(G.configFrame, G.configTitle)
+makeDraggable(G.mobileGui)
+makeDraggable(G.aimSettingsFrame, G.aimSettingsTitle)
+makeDraggable(G.hitboxSettingsFrame, G.hitboxSettingsTitle)
+makeDraggable(G.espSettingsFrame, G.espSettingsTitle)
+makeDraggable(G.espColorPickerFrame, G.espColorPickerTitle)
+makeDraggable(G.espValCheckFrame, G.espValCheckTitle)
+makeDraggable(G.charmsSettingsFrame, G.charmsSettingsTitle)
+makeDraggable(G.charmsColorPickerFrame, G.charmsColorPickerTitle)
+makeDraggable(G.playerSelectFrame, G.playerSelectTitle)
+makeDraggable(G.aimValCheckFrame, G.aimValCheckTitle)
+
+local keyMap = {
+    [Enum.KeyCode.W] = "w",
+    [Enum.KeyCode.A] = "a",
+    [Enum.KeyCode.S] = "s",
+    [Enum.KeyCode.D] = "d",
+    [Enum.KeyCode.Space] = "space"
+}
+
+local function setupMobileKey(btn, key1, key2)
+    local activeTouches = {}
+    
+    local function pressDown()
+        btn.BackgroundColor3 = Color3.fromRGB(80,150,255)
+        if keyMap[key1] then mobileMove[keyMap[key1]] = true end
+        if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = true end
+        task.spawn(function()
+            pcall(function() VIM:SendKeyEvent(true, key1, false, game) end)
+            if key2 then pcall(function() VIM:SendKeyEvent(true, key2, false, game) end) end
+        end)
+    end
+    
+    local function pressUp()
+        if next(activeTouches) ~= nil then return end 
+        btn.BackgroundColor3 = key2 and Color3.fromRGB(60,30,30) or Color3.fromRGB(40,40,60)
+        if keyMap[key1] then mobileMove[keyMap[key1]] = false end
+        if key2 and keyMap[key2] then mobileMove[keyMap[key2]] = false end
+        task.spawn(function()
+            pcall(function() VIM:SendKeyEvent(false, key1, false, game) end)
+            if key2 then pcall(function() VIM:SendKeyEvent(false, key2, false, game) end) end
+        end)
+    end
+    
+    btn.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.Touch then
+            activeTouches[i] = true
+            pressDown()
+        end
+    end)
+    btn.InputEnded:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.Touch then
+            activeTouches[i] = nil
+            pressUp()
+        end
+    end)
+    btn.InputChanged:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.Touch then
+            if not activeTouches[i] then
+                activeTouches[i] = true
+                pressDown()
+            end
+        end
+    end)
+end
+
+setupMobileKey(G.mobileWBtn, Enum.KeyCode.W)
+setupMobileKey(G.mobileABtn, Enum.KeyCode.A)
+setupMobileKey(G.mobileSBtn, Enum.KeyCode.S)
+setupMobileKey(G.mobileDBtn, Enum.KeyCode.D)
+setupMobileKey(G.mobileSpaceBtn, Enum.KeyCode.Space)
+setupMobileKey(G.mobileWABtn, Enum.KeyCode.W, Enum.KeyCode.A)
+setupMobileKey(G.mobileWDBtn, Enum.KeyCode.W, Enum.KeyCode.D)
+
+local function updateEspValCheckList()
+    for _, child in pairs(G.espValCheckScroll:GetChildren()) do
+        if child:IsA("TextButton") then child:Destroy() end
+    end
+    local yPos = 5
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            local isSel = espValCheckTargets[player.Name] == true
+            local btn = Instance.new("TextButton", G.espValCheckScroll)
+            btn.Size = UDim2.new(0.9, 0, 0, 30)
+            btn.Position = UDim2.new(0.05, 0, 0, yPos)
+            btn.BackgroundColor3 = isSel and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
+            btn.TextColor3 = Color3.new(1,1,1)
+            btn.Font = Enum.Font.SourceSans
+            btn.TextSize = 14
+            btn.Text = (isSel and "✅ " or "⬜ ") .. player.Name
+            Instance.new("UICorner", btn)
+            btn.MouseButton1Click:Connect(function()
+                espValCheckTargets[player.Name] = not espValCheckTargets[player.Name]
+                btn.BackgroundColor3 = espValCheckTargets[player.Name] and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
+                btn.Text = (espValCheckTargets[player.Name] and "✅ " or "⬜ ") .. player.Name
+            end)
+            yPos = yPos + 35
+        end
+    end
+    G.espValCheckScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
+end
+
+local function updateAimValCheckList()
+    for _, child in pairs(G.aimValCheckScroll:GetChildren()) do  
+        if child:IsA("TextButton") then child:Destroy() end
+    end
+    local yPos = 5
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            local isSel = aimValCheckTargets[player.Name] == true
+            local btn = Instance.new("TextButton", G.aimValCheckScroll)
+            btn.Size = UDim2.new(0.9, 0, 0, 30)
+            btn.Position = UDim2.new(0.05, 0, 0, yPos)
+            btn.BackgroundColor3 = isSel and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
+            btn.TextColor3 = Color3.new(1,1,1)
+            btn.Font = Enum.Font.SourceSans
+            btn.TextSize = 14
+            btn.Text = (isSel and "✅ " or "⬜ ") .. player.Name
+            Instance.new("UICorner", btn)
+            btn.MouseButton1Click:Connect(function()
+                aimValCheckTargets[player.Name] = not aimValCheckTargets[player.Name]
+                btn.BackgroundColor3 = aimValCheckTargets[player.Name] and Color3.fromRGB(0,180,0) or Color3.fromRGB(50,50,50)
+                btn.Text = (aimValCheckTargets[player.Name] and "✅ " or "⬜ ") .. player.Name
+            end)
+            yPos = yPos + 35
+        end
+    end
+    G.aimValCheckScroll.CanvasSize = UDim2.new(0, 0, 0, yPos)
+end
 
 -- Init sliders
 updateSlider()
 updateFOVSlider()
 updateAimFOVSlider()
-
--- Завантажуємо конфіги при старті 
 loadAllConfigs()
 updateConfigList()
 
--- Повертаємо всі функції для buttons.lua
 return {
 	canClick = canClick,
 	showNotif = showNotif,
@@ -2111,7 +1925,6 @@ return {
 	updateSpeed = updateSpeed,
 	updateFOV = updateFOV,
 	clearESP = clearESP,
-	-- Стан
 	getHolding = function() return Holding end,
 	setHolding = function(v) Holding = v end,
 	getFovCircle = function() return fovCircleEnabled end,
