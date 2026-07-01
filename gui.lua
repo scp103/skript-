@@ -453,10 +453,20 @@ espDistBtn.TextSize = 14
 espDistBtn.Text = "Distance: ON"
 Instance.new("UICorner", espDistBtn)
 
+local espTeamCheckBtn = Instance.new("TextButton", espScroll)
+espTeamCheckBtn.Size = UDim2.new(0.9, 0, 0, 30)
+espTeamCheckBtn.Position = UDim2.new(0.05, 0, 0, 285)
+espTeamCheckBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+espTeamCheckBtn.TextColor3 = Color3.new(1,1,1)
+espTeamCheckBtn.Font = Enum.Font.SourceSansBold
+espTeamCheckBtn.TextSize = 14
+espTeamCheckBtn.Text = "ESP Team Check: OFF"
+Instance.new("UICorner", espTeamCheckBtn)
+
 -- ESP ValCheck
 local espValCheckBtn = Instance.new("TextButton", espScroll)
 espValCheckBtn.Size = UDim2.new(0.75, -5, 0, 30)
-espValCheckBtn.Position = UDim2.new(0.05, 0, 0, 285)
+espValCheckBtn.Position = UDim2.new(0.05, 0, 0, 325)
 espValCheckBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 espValCheckBtn.TextColor3 = Color3.new(1,1,1)
 espValCheckBtn.Font = Enum.Font.SourceSansBold
@@ -466,7 +476,7 @@ Instance.new("UICorner", espValCheckBtn)
 
 local espValCheckOpenBtn = Instance.new("TextButton", espScroll)
 espValCheckOpenBtn.Size = UDim2.new(0.15, -5, 0, 30)
-espValCheckOpenBtn.Position = UDim2.new(0.8, 0, 0, 285)
+espValCheckOpenBtn.Position = UDim2.new(0.8, 0, 0, 325)
 espValCheckOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
 espValCheckOpenBtn.TextColor3 = Color3.new(1,1,1)
 espValCheckOpenBtn.Font = Enum.Font.SourceSansBold
@@ -1440,4 +1450,5 @@ return {
 	teamCheckButton = teamCheckButton,
 	silentAimButton = silentAimButton,
 	smoothButton = smoothButton,
+	espTeamCheckBtn = espTeamCheckBtn,
 }
