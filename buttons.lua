@@ -528,6 +528,14 @@ G.smoothButton.MouseButton1Click:Connect(function()
     end
 end)
 
+G.espTeamCheckBtn.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setEspTeamCheck(not F.getEspTeamCheck())
+        G.espTeamCheckBtn.Text = F.getEspTeamCheck() and "ESP Team Check: ON" or "ESP Team Check: OFF"
+        G.espTeamCheckBtn.BackgroundColor3 = F.getEspTeamCheck() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
 end
 
 return init
