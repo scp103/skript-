@@ -156,6 +156,7 @@ local espShowDist = true
 local espValCheckEnabled = false
 local espValCheckTargets = {}
 local espColorPickerTarget = nil 
+local espTeamCheckEnabled = false
 local charmsVisColor = Color3.fromRGB(0, 255, 0)   
 local charmsUnvisColor = Color3.fromRGB(255, 0, 0) 
 local espRVal, espGVal, espBVal = 255, 0, 0
@@ -1025,7 +1026,8 @@ RunService.RenderStepped:Connect(function()
 						rayParams.FilterType = Enum.RaycastFilterType.Exclude
 						local rayResult = workspace:Raycast(Camera.CFrame.Position, root.Position - Camera.CFrame.Position, rayParams)
 						local canSee = not (rayResult and rayResult.Instance)
-						local shouldShow = not espValCheckEnabled or espValCheckTargets[p.Name] == true
+						local isEnemy = not espTeamCheckEnabled or (p.Team ~= LocalPlayer.Team)
+						local shouldShow = isEnemy and (not espValCheckEnabled or espValCheckTargets[p.Name] == true)
 						if shouldShow then
 							local col = canSee and espVisColor or espUnvisColor
 							esp.Box.Color = col; esp.Tracer.Color = col
@@ -2123,6 +2125,8 @@ return {
 	setSmoothToggle = function(v) smoothToggle = v end,
 	getSmoothValue = function() return smoothValue end,
 	setSmoothValue = function(v) smoothValue = v end,
+	getEspTeamCheck = function() return espTeamCheckEnabled end,
+	setEspTeamCheck = function(v) espTeamCheckEnabled = v end,
 }
 
 end
