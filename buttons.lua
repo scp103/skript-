@@ -536,6 +536,14 @@ G.espTeamCheckBtn.MouseButton1Click:Connect(function()
     end
 end)
 
+G.triggerTeamCheckButton.MouseButton1Click:Connect(function()
+    if F.canClick() then
+        F.setTriggerTeamCheck(not F.getTriggerTeamCheck())
+        G.triggerTeamCheckButton.Text = F.getTriggerTeamCheck() and "Trigger Team Check: ON" or "Trigger Team Check: OFF"
+        G.triggerTeamCheckButton.BackgroundColor3 = F.getTriggerTeamCheck() and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+    end
+end)
+
 end
 
 return init
