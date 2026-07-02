@@ -1499,6 +1499,8 @@ local function getCurrentConfig()
 		charmsEspObj = charmsEspObjEnabled,
 		aimValCheck = aimValCheckEnabled,
 		aimValCheckTargets = aimValCheckTargets,
+		espTeamCheck = espTeamCheckEnabled,
+		triggerTeamCheck = triggerTeamCheckEnabled,
 	}
 end
 
@@ -1739,6 +1741,22 @@ local function applyConfig(config)
 		G.fovButton.Text = "FOV: OFF"
 		if fovChangerConnection then fovChangerConnection:Disconnect(); fovChangerConnection = nil end
 	end
+
+		if config.espTeamCheck ~= nil then
+        espTeamCheckEnabled = config.espTeamCheck
+        if G.espTeamCheckBtn then
+            G.espTeamCheckBtn.Text = espTeamCheckEnabled and "ESP Team Check: ON" or "ESP Team Check: OFF"
+            G.espTeamCheckBtn.BackgroundColor3 = espTeamCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+        end
+    end
+
+    if config.triggerTeamCheck ~= nil then
+        triggerTeamCheckEnabled = config.triggerTeamCheck
+        if G.triggerTeamCheckButton then
+            G.triggerTeamCheckButton.Text = triggerTeamCheckEnabled and "Trigger Team Check: ON" or "Trigger Team Check: OFF"
+            G.triggerTeamCheckButton.BackgroundColor3 = triggerTeamCheckEnabled and Color3.fromRGB(0,180,0) or Color3.fromRGB(40,40,40)
+        end
+    end
 
 	showNotif("✅ Config", "Loaded: "..selectedConfig, 2)
 end
