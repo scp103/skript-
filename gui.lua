@@ -42,7 +42,7 @@ aimScroll.Size = UDim2.new(1, 0, 1, -65)
 aimScroll.Position = UDim2.new(0, 0, 0, 30)
 aimScroll.BackgroundTransparency = 1
 aimScroll.ScrollBarThickness = 5
-aimScroll.CanvasSize = UDim2.new(0, 0, 0, 510)
+aimScroll.CanvasSize = UDim2.new(0, 0, 0, 550)
 
 local espSettingsFrame = Instance.new("Frame", screenGui)
 espSettingsFrame.Size = UDim2.new(0, 210, 0, 260)
@@ -546,6 +546,16 @@ triggerWallCheckButton.Font = Enum.Font.SourceSansBold
 triggerWallCheckButton.TextSize = 14
 triggerWallCheckButton.Text = "Trigger WallCheck: OFF"
 Instance.new("UICorner", triggerWallCheckButton)
+
+local triggerTeamCheckButton = Instance.new("TextButton", aimScroll)
+triggerTeamCheckButton.Size = UDim2.new(0.9, 0, 0, 30)
+triggerTeamCheckButton.Position = UDim2.new(0.05, 0, 0, 505)
+triggerTeamCheckButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+triggerTeamCheckButton.TextColor3 = Color3.new(1,1,1)
+triggerTeamCheckButton.Font = Enum.Font.SourceSansBold
+triggerTeamCheckButton.TextSize = 14
+triggerTeamCheckButton.Text = "Trigger Team Check: OFF"
+Instance.new("UICorner", triggerTeamCheckButton)
 
 local aimCloseButton = Instance.new("TextButton", aimSettingsFrame)
 aimCloseButton.Size = UDim2.new(0.9, 0, 0, 25)
@@ -1451,4 +1461,5 @@ return {
 	silentAimButton = silentAimButton,
 	smoothButton = smoothButton,
 	espTeamCheckBtn = espTeamCheckBtn,
+	triggerTeamCheckButton = triggerTeamCheckButton,
 }
