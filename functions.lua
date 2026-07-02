@@ -163,6 +163,7 @@ local espRVal, espGVal, espBVal = 255, 0, 0
 local mobileTriggerLoop = nil
 local pcTriggerLoop = nil
 local triggerWallCheckEnabled = false
+local triggerTeamCheckEnabled = false
 local fullbrightEnabled = false
 local godModeEnabled = false
 local godModeConnection = nil
@@ -415,6 +416,9 @@ end
 
 local function isValidTarget(player)
     if not player.Character then return false end
+    if triggerTeamCheckEnabled and player.Team == LocalPlayer.Team then
+        return false
+    end
     if triggerWallCheckEnabled then
         local head = player.Character:FindFirstChild("Head")
         if not head then return false end
@@ -426,6 +430,12 @@ local function isValidTarget(player)
         if result and not result.Instance:IsDescendantOf(player.Character) then
             return false
         end
+    end
+    if valCheckEnabled then
+        return valCheckTargets[player.Name] == true
+    end
+    return true
+end
     end
     if valCheckEnabled then
         return valCheckTargets[player.Name] == true
@@ -2127,6 +2137,8 @@ return {
 	setSmoothValue = function(v) smoothValue = v end,
 	getEspTeamCheck = function() return espTeamCheckEnabled end,
 	setEspTeamCheck = function(v) espTeamCheckEnabled = v end,
+	getTriggerTeamCheck = function() return triggerTeamCheckEnabled end,
+	setTriggerTeamCheck = function(v) triggerTeamCheckEnabled = v end,
 }
 
 end
