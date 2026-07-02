@@ -431,15 +431,11 @@ local function isValidTarget(player)
             return false
         end
     end
+
     if valCheckEnabled then
         return valCheckTargets[player.Name] == true
     end
-    return true
-end
-    end
-    if valCheckEnabled then
-        return valCheckTargets[player.Name] == true
-    end
+
     return true
 end
 
